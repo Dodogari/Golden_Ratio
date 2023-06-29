@@ -42,5 +42,4 @@
         android:fontWeight="700"
         android:fontStyle="normal"
         tools:targetApi="o" />
-
 </font-family>
