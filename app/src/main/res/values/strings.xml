@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Golden Ratio</string>
+    <string name="cocktail">칵테일</string>
+    <string name="hangover_cure">숙취해소</string>
 </resources>
