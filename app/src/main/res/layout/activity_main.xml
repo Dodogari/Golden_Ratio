@@ -6,4 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="50dp"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorColor="@color/yellow"
+        app:tabIndicatorHeight="4dp"
+        app:tabSelectedTextColor="@color/basic_text"
+        app:tabTextColor="@color/unselected_text"
+        app:tabTextAppearance="@style/tab_text"
+        tools:ignore="SpeakableTextPresentCheck"
+        android:elevation="20dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@null">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cocktail"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hangover_cure"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
