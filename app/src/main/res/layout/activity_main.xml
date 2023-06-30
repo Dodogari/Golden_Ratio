@@ -2,8 +2,56 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFD9D9D9"
     tools:context=".MainActivity">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/navigation_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:padding="0dp"
+            app:layout_anchor="@+id/navigation_bottom">
+
+            <!-- 바텀 네비게이션 -->
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navigation_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/basic_background"
+                android:paddingTop="5dp"
+                android:paddingBottom="20dp"
+                app:menu="@menu/menu_navi"
+                android:elevation="0dp"
+                app:itemIconTint="@drawable/menu_selector_color"
+                app:itemTextColor="@drawable/menu_selector_color"
+                app:tabRippleColor="@null"/>
+
+        </com.google.android.material.bottomappbar.BottomAppBar>
+
+        <!-- 네비게이션 가운데 플로팅 버튼(추가) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/yellow"
+            android:contentDescription="@string/add"
+            android:scaleType="center"
+            android:src="@drawable/icon_plus"
+            app:borderWidth="0dp"
+            app:tint="@android:color/white"
+            tools:ignore="ImageContrastCheck" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
