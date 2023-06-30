@@ -2,4 +2,10 @@
     <string name="app_name">Golden Ratio</string>
     <string name="cocktail">칵테일</string>
     <string name="hangover_cure">숙취해소</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upper_slide">upper_slide</string>
+    <string name="home">홈</string>
+    <string name="add">추가</string>
+    <string name="setting">설정</string>
 </resources>
