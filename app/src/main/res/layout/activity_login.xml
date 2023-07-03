@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F3F2"
-    tools:context=".LogInActivity">
+    android:background="@color/white"
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="80dp"
         android:layout_marginLeft="37dp"
         android:layout_marginRight="27dp"
         tools:ignore="MissingConstraints">
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditTextEmail"
+                android:id="@+id/input_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
@@ -63,11 +63,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
+            app:endIconMode="password_toggle"
+            app:endIconDrawable="@drawable/bt_pw"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditTextPassword"
+            <EditText
+                android:id="@+id/input_pw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_insert"
@@ -78,7 +80,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_pw"
+            android:id="@+id/tv_find"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -88,16 +90,16 @@
             style="@style/basic_text"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/appCompatButtonLogin"
+            android:id="@+id/bt_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:text="로그인"
-            android:background="@drawable/bt_yellow"
-            android:textColor="@color/white" />
+            android:background="@drawable/bt_next"
+            style="@style/bt_text" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textViewLinkRegister"
+            android:id="@+id/tv_Register"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
