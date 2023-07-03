@@ -20,4 +20,10 @@
         <item name="android:fontFamily">@font/suite_bold</item>
         <item name="android:textSize">21sp</item>
     </style>
+    <style name="Theme.GoldenRatio.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.GoldenRatio.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.GoldenRatio.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -1,14 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HangoverFragment">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/basic_background"
+    android:padding="20dp"
+    android:orientation="vertical"
+    tools:context=".CocktailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!-- 이미지 상단 슬라이드 -->
+            <FrameLayout
+                android:id="@+id/upper_slide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/filter_hangover"
+                tools:context=".SlideFragment">
 
-</FrameLayout>
+                <!-- 뷰 페이저 설정 -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/slide_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    tools:layout="@layout/view_upper_slide"/>
+
+                <!-- 인디케이터 설정 -->
+                <me.relex.circleindicator.CircleIndicator3
+                    android:id="@+id/indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    app:ci_drawable_unselected="@drawable/indicator_unselected"
+                    app:ci_drawable="@drawable/indicator_selected"/>
+
+            </FrameLayout>
+
+            <!-- 목록 필터 (좌우 스크롤 가능, 하나만 선택되게) -->
+            <HorizontalScrollView
+                android:id="@+id/filter_hangover"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginVertical="20dp"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/upper_slide"
+                app:layout_constraintBottom_toTopOf="@id/list_hangover">
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/radio_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/radio_filter_background_selector"
+                        android:button="@android:color/transparent"
+                        android:fontFamily="@font/suite_bold"
+                        android:paddingHorizontal="15dp"
+                        android:text="@string/all"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radio_filter_text_selector"
+                        android:textSize="15sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <RadioButton
+                        android:id="@+id/sort_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/radio_filter_background_selector"
+                        android:button="@android:color/transparent"
+                        android:fontFamily="@font/suite_bold"
+                        android:paddingHorizontal="15dp"
+                        android:text="@string/sort_rating"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radio_filter_text_selector"
+                        android:textSize="15sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/radio_filter_background_selector"
+                        android:button="@android:color/transparent"
+                        android:fontFamily="@font/suite_bold"
+                        android:paddingHorizontal="15dp"
+                        android:text="@string/sort_like"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radio_filter_text_selector"
+                        android:textSize="15sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </RadioGroup>
+            </HorizontalScrollView>
+
+            <!-- 목록 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_hangover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_hangover"
+                tools:listitem="@layout/item_list" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

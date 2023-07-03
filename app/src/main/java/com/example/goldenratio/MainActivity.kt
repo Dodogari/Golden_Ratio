@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         //네비게이션 메뉴 클릭 시
         mainBinding.navigationMenu.setOnItemReselectedListener {
             when(it.itemId) {
-                R.id.fragment_home -> loadFragment(CocktailFragment())
+                R.id.fragment_home -> loadFragment(HomeFragment())
                 R.id.fragment_setting -> loadFragment(SettingFragment())
             }
         }

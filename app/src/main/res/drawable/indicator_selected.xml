@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
-    <solid
-        android:color="@color/yellow"/>
-    <size
-        android:height="8dp"
-        android:width="8dp" />
-</shape>
+<!-- 인디케이터 선택 시 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape  android:shape="oval">
+            <solid android:color="@color/yellow"/>
+            <size
+                android:height="8dp"
+                android:width="8dp" />
+        </shape>
+    </item>
+</layer-list>

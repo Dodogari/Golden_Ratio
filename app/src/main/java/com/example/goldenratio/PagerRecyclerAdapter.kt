@@ -8,7 +8,7 @@ import com.example.goldenratio.databinding.ViewUpperSlideBinding
 class PagerRecyclerAdapter(private val imgList: List<Int>) : RecyclerView.Adapter<PagerRecyclerAdapter.ViewHolder>() {
     private lateinit var pagerRecyclerBinding : ViewUpperSlideBinding
 
-    //가상의 첫번째 뷰와 마지막 뷰를 설정함
+    //가상의 첫번째 뷰와 마지막 뷰 추가
     private val showList : List<Int> = listOf(imgList.last()) + imgList + listOf(imgList.first())
 
     inner class ViewHolder(pagerRecyclerBinding: ViewUpperSlideBinding) : RecyclerView.ViewHolder(pagerRecyclerBinding.root){

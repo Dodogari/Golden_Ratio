@@ -1,12 +1,16 @@
 package com.example.goldenratio
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
 import com.example.goldenratio.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import me.relex.circleindicator.CircleIndicator3
 
 class HomeFragment : Fragment() {
     private lateinit var homeBinding: FragmentHomeBinding
@@ -24,9 +28,10 @@ class HomeFragment : Fragment() {
         //상단 탭 설정
         //탭 메뉴 추가
         val menuList = listOf("칵테일", "숙취해소")
-        val tabLayoutMediator = TabLayoutMediator(homeBinding.navigationTab, homeBinding.viewSlide) { tab, pos ->
-            tab.text = menuList[pos]
-        }
+        val tabLayoutMediator =
+            TabLayoutMediator(homeBinding.navigationTab, homeBinding.viewSlide) { tab, pos ->
+                tab.text = menuList[pos]
+            }
         //탭 어댑터 연결
         homeBinding.viewSlide.adapter = PagerAdapter(this)
         tabLayoutMediator.attach()

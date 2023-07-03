@@ -7,12 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.goldenratio.databinding.FragmentCocktailBinding
 import me.relex.circleindicator.CircleIndicator3
 
 class CocktailFragment : Fragment() {
     private lateinit var cocktailBinding: FragmentCocktailBinding
+    private var recyclerViewBoardAdapter: RecyclerViewBoardAdapter? = null
+    private var cocktailList = mutableListOf<BoardData>()
     //상단 슬라이드 관련 변수
     private var slideList: MutableList<Int> = mutableListOf()
     private lateinit var viewPager2: ViewPager2
@@ -30,16 +34,25 @@ class CocktailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //slide 리스트에 상단 슬라이드에 비출 이미지 저장
+        recyclerViewBoardAdapter = RecyclerViewBoardAdapter(this@CocktailFragment, cocktailList)
+
+        //리사이클러뷰 레이아웃 설정
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
+        cocktailBinding.listCocktail.layoutManager = layoutManager
+        cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
+
+        testCocktailList()
+
+        //슬라이드 이미지 추가
         slideList.add(R.drawable.view_test1)
-        slideList.add(R.drawable.view_text2)
+        slideList.add(R.drawable.view_test2)
         slideList.add(R.drawable.view_test3)
 
         //핸들러 설정
         handler = Handler(Looper.myLooper()!!)
 
         //viewPager2 설정
-        viewPager2 = cocktailBinding.upperSlide
+        viewPager2 = cocktailBinding.slideImage
         adapter = PagerRecyclerAdapter(slideList)
         viewPager2.adapter = adapter
 
@@ -72,6 +85,9 @@ class CocktailFragment : Fragment() {
                 handler.postDelayed(runnable, 3000)
             }
         })
+
+        //라디오 버튼 클릭
+        cocktailBinding.filterCocktail.
     }
 
     //자동 회전 시 크기를 넘어가면
@@ -86,5 +102,15 @@ class CocktailFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         handler.postDelayed(runnable, 3000)
+    }
+
+    fun testCocktailList() {
+        cocktailList.add(BoardData("테스트1", R.drawable.age, 2.5, 3, likeCheck = false, cocktail = true))
+        cocktailList.add(BoardData("테스트2", R.drawable.cell, 2.5, 3, likeCheck = false, cocktail = true))
+        cocktailList.add(BoardData("테스트3", R.drawable.chicken, 2.5, 3, likeCheck = false, cocktail = true))
+        cocktailList.add(BoardData("테스트4", R.drawable.cry, 2.5, 3, likeCheck = false, cocktail = true))
+        cocktailList.add(BoardData("테스트5", R.drawable.drop, 2.5, 3, likeCheck = false, cocktail = true))
+        cocktailList.add(BoardData("테스트6", R.drawable.egg, 2.5, 3, likeCheck = false, cocktail = true))
+        recyclerViewBoardAdapter!!.notifyItemRangeChanged(cocktailList.size, 6)
     }
 }
