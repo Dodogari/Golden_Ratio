@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 좋아요 버튼 비클릭 시 배경 -->
+<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="7dp"/>
+    <solid android:color="@color/red"/>
+    <stroke android:color="@color/red" android:width="2dp"/>
+</shape>

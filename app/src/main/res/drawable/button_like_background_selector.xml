@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 좋아요 버튼 클릭/비클릭 시 배경 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/button_like_background_selected" android:state_checked="true"/>
+    <item android:drawable="@drawable/button_like_background_unselected" android:state_checked="false"/>
+</selector>

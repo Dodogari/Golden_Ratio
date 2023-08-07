@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/basic_background"
+    android:padding="15dp"
+    tools:context=".HangoverFragment">
+
+    <!-- 상하 스크롤 -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- #1. 상단 슬라이드 배너 -->
+            <FrameLayout
+                android:id="@+id/top_slide_banner_hangover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/filter_hangover">
+
+                <!-- 1-1. 뷰 페이저 설정 -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/slide_viewPager_hangover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout="@layout/top_slide_banner"/>
+
+                <!-- 1-2. 인디케이터 설정 -->
+                <me.relex.circleindicator.CircleIndicator3
+                    android:id="@+id/top_slide_banner_indicator_hangover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    app:ci_drawable="@drawable/indicator_selected"
+                    app:ci_drawable_unselected="@drawable/indicator_unselected"/>
+
+            </FrameLayout>
+
+            <!-- #2. 리스트 필터 (좌우 스크롤 가능) -->
+            <!-- 라디오 버튼: 필터 중 하나만 선택되게 -->
+            <RadioGroup
+                android:id="@+id/filter_hangover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/top_slide_banner_hangover">
+
+                <!-- 전체 -->
+                <RadioButton
+                    android:id="@+id/radio_hangover_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginVertical="3dp"
+                    android:paddingHorizontal="17dp"
+                    android:background="@drawable/radio_filter_background_selector"
+                    android:button="@android:color/transparent"
+                    android:text="@string/all"
+                    android:textColor="@drawable/radio_filter_text_selector"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/suite_bold"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- 별점순 -->
+                <RadioButton
+                    android:id="@+id/radio_hangover_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginVertical="3dp"
+                    android:paddingHorizontal="17dp"
+                    android:background="@drawable/radio_filter_background_selector"
+                    android:button="@android:color/transparent"
+                    android:text="@string/sort_rating"
+                    android:textColor="@drawable/radio_filter_text_selector"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/suite_bold"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- 좋아요순 -->
+                <RadioButton
+                    android:id="@+id/radio_hangover_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginVertical="3dp"
+                    android:paddingHorizontal="17dp"
+                    android:background="@drawable/radio_filter_background_selector"
+                    android:button="@android:color/transparent"
+                    android:text="@string/sort_like"
+                    android:textColor="@drawable/radio_filter_text_selector"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/suite_bold"
+                    tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+            </RadioGroup>
+
+            <!-- 칵테일 목록 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_hangover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="90dp"
+                app:layout_constraintTop_toBottomOf="@id/filter_hangover"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:listitem="@layout/item_board" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

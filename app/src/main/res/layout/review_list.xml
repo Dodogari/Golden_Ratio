@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@color/basic_background"
+    app:cardCornerRadius="10dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/info_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <!-- 프로필 사진 -->
+            <ImageView
+                android:id="@+id/user_profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/picture_cocktail"
+                android:maxWidth="30dp"
+                android:maxHeight="50dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/egg"
+                app:layout_constraintEnd_toStartOf="@+id/user_name"
+                app:layout_constraintStart_toStartOf="@id/info_user"
+                app:layout_constraintTop_toTopOf="@id/info_user"
+                app:layout_constraintBottom_toBottomOf="@id/info_user"/>
+
+            <!-- 사용자 이름 -->
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/suite_regular"
+                android:text="자칭 술잘알"
+                android:textColor="@color/text_basic"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/user_rating"
+                app:layout_constraintStart_toEndOf="@+id/user_profile"
+                app:layout_constraintTop_toTopOf="@id/info_user"
+                app:layout_constraintBottom_toBottomOf="@id/info_user"/>
+
+            <!-- 별점 -->
+            <RatingBar
+                android:id="@+id/user_rating"
+                style="@style/ReviewRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:rating="0"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:transformPivotX="25dp"
+                android:transformPivotY="16dp"
+                tools:ignore="SpeakableTextPresentCheck"
+                app:layout_constraintStart_toEndOf="@+id/user_name"
+                app:layout_constraintTop_toTopOf="@id/info_user"
+                app:layout_constraintBottom_toBottomOf="@id/info_user"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/review_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/suite_regular"
+            android:text="자칭 술잘알"
+            android:textColor="@color/text_basic"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_user"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

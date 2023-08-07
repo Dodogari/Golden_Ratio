@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.GoldenRatio" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.GoldenRatio" parent="Base.Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/yellow</item>
         <item name="colorPrimaryVariant">@color/yellow</item>
@@ -18,7 +18,19 @@
 
     <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:fontFamily">@font/suite_bold</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="Theme.GoldenRatio.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.GoldenRatio.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.GoldenRatio.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ReviewRatingBar" parent="Widget.AppCompat.RatingBar.Indicator">
+        <item name="android:progressDrawable">@drawable/ratingbar_custom</item>
+        <item name="minHeight">20dp</item>
+        <item name="maxHeight">30dp</item>
+        <item name="marginHorizontal">20dp</item>
     </style>
 
     <style name="title_text">

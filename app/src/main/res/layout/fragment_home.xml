@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/basic_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeFragment">
 
@@ -11,7 +12,7 @@
         android:id="@+id/navigation_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="50dp"
+        android:paddingTop="40dp"
         android:background="@color/white"
         android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,8 +33,8 @@
         android:id="@+id/view_slide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/navigation_tab"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/navigation_tab" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
