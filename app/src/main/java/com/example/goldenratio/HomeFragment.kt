@@ -24,9 +24,10 @@ class HomeFragment : Fragment() {
         //상단 탭 설정
         //탭 메뉴 추가
         val menuList = listOf("칵테일", "숙취해소")
-        val tabLayoutMediator = TabLayoutMediator(homeBinding.navigationTab, homeBinding.viewSlide) { tab, pos ->
-            tab.text = menuList[pos]
-        }
+        val tabLayoutMediator =
+            TabLayoutMediator(homeBinding.navigationTab, homeBinding.viewSlide) { tab, pos ->
+                tab.text = menuList[pos]
+            }
         //탭 어댑터 연결
         homeBinding.viewSlide.adapter = PagerAdapter(this)
         tabLayoutMediator.attach()

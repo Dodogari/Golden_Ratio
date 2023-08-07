@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/basic_background"
+    tools:context=".ReviewActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/review_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:elevation="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <!-- 뒤로가기 버튼 -->
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/icon_back"
+            android:scaleType="center"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/back" />
+
+        <!-- 리뷰 제목 -->
+        <TextView
+            android:id="@+id/item_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="50dp"
+            android:fontFamily="@font/suite_regular"
+            android:text="리뷰"
+            android:textColor="#414042"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_back"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/review_toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+            <!-- 총 별점 표시 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/total_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                app:layout_constraintBottom_toTopOf="@id/writing_review"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <!-- 별점 스코어 -->
+                <TextView
+                    android:id="@+id/avg_rating_num3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/suite_regular"
+                    android:text="@string/zero"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 후기 갯수 -->
+                <TextView
+                    android:id="@+id/rating_count3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/suite_regular"
+                    android:text="@string/count_reset"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/avg_rating_num3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- 별점 아이콘 -->
+                <RatingBar
+                    android:id="@+id/avg_rating_bar3"
+                    style="@style/ReviewRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:progressDrawable="@drawable/ratingbar_custom"
+                    android:scaleX="0.9"
+                    android:scaleY="0.9"
+                    android:stepSize="0.5"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/rating_count3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 리뷰 작성란 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/writing_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/review_background"
+                android:elevation="5dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                app:layout_constraintBottom_toTopOf="@id/list_review"
+                app:layout_constraintTop_toBottomOf="@id/total_rating">
+
+                <!-- 사용자 정보 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/user_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <!-- 프로필 -->
+                    <ImageView
+                        android:id="@+id/user_profile"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:maxWidth="50dp"
+                        android:maxHeight="50dp"
+                        android:src="@drawable/egg"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!-- 사용자 이름 -->
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/suite_regular"
+                        android:text="황금비율"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/user_profile"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!-- 별점 입력 -->
+                    <RatingBar
+                        android:id="@+id/rating_bar"
+                        style="@style/ReviewRatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:isIndicator="false"
+                        android:numStars="5"
+                        android:rating="0"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
+                        android:stepSize="0.5"
+                        android:transformPivotX="25dp"
+                        android:transformPivotY="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/user_name"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <EditText
+                    android:id="@+id/writing_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@drawable/review_edit_text_background"
+                    android:fontFamily="@font/suite_regular"
+                    android:gravity="top"
+                    android:hint="리뷰를 적어주세요."
+                    android:minHeight="48dp"
+                    android:padding="15dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#FFA9A9A9"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@id/review_enroll"
+                    app:layout_constraintTop_toBottomOf="@id/user_info"
+                    tools:layout_editor_absoluteX="20dp" />
+
+                <Button
+                    android:id="@+id/review_enroll"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@drawable/button_enroll_background"
+                    android:fontFamily="@font/suite_regular"
+                    android:text="등록"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/writing_content"
+                    tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@id/writing_review"
+                tools:listitem="@layout/review_list" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/list_review"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

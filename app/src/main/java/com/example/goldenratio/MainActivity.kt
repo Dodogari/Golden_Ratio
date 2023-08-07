@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.goldenratio.databinding.ActivityMainBinding
-import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         //네비게이션 메뉴 클릭 시
         mainBinding.navigationMenu.setOnItemReselectedListener {
             when(it.itemId) {
-                R.id.fragment_home -> loadFragment(CocktailFragment())
+                R.id.fragment_home -> loadFragment(HomeFragment())
                 R.id.fragment_setting -> loadFragment(SettingFragment())
             }
         }
