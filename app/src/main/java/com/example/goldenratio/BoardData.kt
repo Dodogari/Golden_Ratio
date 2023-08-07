@@ -1,8 +1,9 @@
 package com.example.goldenratio
 
-data class BoardData(var title: String,
-                     var thumbnail: Int,
-                     var rating: Double,
-                     var like: Int,
-                     var likeCheck: Boolean,
-                     val cocktail: Boolean)
+import com.google.gson.annotations.SerializedName
+
+data class BoardData(@SerializedName("title") var title: String,
+                     @SerializedName("mainImageUrl") var mainImageUrl: String,
+                     @SerializedName("averageScore") var averageScore: Float,
+                     @SerializedName("likeCount") var likeCount: Int,
+                     @SerializedName("boardId") var boardId: Int)

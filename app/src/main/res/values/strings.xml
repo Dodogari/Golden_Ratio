@@ -4,7 +4,7 @@
     <string name="hangover_cure">숙취해소</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="upper_slide">upper_slide</string>
+    <string name="top_slide_banner">상단 슬라이드 배너</string>
     <string name="home">홈</string>
     <string name="add">추가</string>
     <string name="setting">설정</string>
@@ -107,4 +107,10 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="edit">수정하기</string>
+    <string name="delete">삭제하기</string>
+    <string name="back">뒤로가기</string>
+    <string name="count_reset">(0)</string>
+    <string name="recipe">레시피</string>
+    <string name="thumbnail_board">보드 썸네일</string>
 </resources>

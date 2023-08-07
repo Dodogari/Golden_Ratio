@@ -1,51 +1,79 @@
 package com.example.goldenratio
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.goldenratio.databinding.ItemListBinding
+import com.bumptech.glide.Glide
+import com.example.goldenratio.databinding.ItemBoardBinding
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlin.coroutines.coroutineContext
 
-class RecyclerViewBoardAdapter(private val getFragment: Fragment, private val boardList: List<BoardData>)
-    :RecyclerView.Adapter<RecyclerViewBoardAdapter.MyViewHolder>() {
-    private lateinit var itemListBinding: ItemListBinding
+class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
+    :RecyclerView.Adapter<RecyclerViewBoardAdapter.CustomViewHolder>() {
+    private lateinit var itemBoardBinding: ItemBoardBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        itemListBinding = ItemListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(itemListBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+        itemBoardBinding = ItemBoardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CustomViewHolder(itemBoardBinding)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.bind(boardList[position])
+
+        //아이템 클릭 리스너
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(position)
+        }
         
         //좋아요 버튼 리스너
-        itemListBinding.buttonLike.setOnClickListener {
-            itemListBinding.buttonLike.isChecked = !itemListBinding.buttonLike.isChecked
+        itemBoardBinding.buttonLike.setOnClickListener {
+            itemClickListener.likeOnClick(position)
         }
     }
 
     override fun getItemCount(): Int = boardList.size
 
-    inner class MyViewHolder(itemListBinding: ItemListBinding) : RecyclerView.ViewHolder(itemListBinding.root){
-        fun bind(boardData: BoardData) {
-            with(itemListBinding) {
-                //제목
-                itemTitle.text = boardData.title
-                //썸네일
-                pictureCocktail.setImageResource(boardData.thumbnail)
-                //별점
-                buttonRating.text = boardData.rating.toString()
-                //좋아요
-                buttonLike.text = boardData.like.toString()
-                buttonLike.isChecked = boardData.likeCheck
+    inner class CustomViewHolder(itemBoardBinding: ItemBoardBinding) : RecyclerView.ViewHolder(itemBoardBinding.root){
 
-                //상태 버튼 활성화
+        fun bind(boardData: BoardData) {
+            with(itemBoardBinding) {
+                itemTitle.text = boardData.title                        //제목
+
+                Glide.with(thumbnailBoard.context)
+                    .load(boardData.mainImageUrl)
+                    .into(thumbnailBoard); //썸네일
+
+                Log.d("mainUrl", boardData.mainImageUrl)
+
+                //별점
+                buttonRating.text = boardData.averageScore.toString()
+
+                //좋아요
+                buttonLike.text = boardData.likeCount.toString()
+                //buttonLike.isChecked = boardData.likeCheck
+
+                //좋아요 버튼 클릭 시 활성화
                 buttonLike.setOnClickListener {
-                    boardData.likeCheck = buttonLike.isChecked
-                    notifyItemChanged(adapterPosition)
+                    //boardData.likeCheck = buttonLike.isChecked
+                    boardData.likeCount++
+                    notifyItemChanged(bindingAdapterPosition)
                 }
             }
         }
-
     }
+    //리스너 구현
+    interface OnClickListener{
+        fun onClick(position: Int)                  //아이템 클릭
+        fun likeOnClick(position: Int)              //좋아요 클릭
+    }
+
+    fun setOnClickListener (onClickListener: OnClickListener) {
+        this.itemClickListener = onClickListener
+    }
+
+    private lateinit var itemClickListener: OnClickListener
 }
