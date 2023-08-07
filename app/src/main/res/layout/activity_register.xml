@@ -1,174 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".RegisterActivity">
+    android:id="@+id/registerFrame"
+    tools:context=".login.RegisterActivity">
 
-  <LinearLayout
-      android:id="@+id/linearLayout"
-      android:layout_width="410dp"
-      android:layout_height="150dp"
-      android:orientation="vertical"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/bg_1" />
-  </LinearLayout>
-
-
-  <androidx.appcompat.widget.LinearLayoutCompat
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-      android:layout_marginTop="80dp"
-      android:layout_marginLeft="32dp"
-      android:layout_marginRight="32dp"
-      tools:ignore="MissingConstraints">
-
-    <TextView
-        android:id="@+id/textView"
-        style="@style/title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="회원가입"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="48dp">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-      <com.google.android.material.textfield.TextInputLayout
-          android:id="@+id/textInputLayoutEmail"
-          android:layout_width="240dp"
-          android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextEmail"
+        <ImageView
+            android:id="@+id/imageView7"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_insert"
-            android:hint="아이디"
-            style="@style/hint_text"
-            android:inputType="text"
-            android:maxLines="1" />
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.AppCompatButton
-          android:id="@+id/bt_login"
-          android:layout_width="match_parent"
-          android:layout_height="52dp"
-          android:layout_marginLeft="10dp"
-          android:background="@drawable/bt_id_check" />
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/bg_1" />
     </LinearLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutPassword"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        app:endIconMode="password_toggle"
         android:layout_height="wrap_content"
-        app:endIconDrawable="@drawable/bt_pw"
-        android:layout_marginTop="16dp">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        tools:ignore="MissingConstraints">
 
-      <EditText
-          android:id="@+id/textInputEditTextPassword"
-          style="@style/hint_text"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/bg_insert"
-          android:hint="비밀번호"
-          android:inputType="textPassword"
-          android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutPassword1"
-        android:layout_width="match_parent"
-        app:endIconMode="password_toggle"
-        app:endIconDrawable="@drawable/bt_pw"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        <TextView
+            android:id="@+id/textView"
+            style="@style/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-      <EditText
-          android:id="@+id/textInputEditTextPassword2"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/bg_input"
-          android:hint="비밀번호"
-          style="@style/hint_text"
-          android:inputType="textPassword"
-          android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="48dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_id"
+                android:layout_width="205dp"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_insert"
+                    android:hint="아이디"
+                    style="@style/hint_text"
+                    android:textSize="13sp"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_id_check"
+                android:layout_width="72dp"
+                android:layout_height="42dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/bt_id_check"
+                android:button="@null"
+                app:layout_constraintStart_toEndOf="@+id/tv_pw"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_pw"
+            android:layout_width="match_parent"
+            app:endIconMode="password_toggle"
+            android:layout_height="wrap_content"
+            app:endIconDrawable="@drawable/bt_pw"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/et_pw"
+                style="@style/hint_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_insert"
+                android:hint="비밀번호"
+                android:textSize="13sp"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_pw2"
+            android:layout_width="match_parent"
+            app:endIconMode="password_toggle"
+            android:layout_height="wrap_content"
+            app:endIconDrawable="@drawable/bt_pw"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/et_pw2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_input"
+                android:hint="비밀번호 확인"
+                android:textSize="13sp"
+                app:errorIconDrawable="@null"
+                style="@style/hint_text"
+                android:inputType="textWebPassword"
+                android:maxLines="1"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="14dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_pw"
+                style="@style/basic_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이용약관 동의 (필수)"
+                android:textColor="#414042"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/bt_agree"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bt_check"
+                android:button="@null"
+                app:layout_constraintStart_toEndOf="@+id/tv_pw"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/bt_next"
+            android:clickable="false"
+            android:text="다음으로"
+            style="@style/bt_text"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-      <androidx.appcompat.widget.AppCompatTextView
-          android:id="@+id/tv_pw"
-          style="@style/basic_text"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="110dp"
-          android:layout_marginTop="12dp"
-          android:text="이용약관 동의 (필수)"
-          android:textColor="#414042"
-          android:textSize="13sp"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-      <CheckBox
-          android:id="@+id/agree_check"
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_marginStart="10dp"
-          android:layout_marginTop="8dp"
-          android:background="@drawable/bt_check"
-          android:button="@null"
-          app:layout_constraintStart_toEndOf="@+id/tv_pw"
-          app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/appCompatButtonLogin"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:background="@drawable/bt_next"
-        android:clickable="false"
-        android:text="다음으로"
-        style="@style/bt_text"/>
-  </androidx.appcompat.widget.LinearLayoutCompat>
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-  <LinearLayout
-      android:id="@+id/linearLayout2"
-      android:layout_width="415dp"
-      android:layout_height="180dp"
-      android:orientation="vertical"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/bg_2" />
+    </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/bg_2" />
-  </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
