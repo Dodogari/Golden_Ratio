@@ -11,4 +11,5 @@
     <color name="basic_background">#FFF5F3F2</color>
     <color name="basic_text">#FF5C5C5C</color>
     <color name="unselected_text">#FF7C7C7C</color>
+    <color name="toolbar">#F5F3F2</color>
 </resources>
