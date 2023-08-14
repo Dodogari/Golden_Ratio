@@ -8,20 +8,26 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityProfileBinding
+import com.example.goldenratio.login.models.register.PostRegisterRequest
+import com.example.goldenratio.login.models.register.RegisterInterface
+import com.example.goldenratio.login.models.register.RegisterResponse
+import com.example.goldenratio.login.models.register.RegisterService
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity(), RegisterInterface {
     private lateinit var profileBinding: ActivityProfileBinding
+    var url = "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA4MjRfMTcz%2FMDAxNjYxMzMyMDMyMTg0.hbbk9kBnG9Cbn0XHWj-O-fN0bOiKtsOrdFE8XRxu7Lsg.tUHYeHPIEN_t1UGdSOt_C5ogpa4pCEVv4wyAbqNnqU0g.JPEG.m8n_sz%2FIMG_3014.JPG&type=sc960_832"
 
     // storage 권한 처리에 필요한 변수
     val CAMERA = arrayOf(Manifest.permission.CAMERA)
@@ -43,9 +49,12 @@ class ProfileActivity : AppCompatActivity() {
 
         // 로그인 화면으로 이동
         profileBinding.btNext.setOnClickListener{
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            startActivity(intent)
+
+
+            // 서버에 값 보냄
+            val postRequest = PostRegisterRequest(id = id, password = pw, nickname = nick, url = url)
+
+            RegisterService(this).tryPostRegister(postRequest)
 
             Toast.makeText(this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -152,11 +161,14 @@ class ProfileActivity : AppCompatActivity() {
                         val img = data?.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_profile.setImageURI(uri)
+                        url = uri.toString()
+                        Log.d("tag", url)
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_profile.setImageURI(uri)
+                    url = uri.toString()
                 }
             }
         }
@@ -175,5 +187,20 @@ class ProfileActivity : AppCompatActivity() {
             itt.type = MediaStore.Images.Media.CONTENT_TYPE
             startActivityForResult(itt, STORAGE_CODE)
         }
+    }
+
+    // 서버 연결 성공
+    override fun onPostRegisterSuccess(response: RegisterResponse) {
+        // 로그인 화면으로 이동
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+
+        Toast.makeText(this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    // 서버 연결 실패
+    override fun onPostRegisterFailure(message: String) {
+        Log.d("error", "오류 : $message")
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="pageMargin">100dp</dimen>
+    <dimen name="pageMargin">56dp</dimen>
     <dimen name="pageWidth">195dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

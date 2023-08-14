@@ -1,34 +1,39 @@
 package com.example.goldenratio.hangover
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.goldenratio.R
+import com.example.goldenratio.databinding.ItemIngredientBinding
 
-class IngredientAdapter(val ingredientList : ArrayList<Ingredient>) : RecyclerView.Adapter<IngredientAdapter.CustomViewHolder>() {
+class IngredientAdapter(private val ingredientList: ArrayList<Ingredient>): RecyclerView.Adapter<IngredientAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_ingredient, parent, false)
-        return CustomViewHolder(view)
+    inner class ViewHolder(val ingredientBinding: ItemIngredientBinding): RecyclerView.ViewHolder(ingredientBinding.root) {
+        fun bind (Ingredient: Ingredient) {
+            ingredientBinding.imgIngredient.setImageURI(img_ingredient)
+            ingredientBinding.tvName.text = ingredientList.get(position).name
+            ingredientBinding.btDel.setImageResource(ingredientList[position].del)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return ingredientList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val ingredientBinding =  ItemIngredientBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(ingredientBinding)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.img.setImageURI(img_uri)
-        holder.name.text = ingredientList.get(position).name
-        holder.del.setImageResource(ingredientList[position].del)
+    override fun getItemCount(): Int = ingredientList.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(ingredientList[position])
+
+        holder.ingredientBinding!!.btDel.setOnClickListener{
+            delete(position)
+        }
     }
 
-    class CustomViewHolder(itemView : View) :RecyclerView.ViewHolder(itemView) {
-        val img = itemView.findViewById<ImageView>(R.id.img_ingredient) // 사진
-        val name = itemView.findViewById<TextView>(R.id.tv_name)         // 이름
-        val del = itemView.findViewById<ImageButton>(R.id.bt_del)        // 삭제
+    fun delete(position: Int) {
+        if (position >= 0) {
+            ingredientList.removeAt(position)
+            notifyDataSetChanged()
+        }
     }
 }

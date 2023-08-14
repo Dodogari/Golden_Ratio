@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.goldenratio.databinding.FragmentNameBinding
 
+var nick: String = ""
 
 class NameFragment : Fragment() {
 
@@ -31,7 +32,7 @@ class NameFragment : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                var nick = nameBinding.etNick.text.toString()
+                nick = nameBinding.etNick.text.toString()
                 nameBinding.btNext.isEnabled = nick.isNotEmpty()
             }
         })

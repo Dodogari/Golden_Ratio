@@ -1,6 +1,7 @@
 package com.example.goldenratio.hangover
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +17,24 @@ class IngredientActivity : AppCompatActivity() {
         setContentView(ingredientBinding.root)
 
         val ingredientList: ArrayList<Ingredient> = arrayListOf()
+//        var ingredient_name: String? = null
+//
+//        // 이름 값 받아오기
+//        if (ingredient_name != null)
+//        {
+//            ingredient_name = intent.getStringExtra("ingredient_name") as String
+//        }
 
         ingredientList.apply {
-            add(Ingredient(img_uri,"스프라이트", R.drawable.ic_delete))
+            if (ingredient_name != null)
+            {
+                add(Ingredient(img_ingredient, ingredient_name.toString(), R.drawable.ic_delete))
+            }
+
+            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
+            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
+            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
+            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
         }
 
         ingredientBinding.rvIngredient.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -45,17 +61,4 @@ class IngredientActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-//    // 화면 이동
-//    fun changeFragment(index: Int){
-//        when(index) {
-//            // 재료 검색 페이지
-//            1 -> {
-//                supportFragmentManager
-//                    .beginTransaction()
-//                    .replace(ingredientBinding.ingredientFrame.id, SearchFragment())
-//                    .commitAllowingStateLoss()
-//            }
-//        }
-//    }
 }

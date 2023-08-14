@@ -1,31 +1,38 @@
 package com.example.goldenratio.search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.goldenratio.R
+import com.example.goldenratio.databinding.ItemUserSearchBinding
 
-class SearchAdapter(val searchList : ArrayList<Search>) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
+class SearchAdapter(private val searchList: ArrayList<Search>): RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_user_search, parent, false)
-        return CustomViewHolder(view)
+    inner class ViewHolder(val searchBinding: ItemUserSearchBinding): RecyclerView.ViewHolder(searchBinding.root) {
+        fun bind (search: Search) {
+            searchBinding.tvSearch.text = searchList.get(position).search
+            searchBinding.btDel.setImageResource(searchList[position].del)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return searchList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val searchBinding =  ItemUserSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(searchBinding)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.searchTv.text = searchList.get(position).search
-        holder.del.setImageResource(searchList[position].del)
+    override fun getItemCount(): Int = searchList.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(searchList[position])
+
+        holder.searchBinding!!.btDel.setOnClickListener{
+            delete(position)
+        }
     }
 
-    class CustomViewHolder(itemView : View) :RecyclerView.ViewHolder(itemView) {
-        val searchTv = itemView.findViewById<TextView>(R.id.tv_search) // 사용자 검색어
-        val del = itemView.findViewById<ImageButton>(R.id.bt_del) // 삭제
+    fun delete(position: Int) {
+        if (position >= 0) {
+            searchList.removeAt(position)
+            notifyDataSetChanged()
+        }
     }
 }

@@ -157,7 +157,7 @@
             android:layout_marginTop="42dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:background="@drawable/bt_next"
+            android:background="@drawable/bt_login"
             android:clickable="false"
             android:text="다음으로"
             style="@style/bt_text"/>

@@ -1,28 +1,26 @@
 package com.example.goldenratio.hangover
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.goldenratio.R
+import com.example.goldenratio.databinding.ItemPicListBinding
 
-class ImgAdapter(val imgList : ArrayList<Img>) : RecyclerView.Adapter<ImgAdapter.CustomViewHolder>() {
+class ImgAdapter(private val imgList: ArrayList<Img>): RecyclerView.Adapter<ImgAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pic_list, parent, false)
-        return CustomViewHolder(view)
+    inner class ViewHolder(val imgBinding: ItemPicListBinding): RecyclerView.ViewHolder(imgBinding.root) {
+        fun bind (img: Img) {
+            imgBinding.imgPic.setImageURI(imgList[position].img)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return imgList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val imgBinding =  ItemPicListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(imgBinding)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.img.setImageResource(imgList[position].img)
-    }
+    override fun getItemCount(): Int = imgList.size
 
-    class CustomViewHolder(itemView : View) :RecyclerView.ViewHolder(itemView) {
-        val img = itemView.findViewById<ImageView>(R.id.img_pic) // 사진
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(imgList[position])
     }
 }
