@@ -86,14 +86,13 @@ class CocktailFragment : Fragment() {
         
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
-        val cocktailListContent = RegisterClient.registerService.getCocktailList()
+        val cocktailListContent = RegisterClient.registerService.getCocktailAll()
         cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
             //서버 응답 시
             override fun onResponse(
                 call: Call<ArrayList<BoardData>>,
                 response: Response<ArrayList<BoardData>>) {
                 cocktailList = response.body()!!
-                Log.d("왜 안돼", cocktailList.toString())
 
                 //#3. 리사이클러뷰 설정
                 //3-1. 리사이클러뷰 레이아웃 설정

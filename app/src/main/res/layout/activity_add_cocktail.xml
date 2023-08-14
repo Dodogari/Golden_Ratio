@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_ingredient_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".cocktail.AddCocktailActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bt_back"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:background="@color/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/bt_back">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/suite_medium"
+            android:text="칵테일 레시피"
+            android:textSize="20sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bt_back"
+        app:umanoOverlay="true"
+        app:umanoPanelHeight="430dp"
+        app:umanoShadowHeight="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/slide_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D9D9D9">
+
+            <ImageView
+                android:id="@+id/img_camera"
+                android:layout_width="match_parent"
+                android:layout_height="295dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/bt_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="309dp"
+                android:layout_marginEnd="42dp"
+                android:layout_marginBottom="80dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.848"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/back_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_sliding">
+
+            <EditText
+                android:id="@+id/editText"
+                style="@style/hint_text"
+                android:layout_width="208dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="35dp"
+                android:hint="칵테일 이름"
+                android:textColor="#C6C6C6"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="312dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="24dp"
+                android:background="#F4F4F4"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        style="@style/medium_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="21dp"
+                        android:layout_marginTop="22dp"
+                        android:text="도수"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioGroup
+                        android:id="@+id/radio_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintStart_toEndOf="@+id/textView4"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <RadioButton
+                            android:id="@+id/rbt_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:textAlignment="textStart"
+                            android:layout_gravity="start"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:layout_weight="1"
+                            style="@style/radio_text"
+                            android:text="소주 ↓"
+                            app:layout_constraintStart_toEndOf="@+id/textView4"
+                            tools:layout_editor_absoluteY="7dp"/>
+
+                        <RadioButton
+                            android:id="@+id/rbt_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:textAlignment="textStart"
+                            android:layout_gravity="start"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:layout_weight="1"
+                            style="@style/radio_text"
+                            android:text="소주 –"
+                            app:layout_constraintStart_toEndOf="@+id/textView4"
+                            tools:layout_editor_absoluteY="7dp"/>
+
+                        <RadioButton
+                            android:id="@+id/rbt_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:textAlignment="textStart"
+                            android:layout_gravity="start"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:layout_weight="1"
+                            style="@style/radio_text"
+                            android:text="소주 ↑"
+                            app:layout_constraintStart_toEndOf="@+id/textView4"
+                            tools:layout_editor_absoluteY="7dp"/>
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:id="@+id/radio_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="28dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toEndOf="@+id/textView6"
+                        app:layout_constraintTop_toBottomOf="@+id/radio_1">
+
+                        <RadioButton
+                            android:id="@+id/rbt_top"
+                            style="@style/radio_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:layoutDirection="rtl"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:text="상"
+                            android:textAlignment="textStart"
+                            app:layout_constraintStart_toEndOf="@+id/textView4"
+                            tools:layout_editor_absoluteY="7dp" />
+
+                        <RadioButton
+                            android:id="@+id/rbt_mid"
+                            style="@style/radio_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:layoutDirection="rtl"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:layout_marginLeft="28dp"
+                            android:text="중"
+                            android:textAlignment="textStart"
+                            app:layout_constraintStart_toEndOf="@+id/textView4"
+                            tools:layout_editor_absoluteY="7dp" />
+
+                        <RadioButton
+                            android:id="@+id/rbt_bottom"
+                            style="@style/radio_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:layoutDirection="rtl"
+                            android:scaleX="0.7"
+                            android:scaleY="0.7"
+                            android:text="하"
+                            android:layout_marginLeft="35dp"
+                            android:textAlignment="textStart"
+                            app:layout_constraintStart_toEndOf="@+id/textView4"
+                            tools:layout_editor_absoluteY="7dp" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        style="@style/medium_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="21dp"
+                        android:layout_marginTop="22dp"
+                        android:text="단 맛"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    <Button
+        android:id="@+id/bt_next"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bt_next"
+        android:text="다음으로"
+        android:textSize="12sp"
+        style="@style/bt_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
