@@ -66,11 +66,15 @@
             android:name=".MainActivity"
             android:theme="@style/Theme.App.Splash"
             android:exported="true"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.GoldenRatio.NoActionBar">
+            android:label="@string/title_activity_main">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".hangover.IngredientActivity"
@@ -129,12 +133,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
