@@ -2,15 +2,16 @@ package com.example.goldenratio
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemBoardBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
-import kotlin.coroutines.coroutineContext
 
 class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
     :RecyclerView.Adapter<RecyclerViewBoardAdapter.CustomViewHolder>() {
@@ -43,12 +44,12 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
             with(itemBoardBinding) {
                 itemTitle.text = boardData.title                        //제목
 
-                Glide.with(thumbnailBoard.context)
-                    .load(boardData.mainImageUrl)
-                    .into(thumbnailBoard); //썸네일
-
-                Log.d("mainUrl", boardData.mainImageUrl)
-
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        convertBitmapFromURL(boardData.mainImageUrl)
+                    }
+                    thumbnailBoard.setImageBitmap(bitmap)
+                }
                 //별점
                 buttonRating.text = boardData.averageScore.toString()
 
@@ -65,6 +66,17 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
             }
         }
     }
+
+    private fun convertBitmapFromURL(url: String): Bitmap?{
+        val conn = URL(url).openConnection() as HttpURLConnection
+        conn.doInput
+        conn.connect()
+
+        val input = conn.inputStream
+
+        return BitmapFactory.decodeStream(input)
+    }
+
     //리스너 구현
     interface OnClickListener{
         fun onClick(position: Int)                  //아이템 클릭
