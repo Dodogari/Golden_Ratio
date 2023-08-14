@@ -23,7 +23,7 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(reviewBinding.root)
 
         //콘텐츠 내용 값 가져오기
-        val reviewList = intent.getParcelableArrayListExtra<ReviewData>("reviewList")
+        /*val reviewList = intent.getParcelableArrayListExtra<ReviewData>("reviewList")
 
         recyclerViewReviewAdapter = ReviewAdapter(reviewList!!)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -75,6 +75,6 @@ class ReviewActivity : AppCompatActivity() {
 
             //끝나지 않았다면
             if (!isFinishing) finish()
-        }
+        }*/
     }
 }

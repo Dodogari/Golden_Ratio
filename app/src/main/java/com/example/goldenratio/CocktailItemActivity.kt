@@ -33,6 +33,10 @@ class CocktailItemActivity : AppCompatActivity() {
         cocktailItemBinding = ActivityCocktailItemBinding.inflate(layoutInflater)
         setContentView(cocktailItemBinding.root)
 
+        setSupportActionBar(cocktailItemBinding.topBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.button_menu)
+
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션
         val boardId = intent.getIntExtra("boardId", 1)
@@ -41,7 +45,6 @@ class CocktailItemActivity : AppCompatActivity() {
 
         //1-2. 통신
         /*val cocktailItemContent = RegisterClient.registerService.getCocktailItem(boardId,)
-        cocktailItemContent.enqueue(object : Callback<CocktailData> {
             //서버 응답 시
             override fun onResponse(
                 call: Call<CocktailData>,
