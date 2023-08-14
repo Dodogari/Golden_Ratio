@@ -17,4 +17,5 @@
     <color name="light_background">#FFEEFBFF</color>
     <color name="star_background">#FFDBDBDB</color>
     <color name="toolbar">#F5F3F2</color>
+    <color name="red">#FFF24E1E</color>
 </resources>

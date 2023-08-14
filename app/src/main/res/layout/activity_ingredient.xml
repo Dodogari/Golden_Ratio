@@ -105,15 +105,16 @@
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
-    <ImageButton
+    <Button
         android:id="@+id/bt_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="255dp"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
         android:layout_marginEnd="23dp"
-        android:layout_marginBottom="31dp"
-        android:background="@drawable/bt_next_2"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bt_next"
+        android:text="다음으로"
+        android:textSize="12sp"
+        style="@style/bt_text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

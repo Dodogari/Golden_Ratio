@@ -46,7 +46,7 @@
             android:background="#D9D9D9">
 
             <ImageView
-                android:id="@+id/img_camera"
+                android:id="@+id/img_hangover"
                 android:layout_width="match_parent"
                 android:layout_height="295dp"
                 android:scaleType="centerCrop"
@@ -77,25 +77,20 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/rv_img_pic"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="50dp"
+                android:layout_marginTop="34dp"
                 android:clipToPadding="false"
-                android:orientation="horizontal"
                 android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_pic_list" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="312dp"
                 android:layout_height="96dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="#F4F4F4"
                 app:cardCornerRadius="7dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -103,6 +98,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rv_img_pic">
 
                 <EditText
+                    android:id="@+id/et_intro"
                     style="@style/hint_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,13 +110,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-    <ImageButton
+    <Button
         android:id="@+id/bt_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
         android:layout_marginEnd="23dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/bt_next_2"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bt_next"
+        android:text="다음으로"
+        android:textSize="12sp"
+        style="@style/bt_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,5 @@
 package com.example.goldenratio.hangover
 
-class Img (val img : Int)
+import android.net.Uri
+
+class Img(val img: Uri?)

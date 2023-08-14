@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="67dp"
                 android:text="다음으로"
-                android:background="@drawable/bt_next"
+                android:background="@drawable/bt_login"
                 style="@style/bt_text" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

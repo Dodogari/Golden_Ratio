@@ -5,14 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import com.example.goldenratio.cocktail.IngredientFragment
 import com.example.goldenratio.databinding.ActivityRegisterBinding
+import com.example.goldenratio.login.models.id.GetIdInterface
+import com.example.goldenratio.login.models.id.GetIdService
+import com.example.goldenratio.login.models.id.IdCheckResponse
 
-class RegisterActivity : AppCompatActivity() {
+var id: String = ""
+var pw: String = ""
+
+class RegisterActivity : AppCompatActivity(), GetIdInterface {
     private lateinit var registerBinding: ActivityRegisterBinding
-    private var id: String = ""
-    private var pw: String = ""
 
     companion object{
         lateinit var RegisterContext : Context
@@ -20,7 +25,7 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
+        registerBinding = com.example.goldenratio.databinding.ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(registerBinding.root)
 
         RegisterContext = this
@@ -54,6 +59,18 @@ class RegisterActivity : AppCompatActivity() {
                 registerBinding.btIdCheck.isEnabled = false
             }
         }
+
+        registerBinding.btIdCheck.setOnClickListener{
+            // 서버 연결
+            if(id != null)
+            {
+                id = registerBinding.etId.text.toString()
+                GetIdService(this).tryGetId(userId = id)
+            }
+            registerBinding.btIdCheck.isEnabled = false
+            Toast.makeText(this, "아이디 중복 확인", Toast.LENGTH_SHORT).show()
+        }
+
 
         registerBinding.btNext.setOnClickListener{
             // 비밀번호 확인
@@ -141,5 +158,16 @@ class RegisterActivity : AppCompatActivity() {
                     .commitAllowingStateLoss()
             }
         }
+    }
+
+
+    // 서버 연결 성공
+    override fun onGetIdSuccess(response: IdCheckResponse) {
+        Toast.makeText(this, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    // 서버 연결 실패
+    override fun onGetIdFailure(message: String) {
+        Log.d("error", "오류 : $message")
     }
 }

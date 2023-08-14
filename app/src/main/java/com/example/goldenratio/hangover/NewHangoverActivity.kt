@@ -11,19 +11,29 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.goldenratio.MainActivity
 import com.example.goldenratio.cocktail.IngredientFragment
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityNewHangoverBinding
+import com.example.goldenratio.hangover.models.HangInterface
+import com.example.goldenratio.hangover.models.HangResponse
+import com.example.goldenratio.hangover.models.PostHangRequest
+import com.example.goldenratio.login.id
+import com.example.goldenratio.login.models.LoginResponse
+import com.example.goldenratio.login.models.LoginService
+import com.example.goldenratio.login.models.PostLoginRequest
 import com.example.goldenratio.search.SearchFragment
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 
+var img_hangover: Uri? = null
 
-class  NewHangoverActivity : AppCompatActivity() {
+class  NewHangoverActivity : AppCompatActivity(), HangInterface {
 
     private lateinit var NewHangoverBinding : ActivityNewHangoverBinding
 
@@ -51,9 +61,16 @@ class  NewHangoverActivity : AppCompatActivity() {
 
         // 다음 화면으로 이동
         NewHangoverBinding.btNext.setOnClickListener{
-            val intent = Intent(this, IngredientActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            startActivity(intent)
+            // 서버에 값 보냄
+//            val title = ""
+//            val hangoverMainImageUrl = ""
+//            val content = ""
+//            val category = ""
+//
+//            val postRequest = PostHangRequest(title = title, hangoverMainImageUrl = hangoverMainImageUrl, content = content, category = category, gradientList = gradientList)
+//
+//            LoginService(this).tryPostLogin(postRequest)
+            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
         // 카메라
@@ -153,11 +170,13 @@ class  NewHangoverActivity : AppCompatActivity() {
                         val img = data?.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
+                        img_hangover = uri
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
+                    img_hangover = uri
                 }
             }
         }
@@ -188,5 +207,21 @@ class  NewHangoverActivity : AppCompatActivity() {
                     .commitAllowingStateLoss()
             }
         }
+    }
+
+    // 서버 연결 성공
+    override fun onPostHangSuccess(response: HangResponse) {
+        // 메인 화면으로 이동
+        val intent = Intent(this, IngredientActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+
+        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show()
+    }
+
+    // 서버 연결 실패
+    override fun onPostHangFailure(message: String) {
+        Log.d("error", "오류 : $message")
+        Toast.makeText(this, "오류 : ${message}", Toast.LENGTH_SHORT).show()
     }
 }

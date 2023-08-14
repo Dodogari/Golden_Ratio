@@ -38,7 +38,7 @@ class AddHangoverActivity : AppCompatActivity() {
         addHangoverBinding = ActivityAddHangoverBinding.inflate(layoutInflater)
         setContentView(addHangoverBinding.root)
 
-        img_camera = findViewById(R.id.img_camera)
+        img_camera = findViewById(R.id.img_hangover)
 
         // 뒤로가기
         addHangoverBinding.btBack.setOnClickListener {
@@ -52,17 +52,20 @@ class AddHangoverActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        if(img_hangover != null){
+            img_camera.setImageURI(img_hangover)
+        }
+
         val imgList: ArrayList<Img> = arrayListOf()
 
         imgList.apply {
-            add(Img(R.drawable.img_44))
-            add(Img(R.drawable.img_22))
-            add(Img(R.drawable.img_33))
+            add(Img(img_ingredient))
+            add(Img(img_ingredient))
         }
 
         // ViewPager 여백, 너비 정의
-            val pageMarginPx = resources.getDimensionPixelOffset(com.example.goldenratio.R.dimen.pageMargin) // 페이지끼리 간격
-            val pagerWidth = resources.getDimensionPixelOffset(com.example.goldenratio.R.dimen.pageWidth) // 페이지 보이는 정도
+            val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin) // 페이지끼리 간격
+            val pagerWidth = resources.getDimensionPixelOffset(R.dimen.pageWidth) // 페이지 보이는 정도
             val screenWidth = resources.displayMetrics.widthPixels // 스마트폰의 가로 길이
             val offsetPx = screenWidth - pageMarginPx - pagerWidth
 

@@ -15,12 +15,14 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityNewIngredientBinding
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 
-var img_uri: Uri? = null
+var img_ingredient: Uri? = null
+var ingredient_name: String? = null
 
 class NewIngredientActivity : AppCompatActivity() {
 
@@ -47,8 +49,16 @@ class NewIngredientActivity : AppCompatActivity() {
             finish()
         }
 
+        // 이전 화면으로 이동
+        newIngredientBinding.btBack.setOnClickListener{
+            finish()
+        }
+
         // 다음 화면으로 이동
         newIngredientBinding.btNext.setOnClickListener{
+
+            ingredient_name = newIngredientBinding.etName.text.toString()
+
             val intent = Intent(this, IngredientActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
@@ -151,13 +161,13 @@ class NewIngredientActivity : AppCompatActivity() {
                         val img = data?.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
-                        img_uri = uri
+                        img_ingredient = uri
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
-                    img_uri = uri
+                    img_ingredient = uri
                 }
             }
         }

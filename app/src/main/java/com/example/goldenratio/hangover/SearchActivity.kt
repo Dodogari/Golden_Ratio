@@ -27,6 +27,8 @@ class SearchActivity : AppCompatActivity() {
             add(Search("스프라이트", R.drawable.ic_search_del))
             add(Search("스프라이트", R.drawable.ic_search_del))
             add(Search("스프라이트", R.drawable.ic_search_del))
+            add(Search("스프라이트", R.drawable.ic_search_del))
+            add(Search("스프라이트", R.drawable.ic_search_del))
         }
 
         searchBinding.rvSearch.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
