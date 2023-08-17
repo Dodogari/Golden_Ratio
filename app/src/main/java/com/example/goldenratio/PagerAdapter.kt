@@ -10,7 +10,7 @@ class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun createFragment(position: Int): Fragment
     = when (position) {
         0 -> CocktailFragment()
-        1 -> IngredientFragment()
+        1 -> HangoverFragment()
         else -> CocktailFragment()
     }
 }

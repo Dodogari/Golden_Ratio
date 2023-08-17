@@ -4,12 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.example.goldenratio.databinding.ActivityCocktailItemBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,12 +12,7 @@ import retrofit2.Response
 
 class CocktailItemActivity : AppCompatActivity() {
     private lateinit var cocktailItemBinding: ActivityCocktailItemBinding
-    private lateinit var recycleViewGradientAdapter: RecycleViewGradientAdapter
-    private lateinit var recyclerViewReviewAdapter: ReviewAdapter
-    private lateinit var itemResultLauncher: ActivityResultLauncher<Intent>
-    private var materialNameList2 = mutableListOf<String>()
-    private var materialNameList = mutableListOf<String>()
-    private var materialNumList = mutableListOf<Int>()
+    private lateinit var cocktailItemData: CocktailData
 
     private lateinit var cocktailItem: CocktailData
 
@@ -33,6 +23,7 @@ class CocktailItemActivity : AppCompatActivity() {
         cocktailItemBinding = ActivityCocktailItemBinding.inflate(layoutInflater)
         setContentView(cocktailItemBinding.root)
 
+        //사이드 메뉴
         setSupportActionBar(cocktailItemBinding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.button_menu)
@@ -40,10 +31,46 @@ class CocktailItemActivity : AppCompatActivity() {
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션
         val boardId = intent.getIntExtra("boardId", 1)
-
         Log.d("dd", boardId.toString())
 
         //1-2. 통신
+        val cocktailListContent = RegisterClient.registerService.getCocktailItem(boardId)
+        cocktailListContent.enqueue(object : Callback<CocktailData> {
+            //서버 응답 시
+            override fun onResponse(
+                call: Call<CocktailData>,
+                response: Response<CocktailData>) {
+                cocktailItemData = response.body()!!
+
+                cocktailItemBinding.itemContentTitle.text = cocktailItemData.title
+                cocktailItemBinding.itemBarTitle.text = cocktailItemData.title
+
+                cocktailItemBinding.ratingCount.text = cocktailItemData.reviews.size.toString()
+                cocktailItemBinding.ratingCount2.text = cocktailItemData.reviews.size.toString()
+
+                cocktailItemBinding.ratingScore.text = cocktailItemData.averageScore.toString()
+                cocktailItemBinding.ratingScore2.text = cocktailItemData.averageScore.toString()
+
+                cocktailItemBinding.avgRatingBar2.rating = cocktailItemData.averageScore
+
+                when(cocktailItemData.sweet) {
+                    0 -> cocktailItemBinding.aSweet.text = "상"
+                    1 -> cocktailItemBinding.aSweet.text = "중"
+                    2 -> cocktailItemBinding.aSweet.text = "하"
+                }
+
+                when(cocktailItemData.alcohol) {
+                    0 -> cocktailItemBinding.aSweet.text = "소주보다 낮음"
+                    1 -> cocktailItemBinding.aSweet.text = "소주"
+                    2 -> cocktailItemBinding.aSweet.text = "소주보다 높음"
+                }
+            }
+
+            override fun onFailure(call: Call<CocktailData>, t: Throwable) {
+                Toast.makeText(this@CocktailItemActivity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         /*val cocktailItemContent = RegisterClient.registerService.getCocktailItem(boardId,)
             //서버 응답 시
             override fun onResponse(

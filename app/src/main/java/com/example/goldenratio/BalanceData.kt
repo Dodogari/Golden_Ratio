@@ -1,8 +1,8 @@
 package com.example.goldenratio
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class BalanceData(var balanceName: String,
-                       var balanceNum: Int): Parcelable
+data class BalanceData(@SerializedName("balanceName") var balanceName: String,
+                       @SerializedName("balanceNum") var balanceNum: Int)
