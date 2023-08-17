@@ -31,9 +31,7 @@ class LoginActivity : AppCompatActivity(), LoginInterface {
             val postRequest = PostLoginRequest(id = id, password = password)
 
             LoginService(this).tryPostLogin(postRequest)
-            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
-
 
         //버튼 비활성화
         loginBinding.btLogin.isEnabled = false

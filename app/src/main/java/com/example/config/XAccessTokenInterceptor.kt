@@ -1,6 +1,6 @@
 package com.example.config
 
-import android.util.Log.i
+
 import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
 import com.example.config.ApplicationClass.Companion.sSharedPreferences
 import okhttp3.Interceptor

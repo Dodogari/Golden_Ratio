@@ -5,23 +5,25 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityNewIngredientBinding
 import java.io.FileOutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 
-var img_ingredient: Uri? = null
+var url_ingredient: URL? = null
 var ingredient_name: String? = null
 
 class NewIngredientActivity : AppCompatActivity() {
@@ -161,13 +163,19 @@ class NewIngredientActivity : AppCompatActivity() {
                         val img = data?.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
-                        img_ingredient = uri
+
+                        // uri -> url로 변경
+                        url_ingredient = URL("file://"+ absolutelyPath(uri!!))
+                        Log.d("tag", "img_ingredient:"+ "{$url_ingredient}")
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
-                    img_ingredient = uri
+
+                    // uri -> url로 변경
+                    url_ingredient = URL("file://"+ absolutelyPath(uri!!))
+                    Log.d("tag", "img_ingredient:"+ "{$url_ingredient}")
                 }
             }
         }
@@ -177,5 +185,17 @@ class NewIngredientActivity : AppCompatActivity() {
     fun RandomFileName() : String{
         val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
         return fileName
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri): String {
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
+        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c.moveToFirst()
+
+        var result = c.getString(index)
+
+        return result
     }
 }

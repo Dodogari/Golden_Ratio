@@ -1,12 +1,14 @@
 package com.example.goldenratio.hangover
 
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityIngredientBinding
+
+
+val ingredientList: ArrayList<Ingredient> = arrayListOf()
 
 class IngredientActivity : AppCompatActivity() {
     private lateinit var ingredientBinding: ActivityIngredientBinding
@@ -16,25 +18,12 @@ class IngredientActivity : AppCompatActivity() {
         ingredientBinding = ActivityIngredientBinding.inflate(layoutInflater)
         setContentView(ingredientBinding.root)
 
-        val ingredientList: ArrayList<Ingredient> = arrayListOf()
-//        var ingredient_name: String? = null
-//
-//        // 이름 값 받아오기
-//        if (ingredient_name != null)
-//        {
-//            ingredient_name = intent.getStringExtra("ingredient_name") as String
-//        }
-
+        // 이미지 저장
         ingredientList.apply {
             if (ingredient_name != null)
             {
-                add(Ingredient(img_ingredient, ingredient_name.toString(), R.drawable.ic_delete))
+                add(Ingredient(url_ingredient, ingredient_name.toString(), R.drawable.ic_delete))
             }
-
-            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
-            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
-            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
-            add(Ingredient(img_ingredient,"스프라이트", R.drawable.ic_delete))
         }
 
         ingredientBinding.rvIngredient.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

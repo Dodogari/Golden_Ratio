@@ -13,7 +13,7 @@ class ApplicationClass : Application() {
 
     companion object {
 
-        val API_URL = "http://54.180.177.129:8080/"
+        val API_URL = "https://d4f37515-8b75-4487-861a-5693493e64ec.mock.pstmn.io"
 
         // 만들어져있는 SharedPreferences 를 사용. 재생성 X
         lateinit var sSharedPreferences: SharedPreferences
@@ -29,8 +29,10 @@ class ApplicationClass : Application() {
             .connectTimeout(5000, TimeUnit.MILLISECONDS)
             // 로그캣에 okhttp.OkHttpClient로 검색하면 http 통신 내용을 보여줍니다.
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
+            //.addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .build()
+
+
 
         val sRetrofit = Retrofit.Builder()
             .baseUrl(API_URL)

@@ -68,7 +68,6 @@ class RegisterActivity : AppCompatActivity(), GetIdInterface {
                 GetIdService(this).tryGetId(userId = id)
             }
             registerBinding.btIdCheck.isEnabled = false
-            Toast.makeText(this, "아이디 중복 확인", Toast.LENGTH_SHORT).show()
         }
 
 

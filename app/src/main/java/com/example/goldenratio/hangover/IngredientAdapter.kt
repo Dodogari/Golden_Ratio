@@ -3,13 +3,17 @@ package com.example.goldenratio.hangover
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemIngredientBinding
 
 class IngredientAdapter(private val ingredientList: ArrayList<Ingredient>): RecyclerView.Adapter<IngredientAdapter.ViewHolder>() {
 
     inner class ViewHolder(val ingredientBinding: ItemIngredientBinding): RecyclerView.ViewHolder(ingredientBinding.root) {
         fun bind (Ingredient: Ingredient) {
-            ingredientBinding.imgIngredient.setImageURI(img_ingredient)
+            Glide.with(ingredientBinding.imgIngredient)
+                .load(ingredientList[position].img.toString()) // 불러올 이미지 url
+                .into(ingredientBinding.imgIngredient) // 이미지를 넣을 뷰
+
             ingredientBinding.tvName.text = ingredientList.get(position).name
             ingredientBinding.btDel.setImageResource(ingredientList[position].del)
         }

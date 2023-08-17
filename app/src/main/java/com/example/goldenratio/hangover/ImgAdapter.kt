@@ -3,13 +3,16 @@ package com.example.goldenratio.hangover
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemPicListBinding
 
 class ImgAdapter(private val imgList: ArrayList<Img>): RecyclerView.Adapter<ImgAdapter.ViewHolder>() {
 
     inner class ViewHolder(val imgBinding: ItemPicListBinding): RecyclerView.ViewHolder(imgBinding.root) {
         fun bind (img: Img) {
-            imgBinding.imgPic.setImageURI(imgList[position].img)
+            Glide.with(imgBinding.imgPic)
+                .load(ingredientList[position].img.toString()) // 불러올 이미지 url
+                .into(imgBinding.imgPic) // 이미지를 넣을 뷰
         }
     }
 
