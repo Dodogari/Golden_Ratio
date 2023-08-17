@@ -5,25 +5,30 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityAddHangoverBinding
+import com.example.goldenratio.hangover.models.*
 import java.io.FileOutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 
 
-class AddHangoverActivity : AppCompatActivity() {
+class AddHangoverActivity : AppCompatActivity(), HangInterface {
     private lateinit var addHangoverBinding: ActivityAddHangoverBinding
 
     // storage 권한 처리에 필요한 변수
@@ -40,6 +45,25 @@ class AddHangoverActivity : AppCompatActivity() {
 
         img_camera = findViewById(R.id.img_hangover)
 
+        // 이미지
+        val imgList: ArrayList<Img> = arrayListOf()
+        val size = ingredientList.size
+
+        for (i in 0 ..size -1) {
+            if (size != 0) {
+                imgList.apply {
+                    add(Img(url_ingredient))
+                }
+            }
+        }
+
+        if(url_hangover != null){
+            Glide.with(this)
+                .load(url_hangover.toString()) // 불러올 이미지 url
+                .into(img_camera) // 이미지를 넣을 뷰
+            Log.d("tag", "url_hangover:"+"{$url_hangover}")
+        }
+
         // 뒤로가기
         addHangoverBinding.btBack.setOnClickListener {
             finish()
@@ -47,20 +71,30 @@ class AddHangoverActivity : AppCompatActivity() {
 
         // 메인 화면으로 이동
         addHangoverBinding.btNext.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            startActivity(intent)
-        }
 
-        if(img_hangover != null){
-            img_camera.setImageURI(img_hangover)
-        }
+            // 서버에 값 보냄
+            val title = title_hangover
+            val hangoverMainImageUrl = url_hangover
+            val content = addHangoverBinding.etContent.text.toString()
+            val category = "category"
+            val gradientList: ArrayList<HangRequest> = arrayListOf()
 
-        val imgList: ArrayList<Img> = arrayListOf()
+            for (i in 0 ..size -1) {
+                if (size != 0) {
+                    gradientList.apply{
+                        add(
+                            HangRequest(
+                                Name = ingredientList[i].name,
+                                url = ingredientList[i].img
+                            )
+                        )
+                    }
+                }
+            }
 
-        imgList.apply {
-            add(Img(img_ingredient))
-            add(Img(img_ingredient))
+            val PostRegisterRequest = PostHangRequest(title = title, hangoverMainImageUrl = hangoverMainImageUrl, content = content, category = category, gradientList = gradientList)
+            HangService(this).tryPostRegister(PostRegisterRequest)
+            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
         // ViewPager 여백, 너비 정의
@@ -163,6 +197,7 @@ class AddHangoverActivity : AppCompatActivity() {
         return uri
     }
 
+
     // 결과
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -174,11 +209,19 @@ class AddHangoverActivity : AppCompatActivity() {
                         val img = data?.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
+
+                        // uri -> url로 변경
+                        url_hangover = URL("file://"+ absolutelyPath(uri!!))
+                        Log.d("tag", "title url:"+ "{$url_hangover}")
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
+
+                    // uri -> url로 변경
+                    url_hangover = URL("file://"+ absolutelyPath(uri!!))
+                    Log.d("tag", "title url:"+ "{$url_hangover}")
                 }
             }
         }
@@ -188,5 +231,33 @@ class AddHangoverActivity : AppCompatActivity() {
     fun RandomFileName() : String{
         val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
         return fileName
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri): String {
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
+        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c.moveToFirst()
+
+        var result = c.getString(index)
+
+        return result
+    }
+
+    // 서버 연결 성공
+    override fun onPostHangSuccess(response: HangResponse) {
+        // 메인 화면으로 이동
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+
+        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show()
+    }
+
+    // 서버 연결 실패
+    override fun onPostHangFailure(message: String) {
+        Log.d("error", "오류 : $message")
+        Toast.makeText(this, "오류 : ${message}", Toast.LENGTH_SHORT).show()
     }
 }

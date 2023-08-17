@@ -1,5 +1,5 @@
 package com.example.goldenratio.hangover
 
-import android.net.Uri
+import java.net.URL
 
-class Ingredient(val img: Uri?, val name: String, val del: Int)
+class Ingredient(val img: URL?, val name: String, val del: Int)

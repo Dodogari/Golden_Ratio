@@ -1,7 +1,9 @@
 package com.example.goldenratio.hangover.models
 
+import com.google.gson.annotations.SerializedName
+
 data class HangResponse(
-        val message : String
+        @SerializedName("result") val result : String
 )
 
 

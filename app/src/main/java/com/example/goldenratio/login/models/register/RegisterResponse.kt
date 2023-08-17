@@ -3,7 +3,7 @@ import com.example.config.BaseResponse
 import com.google.gson.annotations.SerializedName
 
 data class RegisterResponse(
-        @SerializedName("accessToken") val accessToken : String
+        @SerializedName("result") val result : String
 ):BaseResponse()
 
 
