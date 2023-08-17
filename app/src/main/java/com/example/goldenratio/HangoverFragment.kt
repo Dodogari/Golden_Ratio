@@ -1,5 +1,6 @@
 package com.example.goldenratio
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -24,9 +25,8 @@ class HangoverFragment : Fragment() {
     private lateinit var hangoverBinding: FragmentHangoverBinding
 
     //#1. 상단 슬라이드 배너 변수
-    private var slideList: MutableList<Int> = mutableListOf()                       //슬라이드에 보여질 이미지 리스트
+    private var slideListHangover: MutableList<Int> = mutableListOf()                       //슬라이드에 보여질 이미지 리스트
     private lateinit var topSlideBannerViewPager2: ViewPager2                       //슬라이드 뷰페이저 리스트
-    private lateinit var topSlideBannerAdapter: TopSlideBannerAdapter               //슬라이드 뷰페이저 어댑터
     private lateinit var indicator3: CircleIndicator3                               //슬라이드 인디케이터
     private lateinit var handler: Handler                                           //핸들러 (메시지 전달)
 
@@ -49,13 +49,6 @@ class HangoverFragment : Fragment() {
     //초기값 설정
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList)
-
-        //리사이클러뷰 레이아웃 설정
-        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-        hangoverBinding.listHangover.layoutManager = layoutManager
-        hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
-
         //#1. 상단 슬라이드 설정
         //1-1. 슬라이드 이미지 추가
         addSlideImage()
@@ -63,8 +56,7 @@ class HangoverFragment : Fragment() {
 
         //1-2. viewPager2 설정
         topSlideBannerViewPager2 = hangoverBinding.slideViewPagerHangover
-        topSlideBannerAdapter = TopSlideBannerAdapter(slideList)
-        topSlideBannerViewPager2.adapter = topSlideBannerAdapter
+        topSlideBannerViewPager2.adapter = TopSlideBannerAdapter(slideListHangover)
 
         //1-3. indicator 연결
         indicator3 = hangoverBinding.topSlideBannerIndicatorHangover
@@ -78,9 +70,9 @@ class HangoverFragment : Fragment() {
                     //스크롤 상태일 때 범위를 초과한다면
                     when (topSlideBannerViewPager2.currentItem) {
                         //오른쪽: 맨 첫번째 사진 뷰를 보여줌
-                        (slideList.size + 1) -> topSlideBannerViewPager2.setCurrentItem(0, false)
+                        (slideListHangover.size + 1) -> topSlideBannerViewPager2.setCurrentItem(0, false)
                         //왼쪽: 맨 마지막 사진 뷰를 보여줌
-                        -1 -> topSlideBannerViewPager2.setCurrentItem(slideList.size, false)
+                        -1 -> topSlideBannerViewPager2.setCurrentItem(slideListHangover.size, false)
                     }
                 }
             }
@@ -93,10 +85,20 @@ class HangoverFragment : Fragment() {
             }
         })
 
+
+        recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList)
+
+        //리사이클러뷰 레이아웃 설정
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
+        hangoverBinding.listHangover.layoutManager = layoutManager
+        hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
+
+
+
         //#2. 서버 통신: 숙취해소 보드 내용 받아오기
         //2-1. 응답
-        val cocktailListContent = RegisterClient.registerService.getHangoverList()
-        cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+        var HangoverListContent = RegisterClient.registerService.getHangoverListAll()
+        HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
             //서버 응답 시
             override fun onResponse(
                 call: Call<ArrayList<BoardData>>,
@@ -124,15 +126,6 @@ class HangoverFragment : Fragment() {
 
                     //5-2. 좋아요 클릭
                     override fun likeOnClick(position: Int) {
-                        /*cocktailList[position].likeCount = !cocktailList[position].likeCheck
-                        if(cocktailList[position].likeCheck) {
-                            cocktailList[position].like++
-                            recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like++)
-                        }
-                        else {
-                            cocktailList[position].like--
-                            recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like--)
-                        }*/
                     }
 
                 })
@@ -142,8 +135,6 @@ class HangoverFragment : Fragment() {
                 Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
-
-
 
         /*
         resultLauncher = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) {
@@ -162,11 +153,71 @@ class HangoverFragment : Fragment() {
             }
         }*/
 
-        //초기: 필터 중 전체 버튼 클릭 상태
+        //#4. 라디오 버튼 클릭
         hangoverBinding.radioHangoverAll.isChecked = true
 
+        //4-1. 전체
+        hangoverBinding.radioHangoverAll.setOnClickListener {
+            HangoverListContent = RegisterClient.registerService.getHangoverListAll()
+            HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>
+                ) {
+                    hangoverList = response.body()!!
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //4-2. 별점순
+        hangoverBinding.radioHangoverRating.setOnClickListener {
+            HangoverListContent = RegisterClient.registerService.getHangoverListStar()
+            HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>
+                ) {
+                    hangoverList = response.body()!!
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //4-3. 좋아요순
+        hangoverBinding.radioHangoverLike.setOnClickListener {
+            HangoverListContent = RegisterClient.registerService.getHangoverListLike()
+            HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>
+                ) {
+                    hangoverList = response.body()!!
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
         //아이템 클릭 시
-        //칵테일 리스트 아이템 클릭 시
+        //숙취해소 리스트 아이템 클릭 시
         recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
             //상세 페이지 불러오기
             override fun onClick(position: Int) {
@@ -194,15 +245,15 @@ class HangoverFragment : Fragment() {
 
     //1-1. 슬라이드 이미지 추가
     private fun addSlideImage() {
-        slideList.add(R.drawable.view_test1)
-        slideList.add(R.drawable.view_test2)
-        slideList.add(R.drawable.view_test3)
+        slideListHangover.add(R.drawable.view_test1)
+        slideListHangover.add(R.drawable.view_test2)
+        slideListHangover.add(R.drawable.view_test3)
     }
 
     //1-4. runnable 객체 정의
     private val runnable = Runnable {
         //맨 마지막 이미지에 도달하면 처음 이미지로 되돌아감
-        if (topSlideBannerViewPager2.currentItem == slideList.size - 1)
+        if (topSlideBannerViewPager2.currentItem == slideListHangover.size - 1)
             topSlideBannerViewPager2.currentItem = 0
         //그 외엔 마지막으로 향해 이미지 슬라이드
         else

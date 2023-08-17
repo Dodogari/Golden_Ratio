@@ -29,13 +29,21 @@ interface CocktailInterface {
 
     //숙취해소 전체 조회
     @GET("/golden-ratio/hangover/all")
-    fun getHangoverList():Call<ArrayList<BoardData>>
+    fun getHangoverListAll():Call<ArrayList<BoardData>>
+
+    //숙취해소 조회 - 별점순
+    @GET("/golden-ratio/hangover/star")
+    fun getHangoverListStar():Call<ArrayList<BoardData>>
+
+    //숙취해소 조회 - 좋아요순
+    @GET("/golden-ratio/hangover/like")
+    fun getHangoverListLike():Call<ArrayList<BoardData>>
 
     //게시글 상세 조회 - 칵테일
-    //@GET("/golden-ratio/cocktail/${board_id}")
-    //fun getCocktailItem(@Query("board_id") boardId: St, board_id: String):Call<CocktailData>
+    @GET("/golden-ratio/cocktail/{board_id}")
+    fun getCocktailItem(@Path(value = "board_id", encoded = true) boardId: Int):Call<CocktailData>
     
     //게시글 상세 조회 - 숙취해소
-    @GET("/golden-ratio/hangover/{board-id}")
-    fun getHangoverItem(@Query("board-id") boardId: Int):Call<CocktailData>
+    @GET("/golden-ratio/hangover/{board_id}")
+    fun getHangoverItem(@Query("board_id") boardId: Int):Call<CocktailData>
 }
