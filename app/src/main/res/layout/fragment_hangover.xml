@@ -53,7 +53,7 @@
             <RadioGroup
                 android:id="@+id/filter_hangover"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginVertical="20dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/top_slide_banner_hangover">

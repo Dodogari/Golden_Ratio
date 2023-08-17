@@ -1,5 +1,6 @@
 package com.example.goldenratio
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -26,7 +27,6 @@ class CocktailFragment : Fragment() {
     private var slideList: MutableList<Int> = mutableListOf()                       //슬라이드에 보여질 이미지 리스트
     private lateinit var topSlideBannerViewPager2: ViewPager2                       //슬라이드 뷰페이저 리스트
     private lateinit var topSlideBannerAdapter: TopSlideBannerAdapter               //슬라이드 뷰페이저 어댑터
-    private lateinit var indicator3: CircleIndicator3                               //슬라이드 인디케이터
     private lateinit var handler: Handler                                           //핸들러 (메시지 전달)
 
     //#2. 칵테일 리스트 변수
@@ -57,8 +57,7 @@ class CocktailFragment : Fragment() {
         topSlideBannerViewPager2.adapter = topSlideBannerAdapter
 
         //1-3. indicator 연결
-        indicator3 = cocktailBinding.topSlideBannerIndicator
-        indicator3.setViewPager(topSlideBannerViewPager2)
+        cocktailBinding.topSlideBannerIndicator.setViewPager(topSlideBannerViewPager2)
 
         //1-4. 자동 슬라이드 설정
         topSlideBannerViewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -76,7 +75,7 @@ class CocktailFragment : Fragment() {
             }
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                indicator3.animatePageSelected(position)        //인디케이터와 뷰페이저 연결
+                cocktailBinding.topSlideBannerIndicator.animatePageSelected(position)        //인디케이터와 뷰페이저 연결
 
                 handler.removeCallbacks(runnable)               //슬라이드 멈춤
                 handler.postDelayed(runnable, 3000)    //3초에 한번 슬라이드
@@ -86,7 +85,7 @@ class CocktailFragment : Fragment() {
         
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
-        val cocktailListContent = RegisterClient.registerService.getCocktailAll()
+        var cocktailListContent = RegisterClient.registerService.getCocktailAll()
         cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
             //서버 응답 시
             override fun onResponse(
@@ -131,10 +130,115 @@ class CocktailFragment : Fragment() {
             }
         })
 
-        //#4. 라디오 버튼 클릭 -> 라디오 버튼 난리
+        //#4. 라디오 버튼 클릭
         cocktailBinding.radioCocktailAll.isChecked = true
+
+        //4-1. 전체
+        cocktailBinding.radioCocktailAll.setOnClickListener {
+
+            cocktailListContent = RegisterClient.registerService.getCocktailAll()
+            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>) {
+                    cocktailList = response.body()!!
+
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //4-2. 별점순
+        cocktailBinding.radioCocktailRating.setOnClickListener {
+
+            cocktailListContent = RegisterClient.registerService.getCocktailStar()
+            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>) {
+                    cocktailList = response.body()!!
+
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //4-3. 좋아요순
+        cocktailBinding.radioCocktailLike.setOnClickListener {
+
+            cocktailListContent = RegisterClient.registerService.getCocktailLike()
+            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>) {
+                    cocktailList = response.body()!!
+
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //4-4. 도수 높은 순
+        cocktailBinding.radioCocktailAlcohol.setOnClickListener {
+
+            cocktailListContent = RegisterClient.registerService.getCocktailAlcohol()
+            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>) {
+                    cocktailList = response.body()!!
+
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //4-5. 단맛높은순
+        cocktailBinding.radioCocktailSweet.setOnClickListener {
+
+            cocktailListContent = RegisterClient.registerService.getCocktailSweet()
+            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+                //서버 응답 시
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<ArrayList<BoardData>>,
+                    response: Response<ArrayList<BoardData>>) {
+                    cocktailList = response.body()!!
+
+                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
 /*
-        //#5. 아이템 클릭 설정
+   체    //#5. 아이템 클릭 설정
         recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
             //5-1. 상세 메뉴 액티비티로 전환
             override fun onClick(position: Int) {
