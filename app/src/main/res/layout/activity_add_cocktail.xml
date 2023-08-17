@@ -247,7 +247,7 @@
 
     <Button
         android:id="@+id/bt_next"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_marginEnd="23dp"
         android:layout_marginBottom="20dp"
