@@ -58,9 +58,7 @@ class RegisterActivity : AppCompatActivity(), GetIdInterface {
             if (validateEmail()) {
                 registerBinding.btIdCheck.isEnabled = false
             }
-        }
 
-        registerBinding.btIdCheck.setOnClickListener{
             // 서버 연결
             if(id != null)
             {
@@ -69,7 +67,6 @@ class RegisterActivity : AppCompatActivity(), GetIdInterface {
             }
             registerBinding.btIdCheck.isEnabled = false
         }
-
 
         registerBinding.btNext.setOnClickListener{
             // 비밀번호 확인
