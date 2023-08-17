@@ -50,13 +50,13 @@ class RegisterActivity : AppCompatActivity(), GetIdInterface {
 
         // 아이디 중복 확인
         registerBinding.btIdCheck.setOnClickListener {
-            // id 확인
-            if (!validateEmail()) {
-                return@setOnClickListener
-            }
 
+            // id 확인
             if (validateEmail()) {
-                registerBinding.btIdCheck.isEnabled = false
+            registerBinding.btIdCheck.isEnabled = false
+            }
+            else if (!validateEmail()) {
+                return@setOnClickListener
             }
 
             // 서버 연결

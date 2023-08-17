@@ -76,7 +76,7 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
             val title = title_hangover
             val hangoverMainImageUrl = url_hangover
             val content = addHangoverBinding.etContent.text.toString()
-            val category = "category"
+            val category = "hangover" //cocktail
             val gradientList: ArrayList<HangRequest> = arrayListOf()
 
             for (i in 0 ..size -1) {
