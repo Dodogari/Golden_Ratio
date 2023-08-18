@@ -1,6 +1,5 @@
 package com.example.goldenratio
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -14,7 +13,6 @@ class CocktailItemActivity : AppCompatActivity() {
     private lateinit var cocktailItemBinding: ActivityCocktailItemBinding
     private lateinit var cocktailItemData: CocktailData
 
-    private lateinit var cocktailItem: CocktailData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +28,8 @@ class CocktailItemActivity : AppCompatActivity() {
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션
-        val boardId = intent.getIntExtra("boardId", 1)
-        Log.d("dd", boardId.toString())
+        val boardId = intent.getIntExtra("boardId", 1).toString()
+        Log.d("dd", boardId)
 
         //1-2. 통신
         val cocktailListContent = RegisterClient.registerService.getCocktailItem(boardId)
@@ -40,30 +38,33 @@ class CocktailItemActivity : AppCompatActivity() {
             override fun onResponse(
                 call: Call<CocktailData>,
                 response: Response<CocktailData>) {
-                cocktailItemData = response.body()!!
 
-                cocktailItemBinding.itemContentTitle.text = cocktailItemData.title
-                cocktailItemBinding.itemBarTitle.text = cocktailItemData.title
+                if(response.isSuccessful){
+                    cocktailItemBinding.itemContentTitle.text = response.body()!!.title
+                    cocktailItemBinding.itemBarTitle.text = response.body()!!.title
 
-                cocktailItemBinding.ratingCount.text = cocktailItemData.reviews.size.toString()
-                cocktailItemBinding.ratingCount2.text = cocktailItemData.reviews.size.toString()
+                    cocktailItemBinding.ratingCount.text = response.body()!!.reviews.size.toString()
+                    cocktailItemBinding.ratingCount2.text = response.body()!!.reviews.size.toString()
 
-                cocktailItemBinding.ratingScore.text = cocktailItemData.averageScore.toString()
-                cocktailItemBinding.ratingScore2.text = cocktailItemData.averageScore.toString()
+                    cocktailItemBinding.ratingScore.text = response.body()!!.averageScore.toString()
+                    cocktailItemBinding.ratingScore2.text = response.body()!!.averageScore.toString()
 
-                cocktailItemBinding.avgRatingBar2.rating = cocktailItemData.averageScore
+                    cocktailItemBinding.avgRatingBar2.rating = response.body()!!.averageScore
 
-                when(cocktailItemData.sweet) {
-                    0 -> cocktailItemBinding.aSweet.text = "상"
-                    1 -> cocktailItemBinding.aSweet.text = "중"
-                    2 -> cocktailItemBinding.aSweet.text = "하"
+                    when(response.body()!!.sweet) {
+                        0 -> cocktailItemBinding.aSweet.text = "상"
+                        1 -> cocktailItemBinding.aSweet.text = "중"
+                        2 -> cocktailItemBinding.aSweet.text = "하"
+                    }
+
+                    when(response.body()!!.alcohol) {
+                        0 -> cocktailItemBinding.aSweet.text = "소주보다 낮음"
+                        1 -> cocktailItemBinding.aSweet.text = "소주"
+                        2 -> cocktailItemBinding.aSweet.text = "소주보다 높음"
+                    }
                 }
-
-                when(cocktailItemData.alcohol) {
-                    0 -> cocktailItemBinding.aSweet.text = "소주보다 낮음"
-                    1 -> cocktailItemBinding.aSweet.text = "소주"
-                    2 -> cocktailItemBinding.aSweet.text = "소주보다 높음"
-                }
+                else
+                    Log.d("error", response.body().toString())
             }
 
             override fun onFailure(call: Call<CocktailData>, t: Throwable) {

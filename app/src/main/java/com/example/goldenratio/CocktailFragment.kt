@@ -121,8 +121,8 @@ class CocktailFragment : Fragment() {
                             recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like--)
                         }*/
                     }
-
                 })
+                response.errorBody().toString()
             }
 
             override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {

@@ -40,10 +40,10 @@ interface CocktailInterface {
     fun getHangoverListLike():Call<ArrayList<BoardData>>
 
     //게시글 상세 조회 - 칵테일
-    @GET("/golden-ratio/cocktail/{board_id}")
-    fun getCocktailItem(@Path(value = "board_id", encoded = true) boardId: Int):Call<CocktailData>
+    @GET("/golden-ratio/cocktail/{board-id}")
+    fun getCocktailItem(@Query("board-id") boardId: String):Call<CocktailData>
     
     //게시글 상세 조회 - 숙취해소
-    @GET("/golden-ratio/hangover/{board_id}")
-    fun getHangoverItem(@Query("board_id") boardId: Int):Call<CocktailData>
+    @GET("/golden-ratio/hangover/{board-id}")
+    fun getHangoverItem(@Query("board-id") boardId: String):Call<CocktailData>
 }
