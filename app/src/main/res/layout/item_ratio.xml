@@ -36,8 +36,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/img_ingredient"
+                <TextView
+                    android:id="@+id/tv_ingredient"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@color/red"

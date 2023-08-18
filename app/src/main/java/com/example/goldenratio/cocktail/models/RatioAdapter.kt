@@ -1,19 +1,21 @@
-package com.example.goldenratio.cocktail
+package com.example.goldenratio.cocktail.models
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goldenratio.databinding.ItemRatioBinding
-import java.lang.reflect.Member
 
 class RatioAdapter(private val ratioList: ArrayList<Ratio>): RecyclerView.Adapter<RatioAdapter.ViewHolder>() {
 
-    var itemClick: RatioAdapter.ItemClick? = null
+    var itemClick: ItemClick? = null
 
     inner class ViewHolder(val ratioBinding: ItemRatioBinding): RecyclerView.ViewHolder(ratioBinding.root) {
         fun bind (Ratio: Ratio) {
             ratioBinding.tvName.text = Ratio.name
+
+            ratioBinding.tvIngredient.setBackgroundColor(Color.parseColor(Ratio.color))
 
             var ratio = 1
 
