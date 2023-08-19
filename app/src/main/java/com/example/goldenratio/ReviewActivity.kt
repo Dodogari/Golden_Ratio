@@ -3,78 +3,64 @@ package com.example.goldenratio
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.goldenratio.databinding.ActivityReviewBinding
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ReviewActivity : AppCompatActivity() {
     private lateinit var reviewBinding: ActivityReviewBinding
-    private lateinit var recyclerViewReviewAdapter: ReviewAdapter
+    private lateinit var reviewItemList: ArrayList<ReviewItemData>
+
+    //리뷰 어댑터
+    private lateinit var recyclerViewReviewAdapter: ReviewListAdapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //binding 정의
         reviewBinding = ActivityReviewBinding.inflate(layoutInflater)
         setContentView(reviewBinding.root)
 
-        //콘텐츠 내용 값 가져오기
-        /*val reviewList = intent.getParcelableArrayListExtra<ReviewData>("reviewList")
+        //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
+        //1-1. 데이터 포지션
+        val boardId = intent.getIntExtra("boardId", 1).toString()
 
-        recyclerViewReviewAdapter = ReviewAdapter(reviewList!!)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        reviewBinding.listReview.layoutManager = layoutManager
-        reviewBinding.listReview.adapter = recyclerViewReviewAdapter
+        //1-2. 통신
+        val reviewContent = RegisterClient.reviewService.getReviewAll(boardId)
+        reviewContent.enqueue(object : Callback<ArrayList<ReviewItemData>> {
+            override fun onResponse(
+                call: Call<ArrayList<ReviewItemData>>,
+                response: Response<ArrayList<ReviewItemData>>
+            ) {
+                if(response.isSuccessful) {
+                    reviewItemList = response.body()!!
 
-        recyclerViewReviewAdapter.notifyItemRangeChanged(reviewList.size, reviewList.size)
+                    //#2. 리사이클러뷰 설정
+                    //2-1. 리사이클러뷰 레이아웃 설정
+                    reviewBinding.listReview.layoutManager = LinearLayoutManager(this@ReviewActivity, LinearLayoutManager.VERTICAL, false)
 
-        var total = 0
+                    //3-2. 어댑터 - 리스트 연결
+                    recyclerViewReviewAdapter = ReviewListAdapter(reviewItemList)
+                    reviewBinding.listReview.adapter = recyclerViewReviewAdapter
+                }
+            }
 
-        for(i in 0 until reviewList.size) {
-            total += reviewList[i].rating
-        }
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.DOWN
+            override fun onFailure(call: Call<ArrayList<ReviewItemData>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
 
-        var avg = df.format(total / (reviewList.size).toFloat())
+        })
 
-        reviewBinding.avgRatingBar3.rating = avg.toFloat()
-        reviewBinding.ratingCount3.text = "(${reviewList.size})"
-        reviewBinding.avgRatingNum3.text = avg
-
-        reviewBinding.reviewEnroll.setOnClickListener {
-            val rate = reviewBinding.ratingBar.rating
-            val content = reviewBinding.writingContent.text.toString()
-            reviewList.add(ReviewData("황금비율", R.drawable.egg, rate.toInt(), content))
-
-            recyclerViewReviewAdapter.notifyItemRangeChanged(reviewList.size, 1)
-            total += rate.toInt()
-            avg = df.format(total / (reviewList.size).toFloat())
-            reviewBinding.avgRatingBar3.rating = avg.toFloat()
-            reviewBinding.ratingCount3.text = "(${reviewList.size})"
-            reviewBinding.avgRatingNum3.text = avg
-
-            reviewBinding.ratingBar.rating = 0f
-            reviewBinding.writingContent.text.clear()
-
-            Toast.makeText(this, "성공적으로 등록하였습니다.", Toast.LENGTH_SHORT).show()
-        }
-
-        //원래 화면으로 돌아가기
+        //#3. back button
         reviewBinding.buttonBack.setOnClickListener {
-            val itemIntent = Intent(this@ReviewActivity, CocktailItemActivity::class.java)
-            itemIntent.putExtra("total", avg)
-            itemIntent.putParcelableArrayListExtra("reviewList", reviewList)
-
-            //결과값 반환
-            setResult(RESULT_OK, itemIntent)
+            startActivity(Intent(this@ReviewActivity, CocktailItemActivity::class.java))
 
             //끝나지 않았다면
             if (!isFinishing) finish()
-        }*/
+        }
     }
 }

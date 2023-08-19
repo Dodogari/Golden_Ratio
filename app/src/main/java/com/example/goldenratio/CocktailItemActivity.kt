@@ -50,7 +50,7 @@ class CocktailItemActivity : AppCompatActivity() {
         Log.d("dd", boardId)
 
         //1-2. 통신
-        val cocktailItemContent = RegisterClient.registerService.getCocktailItem(boardId)
+        val cocktailItemContent = RegisterClient.cocktailService.getCocktailItem(boardId)
         cocktailItemContent.enqueue(object : Callback<CocktailData> {
             //서버 응답 시
             @SuppressLint("SetTextI18n")
@@ -138,8 +138,7 @@ class CocktailItemActivity : AppCompatActivity() {
                     //2-10. 레시피 설명
                     cocktailItemBinding.recipeContent.text = cocktailItemData.content
 
-                    //2-11. 리뷰
-                    //1) 리사이클러뷰 레이아웃 설정 + 어댑터 연결
+                    //2-11. 리뷰 - 리사이클러뷰 레이아웃 설정 + 어댑터 연결
                     recyclerViewReviewAdapter = ReviewAdapter(cocktailItemData.reviews)
 
                     val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@CocktailItemActivity, LinearLayoutManager.VERTICAL, false)
@@ -147,11 +146,6 @@ class CocktailItemActivity : AppCompatActivity() {
                     cocktailItemBinding.listReview.adapter = recyclerViewReviewAdapter
 
                     recyclerViewReviewAdapter.notifyItemRangeChanged(cocktailItemData.reviews.size, cocktailItemData.reviews.size)
-
-                    //2) 리뷰 전체 보기 화면 불러오기
-                    cocktailItemBinding.reviewAll.setOnClickListener {
-                        startActivity(Intent(this@CocktailItemActivity, ReviewActivity::class.java))
-                    }
 
                     //2-12. 날짜
                     cocktailItemBinding.timeUpload.text = "${cocktailItemData.createdDate[0]}년 ${cocktailItemData.createdDate[1]}월 ${cocktailItemData.createdDate[2]}일 작성"
@@ -169,6 +163,13 @@ class CocktailItemActivity : AppCompatActivity() {
         cocktailItemBinding.buttonBack.setOnClickListener {
             startActivity(Intent(this@CocktailItemActivity, MainActivity::class.java))
             if (!isFinishing) finish()
+        }
+
+        //#4. 리뷰 전체 보기 화면 불러오기
+        cocktailItemBinding.reviewAll.setOnClickListener {
+            val reviewIntent = Intent(this@CocktailItemActivity, ReviewActivity::class.java)
+            reviewIntent.putExtra("boardId", boardId)
+            startActivity(reviewIntent)
         }
 
         /*val cocktailItemContent = RegisterClient.registerService.getCocktailItem(boardId,)

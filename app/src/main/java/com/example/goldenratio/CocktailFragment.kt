@@ -85,7 +85,7 @@ class CocktailFragment : Fragment() {
         
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
-        var cocktailListContent = RegisterClient.registerService.getCocktailAll()
+        var cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
         cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
             //서버 응답 시
             override fun onResponse(
@@ -102,7 +102,8 @@ class CocktailFragment : Fragment() {
                 cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
 
                 recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                    //5-1. 상세 메뉴 액티비티로 전환
+                    //5-1. 상세 메뉴 액티비티로 전환`
+
                     override fun onClick(position: Int) {
                         val itemIntent = Intent(activity, CocktailItemActivity::class.java)
                         itemIntent.putExtra("boardId", cocktailList[position].boardId)
@@ -136,7 +137,7 @@ class CocktailFragment : Fragment() {
         //4-1. 전체
         cocktailBinding.radioCocktailAll.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailAll()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -157,7 +158,7 @@ class CocktailFragment : Fragment() {
         //4-2. 별점순
         cocktailBinding.radioCocktailRating.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailStar()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailStar()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -178,7 +179,7 @@ class CocktailFragment : Fragment() {
         //4-3. 좋아요순
         cocktailBinding.radioCocktailLike.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailLike()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailLike()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -199,7 +200,7 @@ class CocktailFragment : Fragment() {
         //4-4. 도수 높은 순
         cocktailBinding.radioCocktailAlcohol.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailAlcohol()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailAlcohol()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -220,7 +221,7 @@ class CocktailFragment : Fragment() {
         //4-5. 단맛높은순
         cocktailBinding.radioCocktailSweet.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailSweet()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailSweet()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
