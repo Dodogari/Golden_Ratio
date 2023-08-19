@@ -3,6 +3,7 @@ package com.example.goldenratio
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goldenratio.databinding.ActivityReviewBinding
@@ -50,7 +51,7 @@ class ReviewActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ArrayList<ReviewItemData>>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@ReviewActivity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
