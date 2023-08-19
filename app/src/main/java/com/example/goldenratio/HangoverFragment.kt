@@ -97,7 +97,7 @@ class HangoverFragment : Fragment() {
 
         //#2. 서버 통신: 숙취해소 보드 내용 받아오기
         //2-1. 응답
-        var HangoverListContent = RegisterClient.registerService.getHangoverListAll()
+        var HangoverListContent = RegisterClient.hangoverService.getHangoverListAll()
         HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
             //서버 응답 시
             override fun onResponse(
@@ -158,7 +158,7 @@ class HangoverFragment : Fragment() {
 
         //4-1. 전체
         hangoverBinding.radioHangoverAll.setOnClickListener {
-            HangoverListContent = RegisterClient.registerService.getHangoverListAll()
+            HangoverListContent = RegisterClient.hangoverService.getHangoverListAll()
             HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -178,7 +178,7 @@ class HangoverFragment : Fragment() {
 
         //4-2. 별점순
         hangoverBinding.radioHangoverRating.setOnClickListener {
-            HangoverListContent = RegisterClient.registerService.getHangoverListStar()
+            HangoverListContent = RegisterClient.hangoverService.getHangoverListStar()
             HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -198,7 +198,7 @@ class HangoverFragment : Fragment() {
 
         //4-3. 좋아요순
         hangoverBinding.radioHangoverLike.setOnClickListener {
-            HangoverListContent = RegisterClient.registerService.getHangoverListLike()
+            HangoverListContent = RegisterClient.hangoverService.getHangoverListLike()
             HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")

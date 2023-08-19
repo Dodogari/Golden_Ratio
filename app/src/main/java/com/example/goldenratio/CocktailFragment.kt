@@ -85,7 +85,7 @@ class CocktailFragment : Fragment() {
         
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
-        var cocktailListContent = RegisterClient.registerService.getCocktailAll()
+        var cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
         cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
             //서버 응답 시
             override fun onResponse(
@@ -102,7 +102,8 @@ class CocktailFragment : Fragment() {
                 cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
 
                 recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                    //5-1. 상세 메뉴 액티비티로 전환
+                    //5-1. 상세 메뉴 액티비티로 전환`
+
                     override fun onClick(position: Int) {
                         val itemIntent = Intent(activity, CocktailItemActivity::class.java)
                         itemIntent.putExtra("boardId", cocktailList[position].boardId)
@@ -121,8 +122,8 @@ class CocktailFragment : Fragment() {
                             recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like--)
                         }*/
                     }
-
                 })
+                response.errorBody().toString()
             }
 
             override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
@@ -136,7 +137,7 @@ class CocktailFragment : Fragment() {
         //4-1. 전체
         cocktailBinding.radioCocktailAll.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailAll()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -157,7 +158,7 @@ class CocktailFragment : Fragment() {
         //4-2. 별점순
         cocktailBinding.radioCocktailRating.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailStar()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailStar()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -178,7 +179,7 @@ class CocktailFragment : Fragment() {
         //4-3. 좋아요순
         cocktailBinding.radioCocktailLike.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailLike()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailLike()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -199,7 +200,7 @@ class CocktailFragment : Fragment() {
         //4-4. 도수 높은 순
         cocktailBinding.radioCocktailAlcohol.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailAlcohol()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailAlcohol()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -220,7 +221,7 @@ class CocktailFragment : Fragment() {
         //4-5. 단맛높은순
         cocktailBinding.radioCocktailSweet.setOnClickListener {
 
-            cocktailListContent = RegisterClient.registerService.getCocktailSweet()
+            cocktailListContent = RegisterClient.cocktailService.getCocktailSweet()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
                 @SuppressLint("NotifyDataSetChanged")
@@ -237,87 +238,13 @@ class CocktailFragment : Fragment() {
                 }
             })
         }
-/*
-   체    //#5. 아이템 클릭 설정
-        recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-            //5-1. 상세 메뉴 액티비티로 전환
-            override fun onClick(position: Int) {
-                val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                itemIntent.putExtra("position", position)
-                startActivity(itemIntent)
-            }
-
-            //5-2. 좋아요 클릭
-            override fun likeOnClick(position: Int) {
-                /*cocktailList[position].likeCount = !cocktailList[position].likeCheck
-                if(cocktailList[position].likeCheck) {
-                    cocktailList[position].like++
-                    recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like++)
-                }
-                else {
-                    cocktailList[position].like--
-                    recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like--)
-                }*/
-            }
-
-        })*/
-        /*
-        //수정된 내용 받아오기
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == Activity.RESULT_OK) {
-                //콘텐츠 내용 값 가져오기
-                val title = it.data?.getStringExtra("title")
-                val rating = it.data?.getFloatExtra("rating", 0f)
-                val thumbnail = it.data?.getIntExtra("thumbnail", 0)
-                val like = it.data?.getIntExtra("like", 0)
-                val position = it.data?.getIntExtra("position", 0)
-
-                cocktailList[position!!].title = title.toString()
-                cocktailList[position].thumbnail = thumbnail!!.toInt()
-                cocktailList[position].like = like!!.toInt()
-                cocktailList[position].rating = rating!!.toFloat()
-            }
-        }
-        //칵테일 리스트 아이템 클릭 시
-        recyclerViewCocktailAdapter!!.setOnClickListener(object : RecyclerViewCocktailAdapter.OnClickListener {
-            //상세 페이지 불러오기
-            override fun onClick(position: Int) {
-                val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                itemIntent.putExtra("title", cocktailList[position].title)
-                itemIntent.putExtra("thumbnail", cocktailList[position].thumbnail)
-                itemIntent.putExtra("like", cocktailList[position].like)
-                itemIntent.putExtra("rating", cocktailList[position].rating)
-                itemIntent.putExtra("writtenDate", cocktailList[position].writtenDate)
-                itemIntent.putExtra("sweetLevel", cocktailList[position].sweetLevel)
-                itemIntent.putExtra("alcoholLevel", cocktailList[position].alcoholLevel)
-                itemIntent.putParcelableArrayListExtra("gradientList", cocktailList[position].gradientList)
-                itemIntent.putExtra("recipeContent", cocktailList[position].recipeContent)
-                itemIntent.putParcelableArrayListExtra("balanceList", cocktailList[position].balanceList)
-                itemIntent.putParcelableArrayListExtra("reviewList", cocktailList[position].reviewList)
-                itemIntent.putExtra("position", position)                   //배열 위치 넘기기
-                resultLauncher.launch(itemIntent)
-            }
-
-            override fun likeOnClick(position: Int) {
-                cocktailList[position].likeCheck = !cocktailList[position].likeCheck
-                if(cocktailList[position].likeCheck) {
-                    cocktailList[position].like++
-                    recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like++)
-                }
-                else {
-                    cocktailList[position].like--
-                    recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like--)
-                }
-            }
-
-        })*/
     }
 
     //1-1. 슬라이드 이미지 추가
     private fun addSlideImage() {
-        slideList.add(R.drawable.view_test1)
-        slideList.add(R.drawable.view_test2)
-        slideList.add(R.drawable.view_test3)
+        slideList.add(R.drawable.viewpager_image1)
+        slideList.add(R.drawable.viewpager_image2)
+        slideList.add(R.drawable.viewpager_image3)
     }
 
     //1-4. runnable 객체 정의

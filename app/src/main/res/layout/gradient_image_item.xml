@@ -8,5 +8,8 @@
         android:id="@+id/gradient_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:maxWidth="200dp"
+        android:maxHeight="200dp"
         android:adjustViewBounds="true"/>
 </androidx.cardview.widget.CardView>

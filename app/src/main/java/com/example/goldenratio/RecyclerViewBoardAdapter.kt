@@ -1,17 +1,10 @@
 package com.example.goldenratio
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemBoardBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
-import java.net.URL
 
 class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
     :RecyclerView.Adapter<RecyclerViewBoardAdapter.CustomViewHolder>() {
@@ -44,12 +37,11 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
             with(itemBoardBinding) {
                 itemTitle.text = boardData.title                        //제목
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    val bitmap = withContext(Dispatchers.IO) {
-                        convertBitmapFromURL(boardData.mainImageUrl)
-                    }
-                    thumbnailBoard.setImageBitmap(bitmap)
-                }
+                //이미지
+                Glide.with(thumbnailBoard)
+                    .load(boardData.mainImageUrl) // 불러올 이미지 url
+                    .into(thumbnailBoard) // 이미지를 넣을 뷰
+
                 //별점
                 buttonRating.text = boardData.averageScore.toString()
 
@@ -65,16 +57,6 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
                 }
             }
         }
-    }
-
-    private fun convertBitmapFromURL(url: String): Bitmap?{
-        val conn = URL(url).openConnection() as HttpURLConnection
-        conn.doInput
-        conn.connect()
-
-        val input = conn.inputStream
-
-        return BitmapFactory.decodeStream(input)
     }
 
     //리스너 구현
