@@ -200,8 +200,8 @@ class CocktailItemActivity : AppCompatActivity() {
         }
 
         cocktailItemBinding.buttonMenu.setOnClickListener {
-            val popupMenu = PopupMenu::class.java.getDeclaredConstructor("mPopup")
-            popupMenu.isAccessible = true
+            //val popupMenu = PopupMenu::class.java.getDeclaredConstructor("mPopup")
+            //popupMenu.isAccessible = true
         }
     }
 
