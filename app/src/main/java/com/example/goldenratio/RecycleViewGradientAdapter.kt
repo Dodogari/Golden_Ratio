@@ -3,9 +3,10 @@ package com.example.goldenratio
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.GradientData
 import com.example.goldenratio.databinding.GradientImageItemBinding
 
-class RecycleViewGradientAdapter(var gradientList: List<RecipeData>)
+class RecycleViewGradientAdapter(var gradientList: List<GradientData>)
     : RecyclerView.Adapter<RecycleViewGradientAdapter.ViewHolder>() {
     private lateinit var gradientImageItemBinding: GradientImageItemBinding
 

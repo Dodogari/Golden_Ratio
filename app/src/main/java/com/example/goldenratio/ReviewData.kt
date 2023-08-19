@@ -1,11 +1,10 @@
 package com.example.goldenratio
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 //리뷰 데이터
-data class ReviewData(var userName: String,
-                      var userProfile: Int,
-                      var rating: Int,
-                      var content: String): Parcelable
+data class ReviewData(@SerializedName("reviewer") var reviewer: String,
+                      @SerializedName("rating") var rating: Float,
+                      @SerializedName("comment") var comment: String)
