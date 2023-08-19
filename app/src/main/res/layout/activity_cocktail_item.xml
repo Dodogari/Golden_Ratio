@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/basic_background"
     android:fitsSystemWindows="true"
     tools:context=".CocktailItemActivity">
 
@@ -15,7 +16,7 @@
         android:layout_width="match_parent"
         android:elevation="10dp"
         app:layout_collapseMode="pin"
-        android:background="@color/white"
+        android:background="@color/basic_background"
         app:popupTheme="@style/Theme.GoldenRatio.PopupOverlay"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,22 +25,25 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp">
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/item_bar_title"
+            app:layout_constraintStart_toStartOf="@+id/item_bar_title"
+            tools:layout_editor_absoluteY="4dp">
             <!-- 뒤로가기 버튼 -->
             <ImageButton
                 android:id="@+id/button_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/back"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                android:src="@drawable/icon_back"
                 android:scaleType="center"
-                android:background="@android:color/transparent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/icon_back"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="@string/back" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- 아이템 이름 -->
             <TextView
@@ -62,11 +66,11 @@
                 android:id="@+id/button_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="20dp"
                 android:src="@drawable/button_menu"
-                android:layout_marginEnd="20dp"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -97,21 +101,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
         <!-- 세부 내용 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/first_line"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/basic_background"
             app:cardCornerRadius="15dp">
-
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/basic_background">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="30dp"
+                    android:padding="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
                     <!-- 메뉴 제목 및 좋아요 갯수 -->
@@ -120,8 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginHorizontal="20dp"
                         app:layout_constraintTop_toTopOf="parent">
                         <!-- 메뉴 제목 -->
                         <TextView
@@ -161,14 +164,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/suite_regular"
-                                android:text="@string/count_reset"
                                 android:textColor="@color/unselected_text"
                                 android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent" />
-
                         </androidx.constraintlayout.widget.ConstraintLayout>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <!-- 별점 -->
@@ -176,9 +176,8 @@
                         android:id="@+id/rating_line"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="20dp"
                         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
 
                         <ImageView
@@ -199,7 +198,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/suite_regular"
-                            android:text="@string/zero"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -213,7 +211,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/suite_regular"
-                            android:text="@string/count_reset"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -236,17 +233,16 @@
 
                     <!-- 작성 일자 -->
                     <TextView
-                        android:id="@+id/time_upload"
+                        android:id="@+id/time_upload_cocktail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="7dp"
                         android:layout_marginBottom="20dp"
+                        android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_regular"
                         android:textColor="@color/unselected_text"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         android:textAlignment="viewStart"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/rating_line"
                         app:layout_constraintBottom_toTopOf="@id/info_cocktail"/>
 
@@ -255,15 +251,14 @@
                         android:id="@+id/info_cocktail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/background_gradient"
                         android:layout_marginTop="20dp"
-                        android:layout_margin="5dp"
-                        android:padding="20dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:paddingVertical="20dp"
+                        android:paddingHorizontal="25dp"
                         android:clipToPadding="false"
-                        android:elevation="2dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/time_upload"
-                        android:background="@drawable/gradient_background">
+                        android:elevation="1dp"
+                        app:layout_constraintTop_toBottomOf="@id/time_upload_cocktail">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/info_alcohol"
@@ -335,7 +330,6 @@
                                 app:layout_constraintBottom_toBottomOf="@id/info_sweet"
                                 app:layout_constraintStart_toEndOf="@id/q_sweet"
                                 app:layout_constraintTop_toTopOf="@id/info_sweet" />
-
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -345,13 +339,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_bold"
                         android:text="@string/recipe"
                         android:textColor="@color/text_basic"
                         android:textSize="20sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/info_cocktail"
                         app:layout_constraintBottom_toTopOf="@id/info_recipe"/>
 
@@ -360,16 +352,13 @@
                         android:id="@+id/info_recipe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/gradient_background"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:background="@drawable/background_gradient"
                         android:clipToPadding="false"
-                        android:elevation="2dp"
+                        android:elevation="1dp"
                         android:padding="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/recipe_cocktail"
-                        tools:layout_editor_absoluteY="263dp">
+                        app:layout_constraintTop_toBottomOf="@id/recipe_cocktail">
 
                         <!-- 재료 -->
                         <TextView
@@ -390,7 +379,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_regular"
                         android:textColor="@color/text_basic"
                         android:textSize="20sp"
@@ -401,12 +390,11 @@
 
                     <!-- 음료 비율(텍스트) -->
                     <TextView
-
                         android:id="@+id/ratio_num"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_regular"
                         android:textColor="@color/text_basic"
                         android:textSize="20sp"
@@ -421,7 +409,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_regular"
                         android:textColor="@color/text_basic"
                         android:textSize="15sp"
@@ -433,8 +421,7 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/gradient_image_list"
                         android:layout_width="match_parent"
-                        android:layout_height="350dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:clipChildren="false"
                         android:clipToPadding="false"
@@ -449,7 +436,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_bold"
                         android:text="리뷰"
                         android:textColor="@color/text_basic"
@@ -464,6 +451,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/review_text"
@@ -520,6 +508,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
+                            android:layout_marginHorizontal="20dp"
                             android:contentDescription="@string/rating"
                             android:scaleType="fitCenter"
                             android:src="@drawable/button_inside"
@@ -547,6 +536,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:layout_marginHorizontal="20dp"
                         app:layout_constraintTop_toBottomOf="@id/list_review"
                         app:layout_constraintEnd_toEndOf="parent">
                         <!-- 후기 갯수 -->
