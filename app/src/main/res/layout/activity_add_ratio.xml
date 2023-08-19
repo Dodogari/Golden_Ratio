@@ -6,82 +6,120 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".cocktail.AddRatioActivity"
-    android:background="@drawable/bg_ratio">
+    android:background="#24244E">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ic_shadow2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="165dp"
+        android:background="@drawable/ic_shadow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_login"
+        android:id="@+id/bt_next"
         style="@style/bt_text"
-        android:layout_width="wrap_content"
+        android:layout_width="72dp"
         android:layout_height="32dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
         android:text="다음으로"
+        android:textSize="12sp"
         android:background="@drawable/bt_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_marginTop="532dp"
-        android:id="@+id/tv_title"
-        style="@style/title_text"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginEnd="67dp"
-        android:text="어떤 재료를 비율로 나타낼까요?"
-        android:textSize="20dp"
+        android:layout_marginTop="159dp"
+        android:background="@drawable/ic_ratio_cup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="67dp"
-        android:fontFamily="@font/suite_medium"
-        android:text="나머지 재료들은 레시피 설명에 줄글로 적어주세요 \n비율에서 보이지 않는 재료들은 사라진 것이 아닙니다!"
-        android:textColor="#B6B6B6"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
         android:background="@color/toolbar"
-        app:layout_constraintTop_toBottomOf="@+id/textView8">
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="67dp"
+            android:text="어떤 재료를 비율로 나타낼까요?"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="67dp"
+            android:fontFamily="@font/suite_medium"
+            android:text="나머지 재료들은 레시피 설명에 줄글로 적어주세요 \n비율에서 보이지 않는 재료들은 사라진 것이 아닙니다!"
+            android:textColor="#B6B6B6"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/textView8">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="210dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingClass">
+                android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_ingredient"
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nestedScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_height="210dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/item_ratio_check" />
-            </androidx.core.widget.NestedScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </RelativeLayout>
+                    tools:ignore="MissingClass">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/item_ratio_check" />
+                </androidx.core.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

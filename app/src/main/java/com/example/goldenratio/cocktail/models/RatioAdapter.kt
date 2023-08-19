@@ -1,26 +1,40 @@
-package com.example.goldenratio.cocktail
+package com.example.goldenratio.cocktail.models
 
+import android.graphics.Color
+import android.os.Build.VERSION_CODES.P
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.goldenratio.cocktail.intRatio
+import com.example.goldenratio.cocktail.ratio
+import com.example.goldenratio.cocktail.ratioIntList
+import com.example.goldenratio.cocktail.sum
 import com.example.goldenratio.databinding.ItemRatioBinding
-import java.lang.reflect.Member
+
 
 class RatioAdapter(private val ratioList: ArrayList<Ratio>): RecyclerView.Adapter<RatioAdapter.ViewHolder>() {
 
-    var itemClick: RatioAdapter.ItemClick? = null
+    var itemClick: ItemClick? = null
 
     inner class ViewHolder(val ratioBinding: ItemRatioBinding): RecyclerView.ViewHolder(ratioBinding.root) {
         fun bind (Ratio: Ratio) {
             ratioBinding.tvName.text = Ratio.name
+            ratioBinding.tvIngredient.setBackgroundColor(Color.parseColor(Ratio.color))
 
-            var ratio = 1
-
+            // 비율 설정
             ratioBinding.btRatio.setOnClickListener {
-                ratio++
+                if(ratio < 5) {
+                    ratio++
+                    sum++
+                }else{
+                    ratio = 0
+                    sum -= 5
+                }
                 ratioBinding.tvRatio.text = ratio.toString()
             }
+            intRatio = ratioBinding.tvRatio.text.toString().toInt()
         }
     }
 

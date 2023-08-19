@@ -25,15 +25,36 @@
             android:background="@android:color/transparent"
             android:src="@drawable/bt_back"/>
 
-        <androidx.appcompat.widget.SearchView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="22dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_input"
-            app:searchIcon="@drawable/ic_search"
-            app:closeIcon="@drawable/ic_close"/>
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="100dp"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/view_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="22dp"
+                    android:background="@drawable/bg_input"
+                    app:searchIcon="@drawable/ic_search"
+                    app:closeIcon="@drawable/ic_close">
+                </androidx.appcompat.widget.SearchView>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -28,9 +28,10 @@ import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
 
+var url_profile: URL?= null
+
 class ProfileActivity : AppCompatActivity(), RegisterInterface {
     private lateinit var profileBinding: ActivityProfileBinding
-    var url_profile: URL?= null
 
     // storage 권한 처리에 필요한 변수
     val CAMERA = arrayOf(Manifest.permission.CAMERA)

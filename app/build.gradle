@@ -45,11 +45,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    // 이미지
     implementation 'de.hdodenhof:circleimageview:3.1.0' //원형 이미지 XML 컴퍼넌트
     implementation 'com.squareup.picasso:picasso:2.71828' //이미지 다운로드 및 캐싱 라이브러리
 
     //SlidingUpPanel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    // SwipeRefreshLayout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    //water
+    //implementation 'me.itangqi.waveloadingview:library:0.3.5'
 
     //viewpager2 + circle indicator import
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
