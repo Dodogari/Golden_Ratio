@@ -17,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
-import com.example.goldenratio.hangover.IngredientActivity
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 
@@ -44,7 +43,7 @@ class AddCocktailActivity : AppCompatActivity() {
         }
 
         addCocktailBinding.btNext.setOnClickListener {
-            val intent = Intent(this, IngredientActivity::class.java)
+            val intent = Intent(this, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.goldenratio.cocktail.ingredientNameList
 import com.example.goldenratio.databinding.ItemIngredientBinding
 
 class IngredientAdapter(private val ingredientList: ArrayList<Ingredient>): RecyclerView.Adapter<IngredientAdapter.ViewHolder>() {
@@ -37,6 +38,7 @@ class IngredientAdapter(private val ingredientList: ArrayList<Ingredient>): Recy
     fun delete(position: Int) {
         if (position >= 0) {
             ingredientList.removeAt(position)
+            ingredientNameList.removeAt(position)
             notifyDataSetChanged()
         }
     }

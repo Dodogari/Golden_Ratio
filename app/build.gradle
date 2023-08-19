@@ -52,6 +52,9 @@ dependencies {
     //SlidingUpPanel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 
+    // SwipeRefreshLayout
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
     //water
     //implementation 'me.itangqi.waveloadingview:library:0.3.5'
 

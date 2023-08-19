@@ -1,4 +1,4 @@
-package com.example.goldenratio.hangover
+package com.example.goldenratio.cocktail
 
 import android.Manifest
 import android.app.Activity
@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 var url_ingredient: URL? = null
 var ingredient_name: String? = null
 
-class NewIngredientActivity : AppCompatActivity() {
+class NewIngredientActivity2 : AppCompatActivity() {
 
     private lateinit var newIngredientBinding: ActivityNewIngredientBinding
 
@@ -60,7 +60,7 @@ class NewIngredientActivity : AppCompatActivity() {
         newIngredientBinding.btNext.setOnClickListener{
             ingredient_name = newIngredientBinding.etName.text.toString()
 
-            val intent = Intent(this, IngredientActivity::class.java)
+            val intent = Intent(this, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }

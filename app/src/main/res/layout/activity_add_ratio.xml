@@ -110,7 +110,7 @@
                     tools:ignore="MissingClass">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_ingredient"
+                        android:id="@+id/rv_check"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
