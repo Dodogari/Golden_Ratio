@@ -39,7 +39,6 @@ class NameFragment : Fragment() {
 
         // 프로필 설정으로 이동
         nameBinding.btNext.setOnClickListener{
-            //activity.changeFragment(2)
             val intent = Intent(getActivity(), ProfileActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
