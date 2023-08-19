@@ -31,11 +31,11 @@ class ReviewAdapter(private var reviewList: ArrayList<ReviewData>)
         fun bind(reviewData: ReviewData) {
             with(reviewAdapterBinding) {
                 //텍스트 : 사용자 이름, 리뷰 내용
-                userName.text = reviewData.userName
-                reviewContent.text = reviewData.content
+                userName.text = reviewData.reviewer
+                reviewContent.text = reviewData.comment
 
                 //프로필 이미지
-                userProfile.setImageResource(reviewData.userProfile)
+                //userProfile.setImageResource(reviewData.userProfile)
 
                 //최초 별점
                 userRating.rating = reviewData.rating.toFloat()

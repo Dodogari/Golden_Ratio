@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:background="@color/basic_background"
     app:cardCornerRadius="10dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:background="@color/basic_background"
+        android:padding="20dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/info_user"
             android:layout_width="match_parent"
