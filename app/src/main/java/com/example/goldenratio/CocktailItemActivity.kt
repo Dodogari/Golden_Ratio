@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,11 +47,6 @@ class CocktailItemActivity : AppCompatActivity() {
         //binding 정의
         cocktailItemBinding = ActivityCocktailItemBinding.inflate(layoutInflater)
         setContentView(cocktailItemBinding.root)
-
-        //사이드 메뉴
-        setSupportActionBar(cocktailItemBinding.topBar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.button_menu)
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션
@@ -182,5 +181,47 @@ class CocktailItemActivity : AppCompatActivity() {
             reviewIntent.putExtra("boardId", boardId)
             startActivity(reviewIntent)
         }
+
+        val menuOption = PopupMenu(applicationContext, cocktailItemBinding.buttonMenu)
+        menuOption.inflate(R.menu.menu_option)
+        menuOption.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.edit_item -> {
+                    Toast.makeText(this@CocktailItemActivity, "수정하기", Toast.LENGTH_SHORT).show()
+                    true
+                }
+
+                R.id.delete_item -> {
+                    Toast.makeText(this@CocktailItemActivity, "삭제하기", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> {false}
+            }
+        }
+
+        cocktailItemBinding.buttonMenu.setOnClickListener {
+            val popupMenu = PopupMenu::class.java.getDeclaredConstructor("mPopup")
+            popupMenu.isAccessible = true
+        }
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.menu_option, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.edit_item ->
+                Toast.makeText(this@CocktailItemActivity, "수정하기", Toast.LENGTH_SHORT).show()
+
+            R.id.delete_item ->
+                Toast.makeText(this@CocktailItemActivity, "삭제하기", Toast.LENGTH_SHORT).show()
+        }
+        return super.onContextItemSelected(item)
     }
 }

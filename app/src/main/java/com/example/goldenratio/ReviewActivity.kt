@@ -31,10 +31,10 @@ class ReviewActivity : AppCompatActivity() {
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션
-        val boardId = intent.getIntExtra("boardId", 1).toString()
+        val boardId = intent.getStringExtra("boardId")
 
         //1-2. 통신
-        val reviewContent = RegisterClient.reviewService.getReviewAll(boardId)
+        val reviewContent = RegisterClient.reviewService.getReviewAll(boardId!!)
         reviewContent.enqueue(object : Callback<ArrayList<ReviewItemData>> {
             override fun onResponse(
                 call: Call<ArrayList<ReviewItemData>>,
@@ -91,14 +91,20 @@ class ReviewActivity : AppCompatActivity() {
             val registerReviewContent = RegisterClient.reviewService.registerReview(boardId, registerData)
             registerReviewContent.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful.not())
+                    if (response.isSuccessful.not()) {
                         Toast.makeText(this@ReviewActivity, response.message(), Toast.LENGTH_SHORT).show()
-                    else
-                        Toast.makeText(this@ReviewActivity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+
+                        //화면 갱신 : 종료 후 다시 시작
+                        finish()
+                        overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+
+                        startActivity(intent) //현재 액티비티 재실행 실시
+                        overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                    }
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Toast.makeText(this@ReviewActivity, "데이터 전송이 실패되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ReviewActivity, "리뷰 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
 
             })
