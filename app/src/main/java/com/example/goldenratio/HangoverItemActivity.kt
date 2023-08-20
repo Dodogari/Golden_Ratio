@@ -153,6 +153,7 @@ class HangoverItemActivity : AppCompatActivity() {
         hangoverItemBinding.reviewAll.setOnClickListener {
             val reviewIntent = Intent(this@HangoverItemActivity, ReviewActivity::class.java)
             reviewIntent.putExtra("boardId", boardId)
+            reviewIntent.putExtra("category", 1)
             startActivity(reviewIntent)
         }
 
