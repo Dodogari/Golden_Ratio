@@ -34,8 +34,6 @@ class HangoverFragment : Fragment() {
     private var recyclerViewBoardAdapter: RecyclerViewBoardAdapter? = null          //숙취해소 리사이클러뷰 리스트 어댑터
     private var hangoverList = arrayListOf<BoardData>()                             //숙취해소 데이터 리스트
 
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-
     //레이아웃 inflate(객체화)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -136,23 +134,6 @@ class HangoverFragment : Fragment() {
             }
         })
 
-        /*
-        resultLauncher = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == android.app.Activity.RESULT_OK) {
-                //콘텐츠 내용 값 가져오기
-                val title = it.data?.getStringExtra("title")
-                val rating = it.data?.getFloatExtra("rating", 0f)
-                val thumbnail = it.data?.getIntExtra("thumbnail", 0)
-                val like = it.data?.getIntExtra("like", 0)
-                val position = it.data?.getIntExtra("position", 0)
-
-                hangoverList[position!!].title = title.toString()
-                hangoverList[position].thumbnail = thumbnail!!.toInt()
-                hangoverList[position].like = like!!.toInt()
-                hangoverList[position].rating = rating!!.toFloat()
-            }
-        }*/
-
         //#4. 라디오 버튼 클릭
         hangoverBinding.radioHangoverAll.isChecked = true
 
@@ -215,39 +196,13 @@ class HangoverFragment : Fragment() {
                 }
             })
         }
-
-        //아이템 클릭 시
-        //숙취해소 리스트 아이템 클릭 시
-        recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-            //상세 페이지 불러오기
-            override fun onClick(position: Int) {
-                /*
-                val itemIntent = Intent(activity, HangoverItemActivity::class.java)
-                itemIntent.putExtra("title", hangoverList[position].title)
-                itemIntent.putExtra("thumbnail", hangoverList[position].thumbnail)
-                itemIntent.putExtra("like", hangoverList[position].like)
-                itemIntent.putExtra("writtenDate", hangoverList[position].writtenDate)
-                itemIntent.putExtra("position", position)                   //배열 위치 넘기기
-                itemIntent.putParcelableArrayListExtra("gradientList", hangoverList[position].gradientList)
-                itemIntent.putExtra("recipeContent", hangoverList[position].recipeContent)
-                itemIntent.putParcelableArrayListExtra("reviewList", hangoverList[position].reviewList)
-                itemIntent.putExtra("position", position)                   //배열 위치 넘기기
-
-                resultLauncher.launch(itemIntent)*/
-            }
-
-            override fun likeOnClick(position: Int) {
-                //hangoverList[position].likeCheck = !hangoverList[position].likeCheck
-            }
-
-        })
     }
 
     //1-1. 슬라이드 이미지 추가
     private fun addSlideImage() {
-        slideListHangover.add(R.drawable.view_test1)
-        slideListHangover.add(R.drawable.view_test2)
-        slideListHangover.add(R.drawable.view_test3)
+        slideListHangover.add(R.drawable.viewpager_image1)
+        slideListHangover.add(R.drawable.viewpager_image2)
+        slideListHangover.add(R.drawable.viewpager_image3)
     }
 
     //1-4. runnable 객체 정의

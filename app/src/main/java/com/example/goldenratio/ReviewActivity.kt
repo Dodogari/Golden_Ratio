@@ -30,8 +30,9 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(reviewBinding.root)
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
-        //1-1. 데이터 포지션
+        //1-1. 데이터 포지션 / 카테고리
         val boardId = intent.getStringExtra("boardId")
+        val category = intent.getIntExtra("category", -1)
 
         //1-2. 통신
         val reviewContent = RegisterClient.reviewService.getReviewAll(boardId!!)
@@ -77,8 +78,15 @@ class ReviewActivity : AppCompatActivity() {
 
         //#3. back button
         reviewBinding.buttonBack.setOnClickListener {
-            startActivity(Intent(this@ReviewActivity, CocktailItemActivity::class.java))
+            var itemIntent = Intent()
+            if(category == 0) {
+                itemIntent = Intent(this@ReviewActivity, CocktailItemActivity::class.java)
+            }
+            else if(category == 1) {
+                itemIntent = Intent(this@ReviewActivity, HangoverItemActivity::class.java)
+            }
 
+            startActivity(itemIntent)
             //끝나지 않았다면
             if (!isFinishing) finish()
         }

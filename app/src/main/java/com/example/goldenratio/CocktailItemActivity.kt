@@ -177,6 +177,7 @@ class CocktailItemActivity : AppCompatActivity() {
         cocktailItemBinding.reviewAll.setOnClickListener {
             val reviewIntent = Intent(this@CocktailItemActivity, ReviewActivity::class.java)
             reviewIntent.putExtra("boardId", boardId)
+            reviewIntent.putExtra("category", 0)
             startActivity(reviewIntent)
         }
 
