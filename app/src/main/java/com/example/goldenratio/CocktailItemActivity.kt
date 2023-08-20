@@ -4,9 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -15,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ActivityCocktailItemBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.abs
 
 class CocktailItemActivity : AppCompatActivity() {
     private lateinit var cocktailItemBinding: ActivityCocktailItemBinding
@@ -41,6 +38,7 @@ class CocktailItemActivity : AppCompatActivity() {
     //2-4. 리뷰 리스트 어댑터
     private lateinit var recyclerViewReviewAdapter: ReviewAdapter
 
+    @SuppressLint("DiscouragedPrivateApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -119,14 +117,14 @@ class CocktailItemActivity : AppCompatActivity() {
                     cocktailItemBinding.gradientImageList.getChildAt(0).overScrollMode= View.OVER_SCROLL_NEVER
 
                     //3) 이미지 마진
-                    var transform = CompositePageTransformer()
+                    val transform = CompositePageTransformer()
                     transform.addTransformer(MarginPageTransformer(100))
 
                     //4) 스크롤 시 이미지 크기 변동
-                    transform.addTransformer(ViewPager2.PageTransformer{ view: View, fl: Float ->
-                        var v = 1-Math.abs(fl)
+                    transform.addTransformer { view: View, fl: Float ->
+                        val v = 1 - abs(fl)
                         view.scaleY = 0.8f + v * 0.2f
-                    })
+                    }
 
                     cocktailItemBinding.gradientImageList.setPageTransformer(transform)
 
@@ -182,46 +180,35 @@ class CocktailItemActivity : AppCompatActivity() {
             startActivity(reviewIntent)
         }
 
-        val menuOption = PopupMenu(applicationContext, cocktailItemBinding.buttonMenu)
-        menuOption.inflate(R.menu.menu_option)
-        menuOption.setOnMenuItemClickListener {
+        //#5. 팝업 메뉴
+        //5-1. 메뉴 클릭 시 액션
+        val popupMenu = PopupMenu(applicationContext, cocktailItemBinding.buttonMenu)
+        popupMenu.inflate(R.menu.menu_option)
+        popupMenu.setOnMenuItemClickListener{
             when(it.itemId) {
                 R.id.edit_item -> {
-                    Toast.makeText(this@CocktailItemActivity, "수정하기", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "수정하기", Toast.LENGTH_SHORT).show()
                     true
                 }
-
                 R.id.delete_item -> {
-                    Toast.makeText(this@CocktailItemActivity, "삭제하기", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "삭제하기", Toast.LENGTH_SHORT).show()
                     true
                 }
-                else -> {false}
+                else -> true
             }
         }
 
+        //5-1. 사이드 메뉴 버튼 클릭 시 메뉴 펼침
         cocktailItemBinding.buttonMenu.setOnClickListener {
-            //val popupMenu = PopupMenu::class.java.getDeclaredConstructor("mPopup")
-            //popupMenu.isAccessible = true
+            val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val menu = popup.get(popupMenu)
+
+            menu.javaClass
+                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(menu, true)
+
+            popupMenu.show()
         }
-    }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.menu_option, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.edit_item ->
-                Toast.makeText(this@CocktailItemActivity, "수정하기", Toast.LENGTH_SHORT).show()
-
-            R.id.delete_item ->
-                Toast.makeText(this@CocktailItemActivity, "삭제하기", Toast.LENGTH_SHORT).show()
-        }
-        return super.onContextItemSelected(item)
     }
 }

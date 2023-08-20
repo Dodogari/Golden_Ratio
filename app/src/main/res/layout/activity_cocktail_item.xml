@@ -72,7 +72,8 @@
                 android:src="@drawable/button_menu"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -95,14 +96,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@string/picture_cocktail"
-            android:src="@drawable/egg"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:elevation="0dp"
             tools:ignore="ImageContrastCheck"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- 세부 내용 -->
         <androidx.cardview.widget.CardView
@@ -230,7 +228,6 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@id/rating_count"
                             app:layout_constraintTop_toTopOf="parent" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <!-- 작성 일자 -->
@@ -238,7 +235,7 @@
                         android:id="@+id/time_upload_cocktail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
                         android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/suite_regular"
@@ -405,7 +402,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/recipe_content"/>
 
-                    <!-- 비율 상세 설명 -->
+                    <!-- 상세 설명 -->
                     <TextView
                         android:id="@+id/recipe_content"
                         android:layout_width="match_parent"
@@ -454,8 +451,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginHorizontal="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/review_text"
                         tools:layout_editor_absoluteY="263dp">
 
@@ -484,7 +479,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/suite_regular"
-                            android:text="@string/zero"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="@id/info_review"
@@ -498,7 +492,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/suite_regular"
-                            android:text="@string/count_reset"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             app:layout_constraintBottom_toBottomOf="@id/info_review"

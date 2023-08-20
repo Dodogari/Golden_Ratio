@@ -136,7 +136,6 @@ class CocktailFragment : Fragment() {
 
         //4-1. 전체
         cocktailBinding.radioCocktailAll.setOnClickListener {
-
             cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
