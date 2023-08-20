@@ -9,7 +9,6 @@ import com.example.goldenratio.databinding.ActivityAddRatioBinding
 
 val ratioNameList: ArrayList<String> = arrayListOf()   // 재료 이름
 val ratioColorList: ArrayList<String> = arrayListOf()  // 색상
-val ratioItemList: ArrayList<Ratio> = arrayListOf()    // 아이템
 
 class AddRatioActivity : AppCompatActivity() {
     private lateinit var addRatioBinding: ActivityAddRatioBinding
@@ -18,6 +17,10 @@ class AddRatioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         addRatioBinding = ActivityAddRatioBinding.inflate(layoutInflater)
         setContentView(addRatioBinding.root)
+
+        // 리스트 초기화
+        ratioItemList.clear()
+        ratioNameList.clear()
 
         // 기본 색상
         ratioColorList.apply{

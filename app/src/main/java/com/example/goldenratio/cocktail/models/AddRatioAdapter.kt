@@ -11,8 +11,6 @@ import com.example.goldenratio.databinding.ItemRatioCheckBinding
 
 class AddRatioAdapter(private val ratioList: ArrayList<Ratio>): RecyclerView.Adapter<AddRatioAdapter.ViewHolder>() {
 
-    var itemClick: ItemClick? = null
-
     inner class ViewHolder(val checkBinding: ItemRatioCheckBinding): RecyclerView.ViewHolder(checkBinding.root) {
         fun bind (Ratio: Ratio) {
 
@@ -40,12 +38,6 @@ class AddRatioAdapter(private val ratioList: ArrayList<Ratio>): RecyclerView.Ada
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(ratioList[position])
-
-        if (itemClick != null) {
-            holder.checkBinding!!.btCheck.setOnClickListener(View.OnClickListener {
-                itemClick?.onClick(it, position)
-            })
-        }
     }
 
     override fun getItemCount(): Int = ratioList.size
