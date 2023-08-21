@@ -2,7 +2,7 @@ package com.example.goldenratio
 
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface HangoverInterface {
     //숙취해소 전체 조회
@@ -19,5 +19,5 @@ interface HangoverInterface {
 
     //게시글 상세 조회 - 숙취해소
     @GET("/golden-ratio/hangover/{board-id}")
-    fun getHangoverItem(@Query("board-id") boardId: String): Call<HangoverData>
+    fun getHangoverItem(@Path("board-id") boardId: String): Call<HangoverData>
 }

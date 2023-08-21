@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
 import com.example.goldenratio.databinding.ActivityReviewBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,8 +31,9 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(reviewBinding.root)
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
-        //1-1. 데이터 포지션
+        //1-1. 데이터 포지션 / 카테고리
         val boardId = intent.getStringExtra("boardId")
+        val category = intent.getIntExtra("category", -1)
 
         //1-2. 통신
         val reviewContent = RegisterClient.reviewService.getReviewAll(boardId!!)
@@ -77,8 +79,15 @@ class ReviewActivity : AppCompatActivity() {
 
         //#3. back button
         reviewBinding.buttonBack.setOnClickListener {
-            startActivity(Intent(this@ReviewActivity, CocktailItemActivity::class.java))
+            var itemIntent = Intent()
+            if(category == 0) {
+                itemIntent = Intent(this@ReviewActivity, CocktailItemActivity::class.java)
+            }
+            else if(category == 1) {
+                itemIntent = Intent(this@ReviewActivity, HangoverItemActivity::class.java)
+            }
 
+            startActivity(itemIntent)
             //끝나지 않았다면
             if (!isFinishing) finish()
         }
@@ -88,11 +97,12 @@ class ReviewActivity : AppCompatActivity() {
             val registerData = ReviewRegisterData(reviewBinding.writingContent.text.toString(), reviewBinding.ratingBar.rating)
 
             //4-1. 통신
-            val registerReviewContent = RegisterClient.reviewService.registerReview(boardId, registerData)
-            registerReviewContent.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful.not()) {
-                        Toast.makeText(this@ReviewActivity, response.message(), Toast.LENGTH_SHORT).show()
+            val registerReviewContent = RegisterClient.reviewService.registerReview(boardId, X_ACCESS_TOKEN, registerData)
+            registerReviewContent.enqueue(object : Callback<PostResponse> {
+                override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
+                    if (response.isSuccessful) {
+                        val result = response.body()!!.result
+                        Toast.makeText(this@ReviewActivity, result, Toast.LENGTH_SHORT).show()
 
                         //화면 갱신 : 종료 후 다시 시작
                         finish()
@@ -103,7 +113,7 @@ class ReviewActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
+                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                     Toast.makeText(this@ReviewActivity, "리뷰 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
 

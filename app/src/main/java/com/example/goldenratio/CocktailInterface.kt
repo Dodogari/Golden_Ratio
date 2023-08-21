@@ -1,10 +1,7 @@
 package com.example.goldenratio
 
-import retrofit2.http.GET
 import retrofit2.Call
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface CocktailInterface {
     //칵테일 조회 - 전체
@@ -30,4 +27,8 @@ interface CocktailInterface {
     //게시글 상세 조회 - 칵테일
     @GET("/golden-ratio/cocktail/{board-id}")
     fun getCocktailItem(@Path("board-id") boardId: String):Call<CocktailData>
+
+    //좋아요 등록
+    @POST("/golden-ratio/like/{board-id}")
+    fun registerLikes (@Path("board-id") boardId: String, @Header("Authorization") accessToken: String): Call<PostResponse>
 }

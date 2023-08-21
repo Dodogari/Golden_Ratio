@@ -7,7 +7,7 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\youjin\.android\avd\New_Device_Z_API_30_3.avd" />
+            <value value="C:\Users\gaori\.android\avd\GoldenRatio_API_32.avd" />
           </Key>
         </deviceKey>
       </Target>

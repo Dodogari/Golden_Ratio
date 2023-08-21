@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemBoardBinding
 
-class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
+class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>, private val markList: ArrayList<Boolean>)
     :RecyclerView.Adapter<RecyclerViewBoardAdapter.CustomViewHolder>() {
     private lateinit var itemBoardBinding: ItemBoardBinding
 
@@ -17,6 +17,9 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.bind(boardList[position])
+
+        //sharedPreferences 에 저장되어 있는 상태에 따라 ON/OFF 초기화
+        itemBoardBinding.buttonLike.isChecked = markList[position]
 
         //아이템 클릭 리스너
         holder.itemView.setOnClickListener {
@@ -51,8 +54,7 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>)
 
                 //좋아요 버튼 클릭 시 활성화
                 buttonLike.setOnClickListener {
-                    //boardData.likeCheck = buttonLike.isChecked
-                    boardData.likeCount++
+                    buttonLike.isChecked = !buttonLike.isChecked
                     notifyItemChanged(bindingAdapterPosition)
                 }
             }
