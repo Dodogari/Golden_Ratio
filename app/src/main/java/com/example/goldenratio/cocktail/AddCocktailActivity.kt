@@ -55,7 +55,6 @@ class AddCocktailActivity : AppCompatActivity() {
         ratioItemList.clear()
 
         val boardId = intent.getIntExtra("boardId", -1)
-        Toast.makeText(this@AddCocktailActivity, boardId.toString(), Toast.LENGTH_LONG).show()
 
         if(boardId != -1) {
             val editCocktail = RegisterClient.cocktailService.getCocktailItem(boardId.toString())
@@ -107,7 +106,7 @@ class AddCocktailActivity : AppCompatActivity() {
         addCocktailBinding.btNext.setOnClickListener {
             val intent = Intent(this, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            intent.putExtra
+            intent.putExtra("board_id", boardId)
 
             startActivity(intent)
         }
