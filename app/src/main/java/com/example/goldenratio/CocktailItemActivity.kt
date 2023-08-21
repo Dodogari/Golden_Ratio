@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
+import com.example.goldenratio.cocktail.AddCocktailActivity
 import com.example.goldenratio.databinding.ActivityCocktailItemBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,11 +49,11 @@ class CocktailItemActivity : AppCompatActivity() {
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션
-        val boardId = intent.getIntExtra("boardId", 1).toString()
-        Log.d("dd", boardId)
+        val boardId = intent.getIntExtra("boardId", 1)
+        Log.d("dd", boardId.toString())
 
         //1-2. 통신
-        val cocktailItemContent = RegisterClient.cocktailService.getCocktailItem(boardId)
+        val cocktailItemContent = RegisterClient.cocktailService.getCocktailItem(boardId.toString())
         cocktailItemContent.enqueue(object : Callback<CocktailData> {
             //서버 응답 시
             @SuppressLint("SetTextI18n")
@@ -189,6 +190,9 @@ class CocktailItemActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.edit_item -> {
                     Toast.makeText(this, "수정하기", Toast.LENGTH_SHORT).show()
+                    val addCocktailIntent = Intent(this, AddCocktailActivity::class.java)
+                    addCocktailIntent.putExtra("boardId", boardId)
+                    startActivity(addCocktailIntent)
                     true
                 }
                 R.id.delete_item -> {
