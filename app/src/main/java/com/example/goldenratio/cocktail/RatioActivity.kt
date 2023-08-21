@@ -28,7 +28,7 @@ class RatioActivity : AppCompatActivity() {
 
         // 메인 화면으로 이동
         ratioBinding.btNext.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, NewCocktailActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }
@@ -59,6 +59,7 @@ class RatioActivity : AppCompatActivity() {
                 }
             }
         }
+
         ratioBinding.rvIngredient.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         ratioBinding.rvIngredient.setHasFixedSize(true)
         ratioBinding.rvIngredient.adapter = RatioAdapter(ratioList = ratioList)

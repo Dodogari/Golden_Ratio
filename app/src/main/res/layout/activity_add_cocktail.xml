@@ -73,7 +73,7 @@
             android:background="@drawable/bg_sliding">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/et_title"
                 style="@style/hint_text"
                 android:layout_width="208dp"
                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                 app:cardCornerRadius="7dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" >
+                app:layout_constraintTop_toBottomOf="@+id/et_title" >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

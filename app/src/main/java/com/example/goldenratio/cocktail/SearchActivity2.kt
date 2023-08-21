@@ -38,11 +38,11 @@ class SearchActivity2 : AppCompatActivity() {
 
 
         rankList.apply {
-            add(Rank(R.drawable.ic_rank1, "스프라이트"))
-            add(Rank(R.drawable.ic_rank2, "스프라이트"))
-            add(Rank(R.drawable.ic_rank3, "스프라이트"))
-            add(Rank(R.drawable.ic_rank4, "스프라이트"))
-            add(Rank(R.drawable.ic_rank5, "스프라이트"))
+            add(Rank(R.drawable.ic_rank1, "소주"))
+            add(Rank(R.drawable.ic_rank2, "상큼"))
+            add(Rank(R.drawable.ic_rank3, "맥주"))
+            add(Rank(R.drawable.ic_rank4, "달달"))
+            add(Rank(R.drawable.ic_rank5, "젤리"))
         }
 
         searchBinding.rvRank.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

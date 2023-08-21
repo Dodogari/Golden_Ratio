@@ -11,6 +11,7 @@ import com.example.goldenratio.databinding.ActivityIngredientBinding
 import com.example.goldenratio.hangover.*
 
 val ratioItemList: ArrayList<Ratio> = arrayListOf()    // 아이템
+val ingredientList: ArrayList<Ingredient> = arrayListOf()
 
 class IngredientActivity2 : AppCompatActivity() {
     private lateinit var ingredientBinding: ActivityIngredientBinding

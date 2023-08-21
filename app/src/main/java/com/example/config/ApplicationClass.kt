@@ -13,7 +13,7 @@ class ApplicationClass : Application() {
 
     companion object {
 
-        val API_URL = "https://d4f37515-8b75-4487-861a-5693493e64ec.mock.pstmn.io"
+        val API_URL = "https://a34e0232-abb8-403a-9840-d79ef686a4d5.mock.pstmn.io"
 
         // 만들어져있는 SharedPreferences 를 사용. 재생성 X
         lateinit var sSharedPreferences: SharedPreferences

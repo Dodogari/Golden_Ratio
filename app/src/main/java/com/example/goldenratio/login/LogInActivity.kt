@@ -7,10 +7,10 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.config.accessToken
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.databinding.ActivityLoginBinding
 import com.example.goldenratio.login.models.*
-import kotlinx.coroutines.NonCancellable
 
 
 class LoginActivity : AppCompatActivity(), LoginInterface {
@@ -74,6 +74,7 @@ class LoginActivity : AppCompatActivity(), LoginInterface {
         this.startActivity(intent)
 
         Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+        accessToken = response.accessToken
     }
 
     // 서버 연결 실패
