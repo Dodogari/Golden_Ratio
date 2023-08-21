@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
 import com.example.goldenratio.databinding.ActivityReviewBinding
+import com.example.goldenratio.login.accessToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -108,7 +109,7 @@ class ReviewActivity : AppCompatActivity() {
 
             //4-1. 통신
             val registerReviewContent = RegisterClient.reviewService.registerReview(boardId.toString(),
-                "Bearer $X_ACCESS_TOKEN", registerData)
+                "Bearer $accessToken", registerData)
             registerReviewContent.enqueue(object : Callback<PostResponse> {
                 override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
 

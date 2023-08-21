@@ -177,13 +177,51 @@ class HangoverFragment : Fragment() {
             HangoverListContent = RegisterClient.hangoverService.getHangoverListAll()
             HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>
                 ) {
                     hangoverList = response.body()!!
-                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+
+                    //3-2. 어댑터 - 리스트 연결
+                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList, markList)
+                    hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
+
+                    //#5. 아이템 클릭 시
+                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
+                        //5-1. 상세 메뉴 액티비티로 전환
+                        override fun onClick(position: Int) {
+                            val itemIntent = Intent(activity, HangoverItemActivity::class.java)
+                            itemIntent.putExtra("boardId", hangoverList[position].boardId)
+                            startActivity(itemIntent)
+                        }
+
+                        //5-2. 좋아요 클릭
+                        override fun likeOnClick(position: Int) {
+                            markList[position] = !markList[position]
+
+                            if(markList[position] == true) {
+                                hangoverList[position].likeCount++
+                            }
+
+                            else
+                                hangoverList[position].likeCount--
+
+                            //markList를 JSONArray 형식으로 변환
+                            val jsonArr = JSONArray()
+                            for (pos in markList)
+                                jsonArr.put(pos)
+
+                            //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
+                            val result = jsonArr.toString()
+
+                            with(editor) {
+                                putString("key", result)
+                                apply()
+                            }
+                        }
+
+                    })
                 }
 
                 override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
@@ -197,13 +235,51 @@ class HangoverFragment : Fragment() {
             HangoverListContent = RegisterClient.hangoverService.getHangoverListStar()
             HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>
                 ) {
+                    hangoverList.clear()
                     hangoverList = response.body()!!
-                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                    //3-2. 어댑터 - 리스트 연결
+                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList, markList)
+                    hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
+
+                    //#5. 아이템 클릭 시
+                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
+                        //5-1. 상세 메뉴 액티비티로 전환
+                        override fun onClick(position: Int) {
+                            val itemIntent = Intent(activity, HangoverItemActivity::class.java)
+                            itemIntent.putExtra("boardId", hangoverList[position].boardId)
+                            startActivity(itemIntent)
+                        }
+
+                        //5-2. 좋아요 클릭
+                        override fun likeOnClick(position: Int) {
+                            markList[position] = !markList[position]
+
+                            if(markList[position] == true) {
+                                hangoverList[position].likeCount++
+                            }
+
+                            else
+                                hangoverList[position].likeCount--
+
+                            //markList를 JSONArray 형식으로 변환
+                            val jsonArr = JSONArray()
+                            for (pos in markList)
+                                jsonArr.put(pos)
+
+                            //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
+                            val result = jsonArr.toString()
+
+                            with(editor) {
+                                putString("key", result)
+                                apply()
+                            }
+                        }
+
+                    })
                 }
 
                 override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
@@ -217,13 +293,50 @@ class HangoverFragment : Fragment() {
             HangoverListContent = RegisterClient.hangoverService.getHangoverListLike()
             HangoverListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>
                 ) {
                     hangoverList = response.body()!!
-                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
+                    //3-2. 어댑터 - 리스트 연결
+                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList, markList)
+                    hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
+
+                    //#5. 아이템 클릭 시
+                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
+                        //5-1. 상세 메뉴 액티비티로 전환
+                        override fun onClick(position: Int) {
+                            val itemIntent = Intent(activity, HangoverItemActivity::class.java)
+                            itemIntent.putExtra("boardId", hangoverList[position].boardId)
+                            startActivity(itemIntent)
+                        }
+
+                        //5-2. 좋아요 클릭
+                        override fun likeOnClick(position: Int) {
+                            markList[position] = !markList[position]
+
+                            if(markList[position] == true) {
+                                hangoverList[position].likeCount++
+                            }
+
+                            else
+                                hangoverList[position].likeCount--
+
+                            //markList를 JSONArray 형식으로 변환
+                            val jsonArr = JSONArray()
+                            for (pos in markList)
+                                jsonArr.put(pos)
+
+                            //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
+                            val result = jsonArr.toString()
+
+                            with(editor) {
+                                putString("key", result)
+                                apply()
+                            }
+                        }
+
+                    })
                 }
 
                 override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
