@@ -7,11 +7,11 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.config.accessToken
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.databinding.ActivityLoginBinding
 import com.example.goldenratio.login.models.*
 
+var accessToken : String? = null
 
 class LoginActivity : AppCompatActivity(), LoginInterface {
     private lateinit var loginBinding: ActivityLoginBinding
