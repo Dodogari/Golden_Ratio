@@ -101,16 +101,6 @@ class CocktailFragment : Fragment() {
                 markList.add(arrJson.optBoolean(i))
         }
 
-        //초기값
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(true)
-        markList.add(false)
-
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
         var cocktailListContent = RegisterClient.cocktailService.getCocktailAll()

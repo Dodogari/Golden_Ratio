@@ -3,6 +3,7 @@ package com.example.goldenratio
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -13,5 +14,5 @@ interface ReviewInterface {
 
     //리뷰 등록
     @POST("/golden-ratio/review/{board-id}")
-    fun registerReview(@Path("board-id") boardId: String, @Body requestData: ReviewRegisterData): Call<PostResponse>
+    fun registerReview(@Path("board-id") boardId: String, @Header("Authorization") accessToken: String, @Body requestData: ReviewRegisterData): Call<PostResponse>
 }
