@@ -121,7 +121,6 @@ class CocktailFragment : Fragment() {
 
                 recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
                     //5-1. 상세 메뉴 액티비티로 전환`
-
                     override fun onClick(position: Int) {
                         val itemIntent = Intent(activity, CocktailItemActivity::class.java)
                         itemIntent.putExtra("boardId", cocktailList[position].boardId)
@@ -177,13 +176,12 @@ class CocktailFragment : Fragment() {
             cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
                     cocktailList.clear()
-                    cocktailList = response.body()!!
 
+                    cocktailList = response.body()!!
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
                 }
 
@@ -199,12 +197,12 @@ class CocktailFragment : Fragment() {
             cocktailListContent = RegisterClient.cocktailService.getCocktailStar()
             cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
                 //서버 응답 시
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
                     cocktailList.clear()
                     cocktailList = response.body()!!
+                    Toast.makeText(activity, cocktailList[0].title, Toast.LENGTH_SHORT).show()
 
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
                 }

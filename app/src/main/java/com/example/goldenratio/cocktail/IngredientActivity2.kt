@@ -24,6 +24,9 @@ class IngredientActivity2 : AppCompatActivity() {
         // 리스트 초기화
         ratioItemList.clear()
 
+        //보드 아이디 데이터
+        val boardId = intent.getIntExtra("boardId", -1)
+
         // 이미지 저장
         ingredientList.apply {
             if (ingredient_name != null)
@@ -61,6 +64,8 @@ class IngredientActivity2 : AppCompatActivity() {
         ingredientBinding.btNext.setOnClickListener{
             val intent = Intent(this, AddRatioActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra("boardId", boardId)
+
             startActivity(intent)
         }
     }

@@ -22,6 +22,9 @@ class AddRatioActivity : AppCompatActivity() {
         ratioItemList.clear()
         ratioNameList.clear()
 
+        //보드 아이디 데이터
+        val boardId = intent.getIntExtra("boardId", -1)
+
         // 기본 색상
         ratioColorList.apply{
             add("#F9ED69")
@@ -56,6 +59,7 @@ class AddRatioActivity : AppCompatActivity() {
         addRatioBinding.btNext.setOnClickListener {
             val intent = Intent(this, RatioActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra("boardId", boardId)
             startActivity(intent)
         }
     }

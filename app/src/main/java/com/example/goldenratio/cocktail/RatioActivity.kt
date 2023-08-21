@@ -26,6 +26,9 @@ class RatioActivity : AppCompatActivity() {
         // 리스트 초기화
         ratioList.clear()
 
+        //보드 아이디 데이터
+        val boardId = intent.getIntExtra("boardId", -1)
+
         // 메인 화면으로 이동
         ratioBinding.btNext.setOnClickListener {
             val intent = Intent(this, NewCocktailActivity::class.java)

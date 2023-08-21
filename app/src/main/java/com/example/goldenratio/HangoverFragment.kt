@@ -86,7 +86,6 @@ class HangoverFragment : Fragment() {
             }
         })
 
-
         recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList, markList)
 
         //리사이클러뷰 레이아웃 설정
@@ -107,16 +106,6 @@ class HangoverFragment : Fragment() {
             for(i in 0 until arrJson.length())
                 markList.add(arrJson.optBoolean(i))
         }
-
-        //초기값
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(false)
-        markList.add(true)
-        markList.add(false)
 
         //#2. 서버 통신: 숙취해소 보드 내용 받아오기
         //2-1. 응답
