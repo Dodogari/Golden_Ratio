@@ -2,15 +2,15 @@ package com.example.goldenratio.cocktail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goldenratio.R
+import com.example.goldenratio.cocktail.models.Ratio
 import com.example.goldenratio.databinding.ActivityIngredientBinding
 import com.example.goldenratio.hangover.*
 
-
-val ingredientList: ArrayList<Ingredient> = arrayListOf()
-val ingredientNameList: ArrayList<String> = arrayListOf()   // 재료 이름
+val ratioItemList: ArrayList<Ratio> = arrayListOf()    // 아이템
 
 class IngredientActivity2 : AppCompatActivity() {
     private lateinit var ingredientBinding: ActivityIngredientBinding
@@ -19,6 +19,9 @@ class IngredientActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ingredientBinding = ActivityIngredientBinding.inflate(layoutInflater)
         setContentView(ingredientBinding.root)
+
+        // 리스트 초기화
+        ratioItemList.clear()
 
         // 이미지 저장
         ingredientList.apply {
