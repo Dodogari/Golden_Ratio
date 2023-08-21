@@ -55,6 +55,26 @@ class AddCocktailActivity : AppCompatActivity() {
 
         val boardId = intent.getIntExtra("boardId", -1)
 
+        if(boardId != -1) {
+            val editCocktail = RegisterClient.cocktailService.getCocktailItem(boardId.toString())
+            editCocktail.enqueue(object : Callback<CocktailData> {
+                override fun onResponse(
+                    call: Call<CocktailData>,
+                    response: Response<CocktailData>
+                ) {
+                    val cocktailData = response.body()!!
+                    
+                    //화면 초기화
+                    //제목 작성란에 데이터 넣기
+                    addCocktailBinding.editText.setText(cocktailData.title)
+                    
+                    //알콜 라디오 버튼
+                    when(cocktailData.alcohol) {
+                        0 -> addCocktailBinding.rbt1.isChecked = true
+                        1 -> addCocktailBinding.rbt2.isChecked = true
+                        2 -> addCocktailBinding.rbt3.isChecked = true
+                    }
+
         title_cocktail = addCocktailBinding.etTitle.text.toString()
 
         // 카메라
