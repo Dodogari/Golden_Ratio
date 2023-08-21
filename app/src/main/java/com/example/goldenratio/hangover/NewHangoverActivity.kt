@@ -46,9 +46,7 @@ class  NewHangoverActivity : AppCompatActivity() {
 
         img_camera = findViewById(R.id.img_camera)
         NewHangoverBinding.btNext.isEnabled = true
-        val title_hangover = NewHangoverBinding.etTitle.text.toString() + "이게 안된다고?"
 
-        Log.d("tag", "title :{$title_hangover}")
 
         // 이전 화면으로 이동
         NewHangoverBinding.btBack.setOnClickListener{
@@ -57,6 +55,8 @@ class  NewHangoverActivity : AppCompatActivity() {
 
         // 다음 화면으로 이동
         NewHangoverBinding.btNext.setOnClickListener{
+            title_hangover = NewHangoverBinding.etTitle.text.toString()
+
             val intent = Intent(this, IngredientActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)

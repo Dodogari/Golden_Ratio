@@ -87,19 +87,17 @@ class AddCocktailActivity : AppCompatActivity() {
             })
         }
 
-        title_cocktail = addCocktailBinding.etTitle.text.toString()
-
         // 카메라
         addCocktailBinding.btCamera.setOnClickListener{
             CallCamera()
         }
 
         addCocktailBinding.btNext.setOnClickListener {
+            title_cocktail = addCocktailBinding.etTitle.text.toString()
+
             val intent = Intent(this@AddCocktailActivity, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-
             intent.putExtra("board_id", boardId)
-
             startActivity(intent)
         }
 
