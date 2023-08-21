@@ -1,10 +1,9 @@
 package com.example.goldenratio.cocktail
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.goldenratio.MainActivity
@@ -12,10 +11,10 @@ import com.example.goldenratio.R
 import com.example.goldenratio.cocktail.models.*
 import com.example.goldenratio.databinding.ActivityRatioBinding
 
-val ratioIntList: ArrayList<Int> = arrayListOf()   // 비율
-var sum = 0
+val ratioIntList: ArrayList<Int> = arrayListOf(0,0,0,0,0)   // 비율
 var intRatio = 0
-var ratio = 0
+val ratioCupList: ArrayList<RatioCup> = arrayListOf()
+val ratioList: ArrayList<Ratio> = arrayListOf()
 
 class RatioActivity : AppCompatActivity() {
     private lateinit var ratioBinding: ActivityRatioBinding
@@ -24,8 +23,8 @@ class RatioActivity : AppCompatActivity() {
         ratioBinding = ActivityRatioBinding.inflate(layoutInflater)
         setContentView(ratioBinding.root)
 
-        val ratioList: ArrayList<Ratio> = arrayListOf()
-        val ratioCupList: ArrayList<RatioCup> = arrayListOf()
+        // 리스트 초기화
+        ratioList.clear()
 
         // 메인 화면으로 이동
         ratioBinding.btNext.setOnClickListener {
@@ -60,34 +59,30 @@ class RatioActivity : AppCompatActivity() {
                 }
             }
         }
-
         ratioBinding.rvIngredient.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         ratioBinding.rvIngredient.setHasFixedSize(true)
         ratioBinding.rvIngredient.adapter = RatioAdapter(ratioList = ratioList)
 
 
+        // 비율 적용
         for (i in 0 ..ratioNameList.size -1) {
-            if (ratioNameList.size != 0) {
-                ratioIntList.apply {
-                    add(ratio)
-                }
-            }
-        }
-
-        Log.d("tag", "ratioIntListAdapter: {$ratioIntList}")
-
-        for (i in 0 ..ratioNameList.size -1) {
-            if (ratioNameList.size != 0) {
+            if (ratioIntList[i] != 0) {
                 ratioCupList.apply {
                     add(
                         RatioCup(
-                            color = ratioColorList[i], size = 204f/10 * ratioIntList[i]
+                            color = ratioColorList[i],
+                            size = 204f / ratioIntList.sum() * ratioIntList[i]
                         )
                     )
                 }
             }
         }
 
+        ratioBinding.rvRatioCup.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        ratioBinding.rvRatioCup.setHasFixedSize(true)
+        ratioBinding.rvRatioCup.adapter = RatioCupAdapter(ratioCupList = ratioCupList)
+
+        // 새로고침
         var swipe = findViewById<SwipeRefreshLayout>(R.id.swipe)
         swipe.setOnRefreshListener {
             val intent = intent
@@ -96,8 +91,5 @@ class RatioActivity : AppCompatActivity() {
             overridePendingTransition(0, 0)
             swipe.isRefreshing = false
         }
-        ratioBinding.rvRatioCup.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        ratioBinding.rvRatioCup.setHasFixedSize(true)
-        ratioBinding.rvRatioCup.adapter = RatioCupAdapter(ratioCupList = ratioCupList)
     }
 }

@@ -17,8 +17,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
+import com.example.goldenratio.hangover.Ingredient
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+
+val ingredientList: ArrayList<Ingredient> = arrayListOf()
+val ingredientNameList: ArrayList<String> = arrayListOf()   // 재료 이름
 
 class AddCocktailActivity : AppCompatActivity() {
     private lateinit var addCocktailBinding: ActivityAddCocktailBinding
@@ -36,6 +40,12 @@ class AddCocktailActivity : AppCompatActivity() {
         setContentView(addCocktailBinding.root)
 
         img_camera = findViewById(R.id.img_camera)
+
+        // 초기화
+        ingredientList.clear()
+        ingredientNameList.clear()
+        ingredient_name = null
+        ratioItemList.clear()
 
         // 카메라
         addCocktailBinding.btCamera.setOnClickListener{
