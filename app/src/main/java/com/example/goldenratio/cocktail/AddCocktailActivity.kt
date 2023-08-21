@@ -3,32 +3,31 @@ package com.example.goldenratio.cocktail
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.goldenratio.*
+import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
-import com.example.goldenratio.hangover.Ingredient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
 
+var title_cocktail : String = ""
+var url_cocktail: URL?= null
+var sweet : Int?= null
+var alcohol : Int?= null
 
-val ingredientList: ArrayList<Ingredient> = arrayListOf()
 val ingredientNameList: ArrayList<String> = arrayListOf()   // 재료 이름
 
 class AddCocktailActivity : AppCompatActivity() {
@@ -76,27 +75,7 @@ class AddCocktailActivity : AppCompatActivity() {
                         2 -> addCocktailBinding.rbt3.isChecked = true
                     }
 
-                    //단맛 라디오 버튼
-                    when(cocktailData.sweet) {
-                        0 -> addCocktailBinding.rbtTop.isChecked = true
-                        1 -> addCocktailBinding.rbtMid.isChecked = true
-                        2 -> addCocktailBinding.rbtBottom.isChecked = true
-                    }
-
-                    for(i in 0 until cocktailData.gradientList.size) {
-                        ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl),
-                            cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
-
-                        ingredientNameList.add(cocktailData.gradientList[i].gradientName)
-                    }
-                }
-
-                override fun onFailure(call: Call<CocktailData>, t: Throwable) {
-                    Toast.makeText(this@AddCocktailActivity, "기존 데이터 불러오기를 실패하였습니다.", Toast.LENGTH_LONG).show()
-                }
-
-            })
-        }
+        title_cocktail = addCocktailBinding.etTitle.text.toString()
 
         // 카메라
         addCocktailBinding.btCamera.setOnClickListener{
@@ -111,32 +90,22 @@ class AddCocktailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //뒤로가기 버튼
-        addCocktailBinding.btBack.setOnClickListener {
-            //다이얼로그 띄우기
-            val oDialog: AlertDialog.Builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog)
-            oDialog.setMessage("지금까지 작성한 내용은 저장되지 않습니다.")
-                .setTitle("뒤로가기")
-                .setPositiveButton("아니오", DialogInterface.OnClickListener { _, _ ->
-                })
-                .setNeutralButton("예",
-                    DialogInterface.OnClickListener { _, _ ->
-                        //수정 중이면 기존 칵테일 아이템으로
-                        if(boardId != -1) {
-                            val itemIntent = Intent(this@AddCocktailActivity, CocktailItemActivity::class.java)
-                            itemIntent.putExtra("boardId", boardId)
-                            startActivity(itemIntent)
+        // alcohol
+        addCocktailBinding.radio1.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId) {
+                R.id.rbt_1 -> alcohol = 0 // 소주보다 낮음
+                R.id.rbt_2 -> alcohol = 1
+                R.id.rbt_3 -> alcohol = 2 // 소주보다 높음
+            }
+        }
 
-                            if(!isFinishing) finish()
-                        }
-                        else {
-                            val homeIntent = Intent(this@AddCocktailActivity, MainActivity::class.java)
-                            startActivity(homeIntent)
-
-                            if(!isFinishing) finish()
-                        }
-                    })
-                .show()
+        // sweet
+        addCocktailBinding.radio2.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId) {
+                R.id.rbt_top -> sweet = 0    // 상
+                R.id.rbt_mid -> sweet = 1    // 중
+                R.id.rbt_bottom -> sweet = 2 // 하
+            }
         }
     }
 
@@ -233,14 +202,36 @@ class AddCocktailActivity : AppCompatActivity() {
                         val img = data?.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
+
+                        // uri -> url로 변경
+                        url_cocktail = URL("file://"+ absolutelyPath(uri!!))
+                        Log.d("tag", "title url:"+ "{$url_cocktail}")
                     }
+
+
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
+
+                    // uri -> url로 변경
+                    url_cocktail = URL("file://"+ absolutelyPath(uri!!))
+                    Log.d("tag", "title url:"+ "{$url_cocktail}")
                 }
             }
         }
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri): String {
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
+        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c.moveToFirst()
+
+        var result = c.getString(index)
+
+        return result
     }
 
     // 파일명을 날짜 저장
