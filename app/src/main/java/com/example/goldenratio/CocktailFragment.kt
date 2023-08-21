@@ -10,11 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import com.example.config.ApplicationClass
+import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
+import com.example.config.ApplicationClass.Companion.sSharedPreferences
 import com.example.goldenratio.databinding.FragmentCocktailBinding
 import me.relex.circleindicator.CircleIndicator3
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +37,7 @@ class CocktailFragment : Fragment() {
     //#2. 칵테일 리스트 변수
     private var recyclerViewBoardAdapter: RecyclerViewBoardAdapter? = null    //칵테일 리사이클러뷰 리스트 어댑터
     private var cocktailList = arrayListOf<BoardData>()
+    private var markList = arrayListOf<Boolean>()
 
     //레이아웃 inflate(객체화)
     override fun onCreateView(
@@ -81,8 +87,30 @@ class CocktailFragment : Fragment() {
                 handler.postDelayed(runnable, 3000)    //3초에 한번 슬라이드
             }
         })
-        //testCocktailList()
-        
+        //좋아요에 대한 sharedPreferences 객체 선언
+        val likeShared = activity!!.getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val editor = likeShared.edit()
+        val stringPref = likeShared.getString("key", "")
+
+        //저장되어 있는 내용이 있다면
+        if(stringPref != null && stringPref != "") {
+            val arrJson = JSONArray(stringPref)
+
+            //JSONArray 객체를 boolean 으로 전환 -> 배열에 저장
+            for(i in 0 until arrJson.length())
+                markList.add(arrJson.optBoolean(i))
+        }
+
+        //초기값
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(true)
+        markList.add(false)
+
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
         var cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
@@ -98,7 +126,7 @@ class CocktailFragment : Fragment() {
                 cocktailBinding.listCocktail.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
 
                 //3-2. 어댑터 - 리스트 연결
-                recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList)
+                recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
                 cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
 
                 recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
@@ -112,15 +140,35 @@ class CocktailFragment : Fragment() {
 
                     //5-2. 좋아요 클릭
                     override fun likeOnClick(position: Int) {
-                        /*cocktailList[position].likeCount = !cocktailList[position].likeCheck
-                        if(cocktailList[position].likeCheck) {
-                            cocktailList[position].like++
-                            recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like++)
-                        }
-                        else {
-                            cocktailList[position].like--
-                            recyclerViewCocktailAdapter!!.notifyItemChanged(cocktailList[position].like, cocktailList[position].like--)
-                        }*/
+                        val likeContent = RegisterClient.cocktailService.registerLikes(cocktailList[position].boardId.toString(), X_ACCESS_TOKEN)
+                        likeContent.enqueue(object : Callback<PostResponse> {
+                            override fun onResponse(
+                                call: Call<PostResponse>,
+                                response: Response<PostResponse>
+                            ) {
+                                val resultPost = response.body()!!.result
+                                Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
+                                markList[position] = !markList[position]
+
+                                //markList를 JSONArray 형식으로 변환
+                                val jsonArr = JSONArray()
+                                for (pos in markList)
+                                    jsonArr.put(pos)
+
+                                //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
+                                val result = jsonArr.toString()
+
+                                with(editor) {
+                                    putString("key", result)
+                                    apply()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
+                                Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                            }
+
+                        })
                     }
                 })
                 response.errorBody().toString()
@@ -261,29 +309,4 @@ class CocktailFragment : Fragment() {
         super.onResume()
         handler.postDelayed(runnable, 3000)
     }
-
-/*
-
-    internal class FetchImage(var URL: String) : Thread() {
-        var bitmap: Bitmap? = null
-        override fun run() {
-            mainHandler.post(Runnable {
-                progressDialog = ProgressDialog(this@MainActivity)
-                progressDialog.setMessage("Getting your pic....")
-                progressDialog.setCancelable(false)
-                progressDialog.show()
-            })
-            var inputStream: InputStream? = null
-            try {
-                inputStream = URL(URL).openStream()
-                bitmap = BitmapFactory.decodeStream(inputStream)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            mainHandler.post(Runnable {
-                if (progressDialog.isShowing()) progressDialog.dismiss()
-                binding.imageView.setImageBitmap(bitmap)
-            })
-        }
-    }*/
 }

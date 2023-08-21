@@ -97,8 +97,8 @@ class ReviewActivity : AppCompatActivity() {
 
             //4-1. 통신
             val registerReviewContent = RegisterClient.reviewService.registerReview(boardId, registerData)
-            registerReviewContent.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            registerReviewContent.enqueue(object : Callback<PostResponse> {
+                override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                     if (response.isSuccessful.not()) {
                         Toast.makeText(this@ReviewActivity, response.message(), Toast.LENGTH_SHORT).show()
 
@@ -111,7 +111,7 @@ class ReviewActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
+                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                     Toast.makeText(this@ReviewActivity, "리뷰 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
 

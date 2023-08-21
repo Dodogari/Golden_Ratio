@@ -12,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.goldenratio.databinding.FragmentHangoverBinding
 import me.relex.circleindicator.CircleIndicator3
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +35,7 @@ class HangoverFragment : Fragment() {
     //#2. 숙취해소 리스트 변수
     private var recyclerViewBoardAdapter: RecyclerViewBoardAdapter? = null          //숙취해소 리사이클러뷰 리스트 어댑터
     private var hangoverList = arrayListOf<BoardData>()                             //숙취해소 데이터 리스트
+    private var markList = arrayListOf<Boolean>()
 
     //레이아웃 inflate(객체화)
     override fun onCreateView(
@@ -84,14 +87,36 @@ class HangoverFragment : Fragment() {
         })
 
 
-        recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList)
+        recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList, markList)
 
         //리사이클러뷰 레이아웃 설정
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
         hangoverBinding.listHangover.layoutManager = layoutManager
         hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
 
+        //좋아요에 대한 sharedPreferences 객체 선언
+        val likeSharedHangover = activity!!.getSharedPreferences("pref_hangover", AppCompatActivity.MODE_PRIVATE)
+        val editor = likeSharedHangover.edit()
+        val stringPref = likeSharedHangover.getString("key", "")
 
+        //저장되어 있는 내용이 있다면
+        if(stringPref != null && stringPref != "") {
+            val arrJson = JSONArray(stringPref)
+
+            //JSONArray 객체를 boolean 으로 전환 -> 배열에 저장
+            for(i in 0 until arrJson.length())
+                markList.add(arrJson.optBoolean(i))
+        }
+
+        //초기값
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(false)
+        markList.add(true)
+        markList.add(false)
 
         //#2. 서버 통신: 숙취해소 보드 내용 받아오기
         //2-1. 응답
@@ -110,7 +135,7 @@ class HangoverFragment : Fragment() {
                 hangoverBinding.listHangover.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
 
                 //3-2. 어댑터 - 리스트 연결
-                recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList)
+                recyclerViewBoardAdapter = RecyclerViewBoardAdapter(hangoverList, markList)
                 hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
 
                 //#5. 아이템 클릭 시
@@ -124,6 +149,27 @@ class HangoverFragment : Fragment() {
 
                     //5-2. 좋아요 클릭
                     override fun likeOnClick(position: Int) {
+                        markList[position] = !markList[position]
+
+                        if(markList[position] == true) {
+                            hangoverList[position].likeCount++
+                        }
+
+                        else
+                            hangoverList[position].likeCount--
+
+                        //markList를 JSONArray 형식으로 변환
+                        val jsonArr = JSONArray()
+                        for (pos in markList)
+                            jsonArr.put(pos)
+
+                        //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
+                        val result = jsonArr.toString()
+
+                        with(editor) {
+                            putString("key", result)
+                            apply()
+                        }
                     }
 
                 })
@@ -220,53 +266,4 @@ class HangoverFragment : Fragment() {
         super.onResume()
         handler.postDelayed(runnable, 3000)
     }
-/*
-    private fun testHangoverList() {
-        hangoverList.add(HangoverData("숙취해소 1", R.drawable.egg, 4.5f, 6, likeCheck = false,
-            "2023년 7월 20일 작성", arrayListOf<GradientData>(GradientData("소주", R.drawable.egg),
-                GradientData("토닉워터", R.drawable.cell), GradientData("스프라이트", R.drawable.chicken)),
-            "소주와 깔라만시 맛 토닉워터를 같은 비율로 따라준 후, 하리보 2~3개를 넣어주면 달달한 소토닉 완성", arrayListOf(ReviewData("유저 2", R.drawable.drop, 3, "뭔가 아쉬운 맛?"), ReviewData("유저 38", R.drawable.age, 2, "애매..."),
-                ReviewData("유저 47", R.drawable.chicken, 4, "나름 괜춘"), ReviewData("유저 4", R.drawable.cry, 5, "딜리셔스"),
-                ReviewData("유저 12", R.drawable.age, 2, "잡내 난다"), ReviewData("유저 38", R.drawable.egg, 3, "남이 해주면 먹음"))))
-
-        hangoverList.add(HangoverData("숙취해소 2", R.drawable.drop, 2.8f, 3, likeCheck = false,
-            "2023년 7월 20일 작성", arrayListOf<GradientData>(GradientData("소주", R.drawable.egg),
-                GradientData("헛개수", R.drawable.age), GradientData("솔의눈", R.drawable.cry), GradientData("데자와", R.drawable.cell)),
-            "건강에 좋을 것 같은 메뉴",  arrayListOf<ReviewData>(ReviewData("유저 15", R.drawable.drop, 3, "쏘쏘"),
-                ReviewData("유저 48", R.drawable.age, 2, "애매..."), ReviewData("유저 76", R.drawable.chicken, 3, "50프로 부족한 맛"),
-                ReviewData("유저 45", R.drawable.cry, 4, "좀 더..."), ReviewData("유저 57", R.drawable.age, 1, "혼종"),
-                ReviewData("유저 80", R.drawable.egg, 2, "아쉽다"))))
-
-        hangoverList.add(HangoverData("숙취해소 3", R.drawable.age, 3.2f, 20, likeCheck = false,
-            "2023년 7월 20일 작성", arrayListOf<GradientData>(GradientData("소주", R.drawable.egg),
-                GradientData("여명808", R.drawable.cry), GradientData("스프라이트", R.drawable.chicken)),
-            "소주와 깔라만시 맛 토닉워터를 같은 비율로 따라준 후, 하리보 2~3개를 넣어주면 달달한 소토닉 완성",
-            arrayListOf<ReviewData>(ReviewData("유저 21", R.drawable.drop, 3, "쏘쏘"),
-                ReviewData("유저 29", R.drawable.age, 2, "애매..."), ReviewData("유저 40", R.drawable.cell, 4, "가끔씩 해먹을 것 같다"),
-                ReviewData("유저 3", R.drawable.drop, 5, "매우 추천"), ReviewData("유저 7", R.drawable.egg, 2, "이러는 이유가 있을 거 아니예요"))))
-
-        hangoverList.add(HangoverData("숙취해소 4", R.drawable.cell, 4.5f, 3, likeCheck = false,
-            "2023년 7월 20일 작성", arrayListOf<GradientData>(GradientData("소주", R.drawable.egg),
-                GradientData("토닉워터", R.drawable.cell), GradientData("스프라이트", R.drawable.chicken)),
-            "소주와 깔라만시 맛 토닉워터를 같은 비율로 따라준 후, 하리보 2~3개를 넣어주면 달달한 소토닉 완성",  arrayListOf<ReviewData>(ReviewData("유저 15", R.drawable.drop, 3, "쏘쏘"),
-                ReviewData("유저 48", R.drawable.age, 2, "애매..."), ReviewData("유저 76", R.drawable.chicken, 3, "50프로 부족한 맛"),
-                ReviewData("유저 45", R.drawable.cry, 4, "좀 더..."), ReviewData("유저 57", R.drawable.age, 1, "혼종"),
-                ReviewData("유저 80", R.drawable.egg, 2, "아쉽다"))))
-
-        hangoverList.add(HangoverData("숙취해소 5", R.drawable.chicken, 2.3f, 2, likeCheck = false,
-            "2023년 7월 20일 작성", arrayListOf<GradientData>(GradientData("소주", R.drawable.egg),
-                GradientData("토닉워터", R.drawable.cell), GradientData("스프라이트", R.drawable.chicken)),
-            "소주와 깔라만시 맛 토닉워터를 같은 비율로 따라준 후, 하리보 2~3개를 넣어주면 달달한 소토닉 완성", arrayListOf(ReviewData("유저 5", R.drawable.drop, 4, "맛남"), ReviewData("유저 8", R.drawable.age, 2, "애매..."),
-                ReviewData("유저 7", R.drawable.chicken, 3, "무난함"), ReviewData("유저 1", R.drawable.cry, 5, "내 취향"),
-                ReviewData("유저 32", R.drawable.age, 1, "미각을 잃었다"), ReviewData("유저 17", R.drawable.egg, 2, "때깔이..."))))
-
-        hangoverList.add(HangoverData("숙취해소 6", R.drawable.cry, 1.6f, 3, likeCheck = false,
-            "2023년 7월 20일 작성", arrayListOf<GradientData>(GradientData("소주", R.drawable.egg),
-                GradientData("토닉워터", R.drawable.cell), GradientData("스프라이트", R.drawable.chicken)),
-            "소주와 깔라만시 맛 토닉워터를 같은 비율로 따라준 후, 하리보 2~3개를 넣어주면 달달한 소토닉 완성", arrayListOf(ReviewData("유저 2", R.drawable.drop, 3, "뭔가 아쉬운 맛?"), ReviewData("유저 38", R.drawable.age, 2, "애매..."),
-                ReviewData("유저 47", R.drawable.chicken, 4, "나름 괜춘"), ReviewData("유저 4", R.drawable.cry, 5, "딜리셔스"),
-                ReviewData("유저 12", R.drawable.age, 2, "잡내 난다"), ReviewData("유저 38", R.drawable.egg, 3, "남이 해주면 먹음"))))
-
-        recyclerViewHangoverAdapter!!.notifyItemRangeChanged(hangoverList.size, 6)
-    }*/
 }
