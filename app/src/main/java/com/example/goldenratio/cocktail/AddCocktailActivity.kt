@@ -53,6 +53,7 @@ class AddCocktailActivity : AppCompatActivity() {
         ingredient_name = null
         ratioItemList.clear()
 
+        val boardId = intent.getIntExtra("boardId", -1)
 
         title_cocktail = addCocktailBinding.etTitle.text.toString()
 
@@ -64,6 +65,9 @@ class AddCocktailActivity : AppCompatActivity() {
         addCocktailBinding.btNext.setOnClickListener {
             val intent = Intent(this, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+
+            intent.putExtra("board_id", boardId)
+
             startActivity(intent)
         }
 
