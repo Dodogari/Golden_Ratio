@@ -1,4 +1,4 @@
-package com.example.goldenratio.hangover
+package com.example.goldenratio.cocktail
 
 import android.Manifest
 import android.app.Activity
@@ -17,33 +17,38 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
-import com.example.goldenratio.databinding.ActivityAddHangoverBinding
-import com.example.goldenratio.hangover.models.*
+import com.example.goldenratio.cocktail.models.*
+import com.example.goldenratio.databinding.ActivityNewCocktailBinding
+import com.example.goldenratio.hangover.Img
 import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
 
+class NewCocktailActivity : AppCompatActivity(), CocktailInterface {
+    private lateinit var newCocktailBinding: ActivityNewCocktailBinding
 
-class AddHangoverActivity : AppCompatActivity(), HangInterface {
-    private lateinit var addHangoverBinding: ActivityAddHangoverBinding
+    val tvList: ArrayList<TvRatio> = arrayListOf()
+    val intList: ArrayList<TvRatio> = arrayListOf()
+
 
     // storage 권한 처리에 필요한 변수
     val CAMERA = arrayOf(Manifest.permission.CAMERA)
     val CAMERA_CODE = 98
     val STORAGE_CODE = 99
 
-    private lateinit var img_camera : ImageView
+    private lateinit var img_cocktail : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        addHangoverBinding = ActivityAddHangoverBinding.inflate(layoutInflater)
-        setContentView(addHangoverBinding.root)
+        newCocktailBinding = ActivityNewCocktailBinding.inflate(layoutInflater)
+        setContentView(newCocktailBinding.root)
 
-        img_camera = findViewById(R.id.img_hangover)
+        img_cocktail = findViewById(R.id.img_cocktail)
 
         // 이미지
         val imgList: ArrayList<Img> = arrayListOf()
@@ -57,32 +62,66 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
             }
         }
 
-        if(url_hangover != null){
+        if(url_cocktail != null){
             Glide.with(this)
-                .load(url_hangover.toString()) // 불러올 이미지 url
-                .into(img_camera) // 이미지를 넣을 뷰
-            Log.d("tag", "url_hangover:"+"{$url_hangover}")
+                .load(url_cocktail.toString()) // 불러올 이미지 url
+                .into(img_cocktail) // 이미지를 넣을 뷰
+            Log.d("tag", "url_cocktail:"+"{$url_cocktail}")
         }
 
         // 뒤로가기
-        addHangoverBinding.btBack.setOnClickListener {
+        newCocktailBinding.btBack.setOnClickListener {
             finish()
         }
 
+        // 비율 이름
+        for (i in 0 ..ratioNameList.size -1) {
+            if (ratioNameList.size != 0) {
+                tvList.apply {
+                    add(
+                        TvRatio(
+                            name = ratioNameList[i], color = ratioColorList[i]
+                        )
+                    )
+                }
+            }
+        }
+        newCocktailBinding.rvRatioTv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        newCocktailBinding.rvRatioTv.setHasFixedSize(true)
+        newCocktailBinding.rvRatioTv.adapter = TvAdapter(tvList = tvList)
+
+
+        // 비율 숫자
+        for (i in 0 ..ratioNameList.size -1) {
+            if (ratioNameList.size != 0) {
+                intList.apply {
+                    add(
+                        TvRatio(
+                            name = ratioIntList[i].toString(), color = ratioColorList[i]
+                        )
+                    )
+                }
+            }
+        }
+        newCocktailBinding.rvRatioInt.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        newCocktailBinding.rvRatioInt.setHasFixedSize(true)
+        newCocktailBinding.rvRatioInt.adapter = IntAdapter(intList = intList)
+
         // 메인 화면으로 이동
-        addHangoverBinding.btNext.setOnClickListener {
+        newCocktailBinding.btNext.setOnClickListener {
             // 서버에 값 보냄
-            val title = title_hangover
-            val hangoverMainImageUrl = url_hangover
-            val content = addHangoverBinding.etContent.text.toString()
-            val category = "숙취해소"
-            val gradientList: ArrayList<HangRequest> = arrayListOf()
+            val title = title_cocktail
+            val cocktailMainImageUrl = url_cocktail
+            val content = newCocktailBinding.etContent.text.toString()
+            val category = "칵테일"
+            val gradientList: ArrayList<CocktailRequest> = arrayListOf()
+            val balanceList: ArrayList<BalanceListRequest> = arrayListOf()
 
             for (i in 0 ..size -1) {
                 if (size != 0) {
                     gradientList.apply{
                         add(
-                            HangRequest(
+                            CocktailRequest(
                                 name = ingredientList[i].name,
                                 url = ingredientList[i].img
                             )
@@ -91,27 +130,42 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
                 }
             }
 
-            val PostRegisterRequest = PostHangRequest(title = title, hangoverMainImageUrl = hangoverMainImageUrl, content = content, category = category, gradientList = gradientList)
-            HangService(this).tryPostRegister(PostRegisterRequest)
+            for (i in 0 ..size -1) {
+                if (size != 0) {
+                    balanceList.apply{
+                        add(
+                            BalanceListRequest(
+                                balanceName = ratioNameList[i],
+                                balanceNum = ratioIntList[i]
+                            )
+                        )
+                    }
+                }
+            }
+
+            val PostCocktailRequest = PostCocktailRequest(
+                title = title, cocktailMainImageUrl = cocktailMainImageUrl,
+                content = content, category = category, sweet = sweet, alcohol = alcohol, gradientList = gradientList, balanceList = balanceList)
+            CocktailService(this).tryPostCocktail(PostCocktailRequest)
             Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
         // ViewPager 여백, 너비 정의
-            val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin) // 페이지끼리 간격
-            val pagerWidth = resources.getDimensionPixelOffset(R.dimen.pageWidth) // 페이지 보이는 정도
-            val screenWidth = resources.displayMetrics.widthPixels // 스마트폰의 가로 길이
-            val offsetPx = screenWidth - pageMarginPx - pagerWidth
+        val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin) // 페이지끼리 간격
+        val pagerWidth = resources.getDimensionPixelOffset(R.dimen.pageWidth) // 페이지 보이는 정도
+        val screenWidth = resources.displayMetrics.widthPixels // 스마트폰의 가로 길이
+        val offsetPx = screenWidth - pageMarginPx - pagerWidth
 
-        addHangoverBinding.rvImgPic.setPageTransformer { page, position ->
-                page.translationX = position * -offsetPx
-            }
+        newCocktailBinding.rvImgPic.setPageTransformer { page, position ->
+            page.translationX = position * -offsetPx
+        }
 
-        addHangoverBinding.rvImgPic.offscreenPageLimit = 1 // 1개 페이지 미리 로드
-        addHangoverBinding.rvImgPic.adapter = ImgAdapter(imgList)
-        addHangoverBinding.rvImgPic.orientation = ViewPager2.ORIENTATION_HORIZONTAL // 방향을 가로로
+        newCocktailBinding.rvImgPic.offscreenPageLimit = 1 // 1개 페이지 미리 로드
+        newCocktailBinding.rvImgPic.adapter = ImgAdapter2(imgList)
+        newCocktailBinding.rvImgPic.orientation = ViewPager2.ORIENTATION_HORIZONTAL // 방향을 가로로
 
         // 카메라
-        addHangoverBinding.btCamera.setOnClickListener{
+        newCocktailBinding.btCamera.setOnClickListener{
             CallCamera()
         }
     }
@@ -205,22 +259,22 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
             when(requestCode){
                 CAMERA_CODE -> {
                     if(data?.extras?.get("data") != null){
-                        val img = data?.extras?.get("data") as Bitmap
+                        val img = data.extras?.get("data") as Bitmap
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
-                        img_camera.setImageURI(uri)
+                        img_cocktail.setImageURI(uri)
 
                         // uri -> url로 변경
-                        url_hangover = URL("file://"+ absolutelyPath(uri!!))
-                        Log.d("tag", "title url:"+ "{$url_hangover}")
+                        url_cocktail = URL("file://"+ absolutelyPath(uri!!))
+                        Log.d("tag", "title url:"+ "{$url_cocktail}")
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
-                    img_camera.setImageURI(uri)
+                    img_cocktail.setImageURI(uri)
 
                     // uri -> url로 변경
-                    url_hangover = URL("file://"+ absolutelyPath(uri!!))
-                    Log.d("tag", "title url:"+ "{$url_hangover}")
+                    url_cocktail = URL("file://"+ absolutelyPath(uri!!))
+                    Log.d("tag", "title url:"+ "{$url_cocktail}")
                 }
             }
         }
@@ -245,7 +299,7 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
     }
 
     // 서버 연결 성공
-    override fun onPostHangSuccess(response: HangResponse) {
+    override fun onPostCocktailSuccess(response: CocktailResponse) {
         // 메인 화면으로 이동
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -255,7 +309,7 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
     }
 
     // 서버 연결 실패
-    override fun onPostHangFailure(message: String) {
+    override fun onPostCocktailFailure(message: String) {
         Log.d("error", "오류 : $message")
         Toast.makeText(this, "오류 : ${message}", Toast.LENGTH_SHORT).show()
     }
