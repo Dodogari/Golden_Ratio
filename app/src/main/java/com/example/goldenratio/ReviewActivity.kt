@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
 import com.example.goldenratio.databinding.ActivityReviewBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -96,11 +97,12 @@ class ReviewActivity : AppCompatActivity() {
             val registerData = ReviewRegisterData(reviewBinding.writingContent.text.toString(), reviewBinding.ratingBar.rating)
 
             //4-1. 통신
-            val registerReviewContent = RegisterClient.reviewService.registerReview(boardId, registerData)
+            val registerReviewContent = RegisterClient.reviewService.registerReview(boardId, X_ACCESS_TOKEN, registerData)
             registerReviewContent.enqueue(object : Callback<PostResponse> {
                 override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
-                    if (response.isSuccessful.not()) {
-                        Toast.makeText(this@ReviewActivity, response.message(), Toast.LENGTH_SHORT).show()
+                    if (response.isSuccessful) {
+                        val result = response.body()!!.result
+                        Toast.makeText(this@ReviewActivity, result, Toast.LENGTH_SHORT).show()
 
                         //화면 갱신 : 종료 후 다시 시작
                         finish()
