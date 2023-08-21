@@ -2,6 +2,7 @@ package com.example.goldenratio.hangover.models
 
 import android.util.Log
 import com.example.config.ApplicationClass
+import com.example.goldenratio.login.accessToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -9,7 +10,7 @@ import retrofit2.Response
 class HangService(val HangInterface: HangInterface) {
     fun tryPostRegister(PostHangRequest: PostHangRequest){
         val HangRetrofitInterface = ApplicationClass.sRetrofit?.create(HangRetrofitInterface::class.java)
-        HangRetrofitInterface?.postHang(PostHangRequest)?.enqueue(object : Callback<HangResponse>{
+        HangRetrofitInterface?.postHang("Bearer " + accessToken, PostHangRequest)?.enqueue(object : Callback<HangResponse>{
             override fun onResponse(call: Call<HangResponse>, response: Response<HangResponse>) {
                 (response.body() as HangResponse?)?.let {
                     HangInterface.onPostHangSuccess(

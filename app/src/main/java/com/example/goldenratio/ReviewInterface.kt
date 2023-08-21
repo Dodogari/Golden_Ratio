@@ -14,5 +14,9 @@ interface ReviewInterface {
 
     //리뷰 등록
     @POST("/golden-ratio/review/{board-id}")
-    fun registerReview(@Path("board-id") boardId: String, @Header("Authorization") accessToken: String, @Body requestData: ReviewRegisterData): Call<PostResponse>
+    fun registerReview(
+        @Path("board-id") boardId: String,
+        @Header("Authorization") accessToken: String,
+        @Body requestData: ReviewRegisterData
+    ): Call<PostResponse>
 }
