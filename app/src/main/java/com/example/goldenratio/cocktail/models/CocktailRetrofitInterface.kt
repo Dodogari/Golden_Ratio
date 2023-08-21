@@ -5,5 +5,8 @@ import retrofit2.http.*
 
 interface CocktailRetrofitInterface {
     @POST("/golden-ratio/cocktail")
-    fun postCocktail(@Body params: PostCocktailRequest): Call<CocktailResponse>
+    fun postCocktail(
+        @Header("Authorization") accessToken: String,
+        @Body params: PostCocktailRequest
+    ): Call<CocktailResponse>
 }
