@@ -17,8 +17,13 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.goldenratio.CocktailData
 import com.example.goldenratio.R
+import com.example.goldenratio.RegisterClient
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -66,7 +71,7 @@ class AddCocktailActivity : AppCompatActivity() {
                     
                     //화면 초기화
                     //제목 작성란에 데이터 넣기
-                    addCocktailBinding.editText.setText(cocktailData.title)
+                    addCocktailBinding.etTitle.setText(cocktailData.title)
                     
                     //알콜 라디오 버튼
                     when(cocktailData.alcohol) {
@@ -74,6 +79,13 @@ class AddCocktailActivity : AppCompatActivity() {
                         1 -> addCocktailBinding.rbt2.isChecked = true
                         2 -> addCocktailBinding.rbt3.isChecked = true
                     }
+                }
+
+                override fun onFailure(call: Call<CocktailData>, t: Throwable) {
+                    Toast.makeText(this@AddCocktailActivity, "데이터를 불러오지 못했습니다.", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
 
         title_cocktail = addCocktailBinding.etTitle.text.toString()
 
@@ -83,7 +95,7 @@ class AddCocktailActivity : AppCompatActivity() {
         }
 
         addCocktailBinding.btNext.setOnClickListener {
-            val intent = Intent(this, IngredientActivity2::class.java)
+            val intent = Intent(this@AddCocktailActivity, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
             intent.putExtra("board_id", boardId)

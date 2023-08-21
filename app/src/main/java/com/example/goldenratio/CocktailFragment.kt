@@ -110,6 +110,9 @@ class CocktailFragment : Fragment() {
                 call: Call<ArrayList<BoardData>>,
                 response: Response<ArrayList<BoardData>>) {
                 cocktailList = response.body()!!
+                if(cocktailList.size == 0) {
+
+                }
 
                 //#3. 리사이클러뷰 설정
                 //3-1. 리사이클러뷰 레이아웃 설정
@@ -129,7 +132,7 @@ class CocktailFragment : Fragment() {
 
                     //5-2. 좋아요 클릭
                     override fun likeOnClick(position: Int) {
-                        val likeContent = RegisterClient.cocktailService.registerLikes(cocktailList[position].boardId.toString(), X_ACCESS_TOKEN)
+                        val likeContent = RegisterClient.cocktailService.registerLikes(cocktailList[position].boardId.toString(), "Bearer " + X_ACCESS_TOKEN)
                         likeContent.enqueue(object : Callback<PostResponse> {
                             override fun onResponse(
                                 call: Call<PostResponse>,
