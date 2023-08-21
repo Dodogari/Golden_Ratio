@@ -50,7 +50,6 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>, priv
 
                 //좋아요
                 buttonLike.text = boardData.likeCount.toString()
-                //buttonLike.isChecked = boardData.likeCheck
 
                 //좋아요 버튼 클릭 시 활성화
                 buttonLike.setOnClickListener {
