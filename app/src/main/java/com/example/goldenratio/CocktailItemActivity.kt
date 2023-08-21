@@ -97,7 +97,7 @@ class CocktailItemActivity : AppCompatActivity() {
                         1 -> cocktailItemBinding.aAlcohol.text = "소주"
                         2 -> cocktailItemBinding.aAlcohol.text = "소주보다 높음"
                     }
-
+/*
                     //2-8. 레시피명, 이미지
                     for (i in 0 until cocktailItemData.gradientList.size) {
                         cocktailRecipeName.add(cocktailItemData.gradientList[i].gradientName)
@@ -150,7 +150,7 @@ class CocktailItemActivity : AppCompatActivity() {
                     cocktailItemBinding.listReview.adapter = recyclerViewReviewAdapter
 
                     recyclerViewReviewAdapter.notifyItemRangeChanged(cocktailItemData.reviews.size, cocktailItemData.reviews.size)
-
+*/
                     //2-12. 날짜
                     cocktailItemBinding.timeUploadCocktail.text = "${cocktailItemData.createdDate[0]}년 ${cocktailItemData.createdDate[1]}월 ${cocktailItemData.createdDate[2]}일 작성"
 

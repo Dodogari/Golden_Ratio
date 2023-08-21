@@ -95,7 +95,7 @@ class AddCocktailActivity : AppCompatActivity() {
         }
 
         addCocktailBinding.btNext.setOnClickListener {
-            val intent = Intent(this, IngredientActivity2::class.java)
+            val intent = Intent(this@AddCocktailActivity, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             intent.putExtra("board_id", boardId)
 
