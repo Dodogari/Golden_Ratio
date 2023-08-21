@@ -20,6 +20,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".cocktail.NewCocktailActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".cocktail.NewIngredientActivity2"
             android:exported="false">
             <meta-data
@@ -47,8 +54,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-  
-  
         <activity
             android:name=".AddDialog"
             android:exported="false">
@@ -62,7 +67,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
         <activity
             android:name=".cocktail.RatioActivity"
@@ -70,7 +74,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
         </activity>
         <activity
             android:name=".ReviewActivity"
@@ -108,11 +111,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
@@ -128,6 +127,12 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".hangover.AddHangoverActivity"
@@ -170,6 +175,8 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
         </activity>
     </application>
+
 </manifest>
