@@ -3,23 +3,30 @@ package com.example.goldenratio.cocktail
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.goldenratio.R
+import com.example.goldenratio.*
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
 import com.example.goldenratio.hangover.Ingredient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.FileOutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
+
 
 val ingredientList: ArrayList<Ingredient> = arrayListOf()
 val ingredientNameList: ArrayList<String> = arrayListOf()   // 재료 이름
@@ -47,6 +54,51 @@ class AddCocktailActivity : AppCompatActivity() {
         ingredient_name = null
         ratioItemList.clear()
 
+        val boardId = intent.getIntExtra("boardId", -1)
+        Toast.makeText(this@AddCocktailActivity, boardId.toString(), Toast.LENGTH_LONG).show()
+
+        if(boardId != -1) {
+            val editCocktail = RegisterClient.cocktailService.getCocktailItem(boardId.toString())
+            editCocktail.enqueue(object : Callback<CocktailData> {
+                override fun onResponse(
+                    call: Call<CocktailData>,
+                    response: Response<CocktailData>
+                ) {
+                    val cocktailData = response.body()!!
+                    
+                    //화면 초기화
+                    //제목 작성란에 데이터 넣기
+                    addCocktailBinding.editText.setText(cocktailData.title)
+                    
+                    //알콜 라디오 버튼
+                    when(cocktailData.alcohol) {
+                        0 -> addCocktailBinding.rbt1.isChecked = true
+                        1 -> addCocktailBinding.rbt2.isChecked = true
+                        2 -> addCocktailBinding.rbt3.isChecked = true
+                    }
+
+                    //단맛 라디오 버튼
+                    when(cocktailData.sweet) {
+                        0 -> addCocktailBinding.rbtTop.isChecked = true
+                        1 -> addCocktailBinding.rbtMid.isChecked = true
+                        2 -> addCocktailBinding.rbtBottom.isChecked = true
+                    }
+
+                    for(i in 0 until cocktailData.gradientList.size) {
+                        ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl),
+                            cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
+
+                        ingredientNameList.add(cocktailData.gradientList[i].gradientName)
+                    }
+                }
+
+                override fun onFailure(call: Call<CocktailData>, t: Throwable) {
+                    Toast.makeText(this@AddCocktailActivity, "기존 데이터 불러오기를 실패하였습니다.", Toast.LENGTH_LONG).show()
+                }
+
+            })
+        }
+
         // 카메라
         addCocktailBinding.btCamera.setOnClickListener{
             CallCamera()
@@ -55,7 +107,37 @@ class AddCocktailActivity : AppCompatActivity() {
         addCocktailBinding.btNext.setOnClickListener {
             val intent = Intent(this, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra
+
             startActivity(intent)
+        }
+
+        //뒤로가기 버튼
+        addCocktailBinding.btBack.setOnClickListener {
+            //다이얼로그 띄우기
+            val oDialog: AlertDialog.Builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog)
+            oDialog.setMessage("지금까지 작성한 내용은 저장되지 않습니다.")
+                .setTitle("뒤로가기")
+                .setPositiveButton("아니오", DialogInterface.OnClickListener { _, _ ->
+                })
+                .setNeutralButton("예",
+                    DialogInterface.OnClickListener { _, _ ->
+                        //수정 중이면 기존 칵테일 아이템으로
+                        if(boardId != -1) {
+                            val itemIntent = Intent(this@AddCocktailActivity, CocktailItemActivity::class.java)
+                            itemIntent.putExtra("boardId", boardId)
+                            startActivity(itemIntent)
+
+                            if(!isFinishing) finish()
+                        }
+                        else {
+                            val homeIntent = Intent(this@AddCocktailActivity, MainActivity::class.java)
+                            startActivity(homeIntent)
+
+                            if(!isFinishing) finish()
+                        }
+                    })
+                .show()
         }
     }
 

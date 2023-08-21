@@ -181,6 +181,7 @@ class CocktailFragment : Fragment() {
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
+                    cocktailList.clear()
                     cocktailList = response.body()!!
 
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
@@ -202,6 +203,7 @@ class CocktailFragment : Fragment() {
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
+                    cocktailList.clear()
                     cocktailList = response.body()!!
 
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
@@ -223,6 +225,7 @@ class CocktailFragment : Fragment() {
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
+                    cocktailList.clear()
                     cocktailList = response.body()!!
 
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
@@ -244,6 +247,7 @@ class CocktailFragment : Fragment() {
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
+                    cocktailList.clear()
                     cocktailList = response.body()!!
 
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
@@ -265,6 +269,7 @@ class CocktailFragment : Fragment() {
                 override fun onResponse(
                     call: Call<ArrayList<BoardData>>,
                     response: Response<ArrayList<BoardData>>) {
+                    cocktailList.clear()
                     cocktailList = response.body()!!
 
                     recyclerViewBoardAdapter!!.notifyDataSetChanged()
