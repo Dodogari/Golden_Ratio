@@ -68,13 +68,13 @@ class AddCocktailActivity : AppCompatActivity() {
                     response: Response<CocktailData>
                 ) {
                     val cocktailData = response.body()!!
-                    
+
                     //화면 초기화
                     //제목 작성란에 데이터 넣기
                     addCocktailBinding.etTitle.setText(cocktailData.title)
-                    
+
                     //알콜 라디오 버튼
-                    when(cocktailData.alcohol) {
+                    when (cocktailData.alcohol) {
                         0 -> addCocktailBinding.rbt1.isChecked = true
                         1 -> addCocktailBinding.rbt2.isChecked = true
                         2 -> addCocktailBinding.rbt3.isChecked = true
@@ -82,7 +82,7 @@ class AddCocktailActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<CocktailData>, t: Throwable) {
-                    Toast.makeText(this@AddCocktailActivity, "데이터를 불러오지 못했습니다.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@AddCocktailActivity, "데이터를 불러올 수 없습니다.", Toast.LENGTH_LONG).show()
                 }
             })
         }
