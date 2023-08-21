@@ -6,5 +6,5 @@ import retrofit2.http.*
 interface GetIdRetrofitInterface {
     //아이디 중복확인
     @GET("/check/{user-id}")
-    fun getID(@Query("user-id") userId: String):Call<IdCheckResponse>
+    fun getID(@Path("user-id") userId: String):Call<IdCheckResponse>
 }
