@@ -1,18 +1,19 @@
-package com.example.goldenratio.hangover
+package com.example.goldenratio.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivitySearchBinding
-import com.example.goldenratio.search.Rank
-import com.example.goldenratio.search.RankAdapter
-import com.example.goldenratio.search.Search
-import com.example.goldenratio.search.SearchAdapter
+import com.example.goldenratio.hangover.NewIngredientActivity
+import com.example.goldenratio.hangover.ingredient_name
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), SearchInterface {
 
     private lateinit var searchBinding: ActivitySearchBinding
 
@@ -53,9 +54,33 @@ class SearchActivity : AppCompatActivity() {
 
         // 재료추가 화면으로 이동
         searchBinding.btNewIngredient.setOnClickListener{
+
+            // 서버에 값 보냄
+            val name = ingredient_name.toString()
+
+            SearchService(this).tryGetSearch(name)
+            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
+
             val intent = Intent(this, NewIngredientActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }
+    }
+
+
+    // 서버 연결 성공
+    override fun onSearchSuccess(response: SearchResponse) {
+        // 메인 화면으로 이동
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+
+        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show()
+    }
+
+    // 서버 연결 실패
+    override fun onSearchFailure(message: String) {
+        Log.d("error", "오류 : $message")
+        Toast.makeText(this, "오류 : ${message}", Toast.LENGTH_SHORT).show()
     }
 }
