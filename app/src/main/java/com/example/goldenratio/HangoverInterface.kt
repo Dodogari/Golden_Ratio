@@ -7,7 +7,7 @@ import retrofit2.http.Path
 interface HangoverInterface {
     //숙취해소 전체 조회
     @GET("/golden-ratio/hangover/all")
-    fun getHangoverListAll():Call<ArrayList<BoardData>>
+    fun getHangoverListAll():Call<ArrayList<BoardAllData>>
 
     //숙취해소 조회 - 별점순
     @GET("/golden-ratio/hangover/star")

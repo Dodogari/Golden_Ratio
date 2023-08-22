@@ -6,4 +6,4 @@ data class BoardData(@SerializedName("title") var title: String,
                      @SerializedName("mainImage") var mainImage: String,
                      @SerializedName("averageScore") var averageScore: Float,
                      @SerializedName("likeCount") var likeCount: Int,
-                     @SerializedName("boardId") var boardId: Int)
+                     @SerializedName("boardid") var boardId: Int)

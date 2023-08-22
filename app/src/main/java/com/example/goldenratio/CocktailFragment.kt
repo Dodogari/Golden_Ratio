@@ -147,7 +147,6 @@ class CocktailFragment : Fragment() {
         //4-4. 도수 높은 순
         cocktailBinding.radioCocktailAlcohol.setOnClickListener {
             cocktailListContent = RegisterClient.cocktailService.getCocktailAlcohol()
-
             try {
                 //리스트 불러오기
                 listUpdate(editor, cocktailListContent)
@@ -272,16 +271,16 @@ class CocktailFragment : Fragment() {
                     //5-1. 상세 메뉴 액티비티로 전환`
                     override fun onClick(position: Int) {
                         val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                        itemIntent.putExtra("boardId", cocktailList[position].boardId)
+                        itemIntent.putExtra("boardId", cocktailAllList[position].boardId)
 
-                        Log.d("dd", cocktailList[position].boardId.toString())
+                        Log.d("dd", cocktailAllList[position].boardId.toString())
                         startActivity(itemIntent)
                     }
 
                     //5-2. 좋아요 클릭
                     override fun likeOnClick(position: Int) {
                         val likeContent = RegisterClient.cocktailService.registerLikes(
-                            cocktailList[position].boardId.toString(),
+                            cocktailAllList[position].boardId.toString(),
                             "Bearer $accessToken"
                         )
                         likeContent.enqueue(object : Callback<PostResponse> {

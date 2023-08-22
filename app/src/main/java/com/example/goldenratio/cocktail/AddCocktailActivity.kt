@@ -22,6 +22,7 @@ import com.example.goldenratio.R
 import com.example.goldenratio.RegisterClient
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
 import com.example.goldenratio.hangover.Ingredient
+import com.example.goldenratio.hangover.ingredientList
 import com.example.goldenratio.login.id
 import com.example.goldenratio.img.ImgInterface
 import com.example.goldenratio.img.ImgResponse
