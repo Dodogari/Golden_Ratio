@@ -11,14 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivitySearchBinding
 import com.example.goldenratio.hangover.Ingredient
+import com.example.goldenratio.hangover.IngredientActivity
+import com.example.goldenratio.hangover.NewIngredientActivity
+import com.example.goldenratio.hangover.ingredientList
 import com.example.goldenratio.search.*
 import java.net.URL
 
-val searchList2: ArrayList<Search> = arrayListOf()
 
-class SearchActivity2 : AppCompatActivity(), SearchInterface {
+class CocktailSearchActivity : AppCompatActivity(), SearchInterface {
 
     private lateinit var searchBinding: ActivitySearchBinding
+    val searchList2: ArrayList<Search> = arrayListOf()
     val rankList2: ArrayList<Rank> = arrayListOf()
     val searchNameList: ArrayList<SearchName> = arrayListOf()
     var gradientUrl : URL? = null
@@ -28,13 +31,6 @@ class SearchActivity2 : AppCompatActivity(), SearchInterface {
         searchBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(searchBinding.root)
 
-//        for (i in 0 ..searchList2.size -1) {
-//            if (searchList2.size != 0) {
-//                searchRecently(searchList2[i].search)
-//            }
-//        }
-
-        Log.d("tag", "searchList  L ${searchList2}")
         if(searchList2.size == 0)
         {
             searchBinding.tvRecently.visibility = View.GONE
@@ -57,11 +53,9 @@ class SearchActivity2 : AppCompatActivity(), SearchInterface {
             finish()
         }
 
-
-
         // 재료추가 화면으로 이동
         searchBinding.btNewIngredient.setOnClickListener{
-            val intent = Intent(this, NewIngredientActivity2::class.java)
+            val intent = Intent(this, NewIngredientActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }
@@ -120,7 +114,7 @@ class SearchActivity2 : AppCompatActivity(), SearchInterface {
 
         Log.d("tag", "서버 연결 완료")
         if(response.gradientImageUrl != null) {
-            ingredientList2.apply {
+            ingredientList.apply {
                 add(
                     Ingredient(
                         response.gradientImageUrl,
@@ -129,7 +123,7 @@ class SearchActivity2 : AppCompatActivity(), SearchInterface {
                     )
                 )
             }
-            val intent = Intent(this, IngredientActivity2::class.java)
+            val intent = Intent(this, IngredientActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
 
@@ -137,6 +131,8 @@ class SearchActivity2 : AppCompatActivity(), SearchInterface {
         }
 
         if(response.gradientImageUrl == null || response.gradientImageUrl == null) {
+            Log.d("tag", "${response.gradientName}")
+            Log.d("tag", "${response.gradientImageUrl}")
             Toast.makeText(this, "재료를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
@@ -145,5 +141,6 @@ class SearchActivity2 : AppCompatActivity(), SearchInterface {
     override fun onSearchFailure(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         Log.d("tag", "서버 연결 실패")
+        //Toast.makeText(this, "재료를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
     }
 }

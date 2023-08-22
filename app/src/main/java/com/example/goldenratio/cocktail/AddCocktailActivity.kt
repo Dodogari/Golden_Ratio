@@ -3,6 +3,7 @@ package com.example.goldenratio.cocktail
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -13,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.goldenratio.CameraDialog
 import com.example.goldenratio.CocktailData
 import com.example.goldenratio.R
 import com.example.goldenratio.RegisterClient
@@ -47,6 +50,8 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
 
     // storage 권한 처리에 필요한 변수
     val CAMERA = arrayOf(Manifest.permission.CAMERA)
+    val STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
     val CAMERA_CODE = 98
     val STORAGE_CODE = 99
 
@@ -117,7 +122,7 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
 
         // 카메라
         addCocktailBinding.btCamera.setOnClickListener{
-            CallCamera()
+            addDialog(it.context) // 다이얼로그 띄우기
         }
 
         addCocktailBinding.btNext.setOnClickListener {
@@ -148,6 +153,24 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
                 R.id.rbt_bottom -> sweet = 2 // 하
             }
         }
+    }
+    // 다이얼로그 띄우기
+    fun addDialog(context: Context) {
+        val dialog = CameraDialog(
+            context = context,
+            clickCamera = clickCamera,
+            clickGallery = clickGallery
+        )
+        dialog.showDialog()
+    }
+    // 카메라
+    private val clickCamera = View.OnClickListener {
+        CallCamera()
+    }
+
+    // 갤러리
+    private val clickGallery = View.OnClickListener {
+        GetAlbum()
     }
 
     // 카메라 권한, 저장소 권한
@@ -195,6 +218,15 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
         if(checkPermission(CAMERA, CAMERA_CODE)){
             val itt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(itt, CAMERA_CODE)
+        }
+    }
+
+    // 갤러리 취득
+    fun GetAlbum(){
+        if(checkPermission(STORAGE, STORAGE_CODE)){
+            val itt = Intent(Intent.ACTION_PICK)
+            itt.type = MediaStore.Images.Media.CONTENT_TYPE
+            startActivityForResult(itt, STORAGE_CODE)
         }
     }
 

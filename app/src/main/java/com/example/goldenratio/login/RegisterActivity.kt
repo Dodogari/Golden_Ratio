@@ -1,12 +1,14 @@
 package com.example.goldenratio.login
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import com.example.goldenratio.AgreementActivity
 import com.example.goldenratio.cocktail.IngredientFragment
 import com.example.goldenratio.databinding.ActivityRegisterBinding
 import com.example.goldenratio.login.models.id.GetIdInterface
@@ -25,7 +27,7 @@ class RegisterActivity : AppCompatActivity(), GetIdInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registerBinding = com.example.goldenratio.databinding.ActivityRegisterBinding.inflate(layoutInflater)
+        registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(registerBinding.root)
 
         RegisterContext = this
@@ -47,6 +49,13 @@ class RegisterActivity : AppCompatActivity(), GetIdInterface {
                 registerBinding.btNext.isEnabled = id.isNotEmpty() && pw.isNotEmpty()
             }
         })
+
+        // 이용약관 동의
+        registerBinding.tvAgree.setOnClickListener {
+            val intent = Intent(this, AgreementActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            startActivity(intent)
+        }
 
         // 아이디 중복 확인
         registerBinding.btIdCheck.setOnClickListener {

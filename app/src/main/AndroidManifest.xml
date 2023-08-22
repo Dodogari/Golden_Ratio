@@ -25,6 +25,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
         </activity>
         <activity
             android:name=".cocktail.NewIngredientActivity2"
@@ -97,8 +98,8 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".hangover.SearchActivity"
-            android:exported="false">
+            android:name=".search.SearchActivity"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
