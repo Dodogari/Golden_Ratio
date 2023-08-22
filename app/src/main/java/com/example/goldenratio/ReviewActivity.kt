@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
 import com.example.goldenratio.databinding.ActivityReviewBinding
 import com.example.goldenratio.login.accessToken
+import com.example.goldenratio.login.nick
+import com.example.goldenratio.login.url_profile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,9 +38,6 @@ class ReviewActivity : AppCompatActivity() {
         //1-1. 데이터 포지션 / 카테고리
         val boardId = intent.getIntExtra("boardId", 0)
         val category = intent.getIntExtra("category", -1)
-
-        reviewBinding.ratingCount3.text = "(0)"
-        reviewBinding.avgRatingNum3.text = "0.0"
 
         Toast.makeText(this@ReviewActivity, boardId.toString(), Toast.LENGTH_SHORT).show()
 
@@ -66,7 +66,12 @@ class ReviewActivity : AppCompatActivity() {
                         }
 
                         //1) 레이팅 바 표시
-                        reviewBinding.avgRatingBar3.rating = total / reviewItemList.size
+                        if(reviewItemList.size == 0) {
+                            reviewBinding.avgRatingBar3.rating = 0f
+                        }
+                        else {
+                            reviewBinding.avgRatingBar3.rating = total / reviewItemList.size
+                        }
 
                         //2) 텍스트 표시(소숫점 한 자리 수까지)
                         val ratingValue = DecimalFormat("#.#")
@@ -75,6 +80,12 @@ class ReviewActivity : AppCompatActivity() {
 
                         //2-4. 리뷰 갯수
                         reviewBinding.ratingCount3.text = "(${reviewItemList.size})"
+
+                        //사용자 프로필 표시
+                        reviewBinding.userName.text = nick
+                        Glide.with(reviewBinding.userProfile)
+                            .load(url_profile)
+                            .into(reviewBinding.userProfile)
                     }
                 }
 

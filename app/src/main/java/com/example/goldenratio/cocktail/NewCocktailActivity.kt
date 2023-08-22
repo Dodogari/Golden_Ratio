@@ -50,6 +50,8 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface {
 
         img_cocktail = findViewById(R.id.img_cocktail)
 
+        val boardId = intent.getIntExtra("boardId", -1)
+
         // 이미지
         val imgList: ArrayList<Img> = arrayListOf()
         val size = ingredientList.size
@@ -146,7 +148,12 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface {
             val PostCocktailRequest = PostCocktailRequest(
                 title = title, cocktailMainImageUrl = cocktailMainImageUrl,
                 content = content, category = category, sweet = sweet, alcohol = alcohol, gradientList = gradientList, balanceList = balanceList)
-            CocktailService(this).tryPostCocktail(PostCocktailRequest)
+
+            if(boardId != -1)
+                CocktailService(this).tryEditCocktail(boardId.toString(), PostCocktailRequest)
+            else
+                CocktailService(this).tryPostCocktail(PostCocktailRequest)
+
             Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
