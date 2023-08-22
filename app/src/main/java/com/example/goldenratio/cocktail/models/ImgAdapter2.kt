@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemPicListBinding
 import com.example.goldenratio.hangover.Img
-import com.example.goldenratio.cocktail.ingredientList
+import com.example.goldenratio.cocktail.ingredientList2
 
 class ImgAdapter2(private val imgList: ArrayList<Img>): RecyclerView.Adapter<ImgAdapter2.ViewHolder>() {
 
     inner class ViewHolder(val imgBinding: ItemPicListBinding): RecyclerView.ViewHolder(imgBinding.root) {
         fun bind (img: Img) {
             Glide.with(imgBinding.imgPic)
-                .load(ingredientList[position].img.toString()) // 불러올 이미지 url
+                .load(ingredientList2[position].img.toString()) // 불러올 이미지 url
                 .into(imgBinding.imgPic) // 이미지를 넣을 뷰
         }
     }

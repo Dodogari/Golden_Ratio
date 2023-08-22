@@ -10,7 +10,7 @@ import retrofit2.Response
 class CocktailService(val CocktailInterface: CocktailInterface) {
     fun tryPostCocktail(PostCocktailRequest: PostCocktailRequest){
         val CocktailRetrofitInterface = ApplicationClass.sRetrofit?.create(CocktailRetrofitInterface::class.java)
-        CocktailRetrofitInterface?.postCocktail("Bearer " + accessToken, PostCocktailRequest)?.enqueue(object : Callback<CocktailResponse>{
+        CocktailRetrofitInterface?.postCocktail("Bearer $accessToken", PostCocktailRequest)?.enqueue(object : Callback<CocktailResponse>{
             override fun onResponse(call: Call<CocktailResponse>, response: Response<CocktailResponse>) {
                 (response.body() as CocktailResponse?)?.let {
                     CocktailInterface.onPostCocktailSuccess(

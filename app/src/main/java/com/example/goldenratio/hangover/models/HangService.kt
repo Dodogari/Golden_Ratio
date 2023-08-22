@@ -10,7 +10,7 @@ import retrofit2.Response
 class HangService(val HangInterface: HangInterface) {
     fun tryPostRegister(PostHangRequest: PostHangRequest){
         val HangRetrofitInterface = ApplicationClass.sRetrofit?.create(HangRetrofitInterface::class.java)
-        HangRetrofitInterface?.postHang("Bearer " + accessToken, PostHangRequest)?.enqueue(object : Callback<HangResponse>{
+        HangRetrofitInterface?.postHang("Bearer $accessToken", PostHangRequest)?.enqueue(object : Callback<HangResponse>{
             override fun onResponse(call: Call<HangResponse>, response: Response<HangResponse>) {
                 (response.body() as HangResponse?)?.let {
                     HangInterface.onPostHangSuccess(

@@ -1,4 +1,4 @@
-package com.example.goldenratio.hangover.img
+package com.example.goldenratio.img
 
 import com.google.gson.annotations.SerializedName
 import java.net.URL
