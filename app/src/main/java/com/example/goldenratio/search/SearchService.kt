@@ -1,5 +1,6 @@
 package com.example.goldenratio.search
 
+import android.util.Log
 import com.example.config.ApplicationClass
 import com.example.goldenratio.login.accessToken
 import retrofit2.Call
@@ -17,9 +18,9 @@ class SearchService(val SearchInterface: SearchInterface) {
                     )
                 }
             }
-
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 SearchInterface.onSearchFailure(t.message ?: "통신 오류")
+                Log.d("tag", "통신 오류")
             }
         })
     }

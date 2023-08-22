@@ -3,6 +3,7 @@ package com.example.goldenratio.cocktail
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -12,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.goldenratio.CameraDialog
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
 import com.example.goldenratio.cocktail.models.*
@@ -41,6 +44,8 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface, ImgInterface
 
     // storage 권한 처리에 필요한 변수
     val CAMERA = arrayOf(Manifest.permission.CAMERA)
+    val STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
     val CAMERA_CODE = 98
     val STORAGE_CODE = 99
 
@@ -156,8 +161,6 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface, ImgInterface
                 CocktailService(this).tryEditCocktail(boardId.toString(), PostCocktailRequest)
             else
                 CocktailService(this).tryPostCocktail(PostCocktailRequest)
-
-            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
         // ViewPager 여백, 너비 정의
@@ -176,8 +179,26 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface, ImgInterface
 
         // 카메라
         newCocktailBinding.btCamera.setOnClickListener{
-            CallCamera()
+            addDialog(it.context) // 다이얼로그 띄우기
         }
+    }
+    // 다이얼로그 띄우기
+    fun addDialog(context: Context) {
+        val dialog = CameraDialog(
+            context = context,
+            clickCamera = clickCamera,
+            clickGallery = clickGallery
+        )
+        dialog.showDialog()
+    }
+    // 카메라
+    private val clickCamera = View.OnClickListener {
+        CallCamera()
+    }
+
+    // 갤러리
+    private val clickGallery = View.OnClickListener {
+        GetAlbum()
     }
     // 카메라 권한, 저장소 권한
     // 요청 권한
@@ -225,7 +246,14 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface, ImgInterface
             startActivityForResult(itt, CAMERA_CODE)
         }
     }
-
+    // 갤러리 취득
+    fun GetAlbum(){
+        if(checkPermission(STORAGE, STORAGE_CODE)){
+            val itt = Intent(Intent.ACTION_PICK)
+            itt.type = MediaStore.Images.Media.CONTENT_TYPE
+            startActivityForResult(itt, STORAGE_CODE)
+        }
+    }
     // 사진 저장
     fun saveFile(fileName:String, mimeType:String, bitmap: Bitmap): Uri?{
 
