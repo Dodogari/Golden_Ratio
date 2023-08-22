@@ -48,11 +48,11 @@ class HangoverItemActivity : AppCompatActivity() {
 
         //#1. 서버 통신: 세부 숙취해소 보드 내용 받아오기
         //1-1. 데이터 포지션
-        val boardId = intent.getIntExtra("boardId", 1).toString()
-        Log.d("dd", boardId)
+        val boardId = intent.getIntExtra("boardId", 1)
+        Log.d("dd", boardId.toString())
 
         //1-2. 통신
-        val hangoverItemContent = RegisterClient.hangoverService.getHangoverItem(boardId)
+        val hangoverItemContent = RegisterClient.hangoverService.getHangoverItem(boardId.toString())
         hangoverItemContent.enqueue(object : Callback<HangoverData> {
             //서버 응답 시
             @SuppressLint("SetTextI18n")
@@ -83,36 +83,41 @@ class HangoverItemActivity : AppCompatActivity() {
                     //2-5. 좋아요 갯수
                     hangoverItemBinding.likes.text = hangoverItemData.likes.toString()
 
-                    //2-8. 레시피명, 이미지
-                    for (i in 0 until hangoverItemData.gradientList.size) {
-                        hangoverRecipeName.add(hangoverItemData.gradientList[i].gradientName)
-                        hangoverRecipeImage.add(hangoverItemData.gradientList[i].gradientImageUrl)
+                    try {
+                        //2-8. 레시피명, 이미지
+                        for (i in 0 until hangoverItemData.gradientList.size) {
+                            hangoverRecipeName.add(hangoverItemData.gradientList[i].gradientName)
+                            hangoverRecipeImage.add(hangoverItemData.gradientList[i].gradientImageUrl)
+                        }
+
+                        //레시피명
+                        hangoverItemBinding.materialHangover.text = hangoverRecipeName.joinToString(", ")
+
+                        //레시피 이미지
+                        //1) 어댑터 연결
+                        recycleViewGradientAdapter = RecycleViewGradientAdapter(hangoverItemData.gradientList)
+                        hangoverItemBinding.gradientImageListHangover.adapter = recycleViewGradientAdapter
+
+                        //2) 크기, 보여지는 아이템 갯수 정하기
+                        hangoverItemBinding.gradientImageListHangover.setPadding(150, 150, 150, 150)
+                        hangoverItemBinding.gradientImageListHangover.offscreenPageLimit = 3
+                        hangoverItemBinding.gradientImageListHangover.getChildAt(0).overScrollMode= View.OVER_SCROLL_NEVER
+
+                        //3) 이미지 마진
+                        val transform = CompositePageTransformer()
+                        transform.addTransformer(MarginPageTransformer(100))
+
+                        //4) 스크롤 시 이미지 크기 변동
+                        transform.addTransformer { view: View, fl: Float ->
+                            val v = 1 - abs(fl)
+                            view.scaleY = 0.8f + v * 0.2f
+                        }
+
+                        hangoverItemBinding.gradientImageListHangover.setPageTransformer(transform)
                     }
-
-                    //레시피명
-                    hangoverItemBinding.materialHangover.text = hangoverRecipeName.joinToString(", ")
-
-                    //레시피 이미지
-                    //1) 어댑터 연결
-                    recycleViewGradientAdapter = RecycleViewGradientAdapter(hangoverItemData.gradientList)
-                    hangoverItemBinding.gradientImageListHangover.adapter = recycleViewGradientAdapter
-
-                    //2) 크기, 보여지는 아이템 갯수 정하기
-                    hangoverItemBinding.gradientImageListHangover.setPadding(150, 150, 150, 150)
-                    hangoverItemBinding.gradientImageListHangover.offscreenPageLimit = 3
-                    hangoverItemBinding.gradientImageListHangover.getChildAt(0).overScrollMode= View.OVER_SCROLL_NEVER
-
-                    //3) 이미지 마진
-                    val transform = CompositePageTransformer()
-                    transform.addTransformer(MarginPageTransformer(100))
-
-                    //4) 스크롤 시 이미지 크기 변동
-                    transform.addTransformer { view: View, fl: Float ->
-                        val v = 1 - abs(fl)
-                        view.scaleY = 0.8f + v * 0.2f
+                    catch (e: NullPointerException) {
+                        //Toast.makeText(this@HangoverItemActivity, "재료 이미지 및 이름을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                     }
-
-                    hangoverItemBinding.gradientImageListHangover.setPageTransformer(transform)
 
                     //2-10. 레시피 설명
                     hangoverItemBinding.recipeContentHangover.text = hangoverItemData.content
@@ -152,7 +157,7 @@ class HangoverItemActivity : AppCompatActivity() {
         //#4. 리뷰 전체 보기 화면 불러오기
         hangoverItemBinding.reviewAll.setOnClickListener {
             val reviewIntent = Intent(this@HangoverItemActivity, ReviewActivity::class.java)
-            reviewIntent.putExtra("boardId", boardId)
+            reviewIntent.putExtra("board", boardId)
             reviewIntent.putExtra("category", 1)
             startActivity(reviewIntent)
         }
@@ -165,10 +170,6 @@ class HangoverItemActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.edit_item -> {
                     Toast.makeText(this, "수정하기", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.delete_item -> {
-                    Toast.makeText(this, "삭제하기", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> true

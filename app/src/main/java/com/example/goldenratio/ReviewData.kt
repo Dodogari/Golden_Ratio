@@ -7,4 +7,5 @@ import kotlinx.parcelize.Parcelize
 //리뷰 데이터
 data class ReviewData(@SerializedName("reviewer") var reviewer: String,
                       @SerializedName("rating") var rating: Float,
-                      @SerializedName("comment") var comment: String)
+                      @SerializedName("comment") var comment: String,
+                      @SerializedName("profileImageUrl") var profileImageUrl: String,)

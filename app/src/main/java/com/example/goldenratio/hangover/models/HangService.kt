@@ -25,4 +25,22 @@ class HangService(val HangInterface: HangInterface) {
             }
         })
     }
+
+    fun tryEditRegister(boardId: String, PostHangRequest: PostHangRequest){
+        val HangRetrofitInterface = ApplicationClass.sRetrofit?.create(HangRetrofitInterface::class.java)
+        HangRetrofitInterface?.editHang(boardId, "Bearer $accessToken", PostHangRequest)?.enqueue(object : Callback<HangResponse>{
+            override fun onResponse(call: Call<HangResponse>, response: Response<HangResponse>) {
+                (response.body() as HangResponse?)?.let {
+                    HangInterface.onPostHangSuccess(
+                        it
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<HangResponse>, t: Throwable) {
+                HangInterface.onPostHangFailure(t.message ?: "통신 오류")
+                Log.d("error","연결 실패")
+            }
+        })
+    }
 }

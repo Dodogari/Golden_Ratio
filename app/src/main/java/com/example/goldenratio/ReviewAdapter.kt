@@ -3,6 +3,7 @@ package com.example.goldenratio
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ReviewListBinding
 
 class ReviewAdapter(private var reviewList: ArrayList<ReviewData>)
@@ -35,8 +36,14 @@ class ReviewAdapter(private var reviewList: ArrayList<ReviewData>)
                 reviewContent.text = reviewData.comment
 
                 //프로필 이미지
-                //userProfile.setImageResource(reviewData.userProfile)
+                try {
+                    Glide.with(userProfile)
+                        .load(reviewData.profileImageUrl)
+                        .into(userProfile)
+                }
+                catch (e: Exception) {
 
+                }
                 //최초 별점
                 userRating.rating = reviewData.rating.toFloat()
             }

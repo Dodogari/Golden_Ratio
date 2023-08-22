@@ -1,14 +1,13 @@
 package com.example.goldenratio
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.goldenratio.databinding.ItemBoardBinding
 
-class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>, private val markList: ArrayList<Boolean>)
-    :RecyclerView.Adapter<RecyclerViewBoardAdapter.CustomViewHolder>() {
+class RecyclerViewBoardAllAdapter (private val boardList: ArrayList<BoardAllData>, private val markList: ArrayList<Boolean>)
+    :RecyclerView.Adapter<RecyclerViewBoardAllAdapter.CustomViewHolder>() {
     private lateinit var itemBoardBinding: ItemBoardBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -26,7 +25,7 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>, priv
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(position)
         }
-        
+
         //좋아요 버튼 리스너
         itemBoardBinding.buttonLike.setOnClickListener {
             itemClickListener.likeOnClick(position)
@@ -37,13 +36,13 @@ class RecyclerViewBoardAdapter(private val boardList: ArrayList<BoardData>, priv
 
     inner class CustomViewHolder(itemBoardBinding: ItemBoardBinding) : RecyclerView.ViewHolder(itemBoardBinding.root){
 
-        fun bind(boardData: BoardData) {
+        fun bind(boardData: BoardAllData) {
             with(itemBoardBinding) {
                 itemTitle.text = boardData.title                        //제목
 
                 //이미지
                 Glide.with(thumbnailBoard)
-                    .load(boardData.mainImage) // 불러올 이미지 url
+                    .load(boardData.mainImageUrl) // 불러올 이미지 url
                     .into(thumbnailBoard) // 이미지를 넣을 뷰
 
                 //별점

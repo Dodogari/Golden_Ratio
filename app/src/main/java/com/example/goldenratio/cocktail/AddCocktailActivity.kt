@@ -25,6 +25,8 @@ import com.example.goldenratio.R
 import com.example.goldenratio.RegisterClient
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
 import com.example.goldenratio.hangover.Ingredient
+import com.example.goldenratio.hangover.ingredientList
+import com.example.goldenratio.login.id
 import com.example.goldenratio.img.ImgInterface
 import com.example.goldenratio.img.ImgResponse
 import com.example.goldenratio.img.ImgService
@@ -99,12 +101,16 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
                         2 -> addCocktailBinding.rbtBottom.isChecked = true
                     }
 
-                    //재료
-                    if(cocktailData.gradientList.size != 0) {
-                        for (i in 0 until cocktailData.gradientList.size){
-                            ingredientList2.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
-                            ingredientNameList.add(cocktailData.gradientList[i].gradientName)
+                    try {
+                        //재료
+                        if(cocktailData.gradientList.size != 0) {
+                            for (i in 0 until cocktailData.gradientList.size){
+                                ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
+                                ingredientNameList.add(cocktailData.gradientList[i].gradientName)
+                            }
                         }
+                    } catch (e: Exception) {
+
                     }
                 }
 

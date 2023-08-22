@@ -97,51 +97,63 @@ class CocktailItemActivity : AppCompatActivity() {
                         1 -> cocktailItemBinding.aAlcohol.text = "소주"
                         2 -> cocktailItemBinding.aAlcohol.text = "소주보다 높음"
                     }
-/*
-                    //2-8. 레시피명, 이미지
-                    for (i in 0 until cocktailItemData.gradientList.size) {
-                        cocktailRecipeName.add(cocktailItemData.gradientList[i].gradientName)
-                        cocktailRecipeImage.add(cocktailItemData.gradientList[i].gradientImageUrl)
-                    }
-                    //레시피명
-                    cocktailItemBinding.materialCocktail.text = cocktailRecipeName.joinToString(", ")
-                    cocktailRecipeName.clear()
 
-                    //레시피 이미지
-                    //1) 어댑터 연결
-                    recycleViewGradientAdapter = RecycleViewGradientAdapter(cocktailItemData.gradientList)
-                    cocktailItemBinding.gradientImageList.adapter = recycleViewGradientAdapter
-                    
-                    //2) 크기, 보여지는 아이템 갯수 정하기
-                    cocktailItemBinding.gradientImageList.setPadding(150, 150, 150, 150)
-                    cocktailItemBinding.gradientImageList.offscreenPageLimit = 3
-                    cocktailItemBinding.gradientImageList.getChildAt(0).overScrollMode= View.OVER_SCROLL_NEVER
-
-                    //3) 이미지 마진
-                    val transform = CompositePageTransformer()
-                    transform.addTransformer(MarginPageTransformer(100))
-
-                    //4) 스크롤 시 이미지 크기 변동
-                    transform.addTransformer { view: View, fl: Float ->
-                        val v = 1 - abs(fl)
-                        view.scaleY = 0.8f + v * 0.2f
-                    }
-
-                    cocktailItemBinding.gradientImageList.setPageTransformer(transform)
-
-                    //2-9. 레시피 비율
-                    for (i in 0 until cocktailItemData.balanceList.size){
-                        if(cocktailItemData.balanceList[i].balanceNum != 0){
-                            cocktailRecipeName.add(cocktailItemData.balanceList[i].balanceName)
-                            cocktailRecipeRatio.add(cocktailItemData.balanceList[i].balanceNum)
+                    try {
+                        //2-8. 레시피명, 이미지
+                        for (i in 0 until cocktailItemData.gradientList.size) {
+                            cocktailRecipeName.add(cocktailItemData.gradientList[i].gradientName)
+                            cocktailRecipeImage.add(cocktailItemData.gradientList[i].gradientImageUrl)
                         }
+                        //레시피명
+                        cocktailItemBinding.materialCocktail.text = cocktailRecipeName.joinToString(", ")
+                        cocktailRecipeName.clear()
+
+                        //레시피 이미지
+                        //1) 어댑터 연결
+                        recycleViewGradientAdapter = RecycleViewGradientAdapter(cocktailItemData.gradientList)
+                        cocktailItemBinding.gradientImageList.adapter = recycleViewGradientAdapter
+
+                        //2) 크기, 보여지는 아이템 갯수 정하기
+                        cocktailItemBinding.gradientImageList.setPadding(150, 150, 150, 150)
+                        cocktailItemBinding.gradientImageList.offscreenPageLimit = 3
+                        cocktailItemBinding.gradientImageList.getChildAt(0).overScrollMode= View.OVER_SCROLL_NEVER
+
+                        //3) 이미지 마진
+                        val transform = CompositePageTransformer()
+                        transform.addTransformer(MarginPageTransformer(100))
+
+                        //4) 스크롤 시 이미지 크기 변동
+                        transform.addTransformer { view: View, fl: Float ->
+                            val v = 1 - abs(fl)
+                            view.scaleY = 0.8f + v * 0.2f
+                        }
+
+                        cocktailItemBinding.gradientImageList.setPageTransformer(transform)
                     }
-                    cocktailItemBinding.ratioText.text = cocktailRecipeName.joinToString(" : ")
-                    cocktailItemBinding.ratioNum.text = cocktailRecipeRatio.joinToString(" : ")
+
+                    catch (e: NullPointerException) {
+                        Toast.makeText(this@CocktailItemActivity, "재료 이미지 및 이름을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+                    try {
+                        //2-9. 레시피 비율
+                        for (i in 0 until cocktailItemData.balanceList.size){
+                            if(cocktailItemData.balanceList[i].balanceNum != 0){
+                                cocktailRecipeName.add(cocktailItemData.balanceList[i].balanceName)
+                                cocktailRecipeRatio.add(cocktailItemData.balanceList[i].balanceNum)
+                            }
+                        }
+
+                        cocktailItemBinding.ratioText.text = cocktailRecipeName.joinToString(" : ")
+                        cocktailItemBinding.ratioNum.text = cocktailRecipeRatio.joinToString(" : ")
+                    }
+                    catch (e: NullPointerException) {
+                        Toast.makeText(this@CocktailItemActivity, "비율 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
 
                     //2-10. 레시피 설명
                     cocktailItemBinding.recipeContent.text = cocktailItemData.content
-*/
+
                     //2-11. 리뷰 - 리사이클러뷰 레이아웃 설정 + 어댑터 연결
                     recyclerViewReviewAdapter = ReviewAdapter(cocktailItemData.reviews)
 
@@ -177,7 +189,7 @@ class CocktailItemActivity : AppCompatActivity() {
         //#4. 리뷰 전체 보기 화면 불러오기
         cocktailItemBinding.reviewAll.setOnClickListener {
             val reviewIntent = Intent(this@CocktailItemActivity, ReviewActivity::class.java)
-            reviewIntent.putExtra("boardId", boardId)
+            reviewIntent.putExtra("board", boardId)
             reviewIntent.putExtra("category", 0)
             startActivity(reviewIntent)
         }
@@ -189,14 +201,10 @@ class CocktailItemActivity : AppCompatActivity() {
         popupMenu.setOnMenuItemClickListener{
             when(it.itemId) {
                 R.id.edit_item -> {
-                    Toast.makeText(this, "수정하기", Toast.LENGTH_SHORT).show()
                     val addCocktailIntent = Intent(this, AddCocktailActivity::class.java)
                     addCocktailIntent.putExtra("boardId", boardId)
+
                     startActivity(addCocktailIntent)
-                    true
-                }
-                R.id.delete_item -> {
-                    Toast.makeText(this, "삭제하기", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> true

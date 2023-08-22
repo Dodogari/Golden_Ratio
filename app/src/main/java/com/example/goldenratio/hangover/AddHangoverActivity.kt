@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.goldenratio.*
+import com.example.goldenratio.cocktail.ingredientNameList
 import com.example.goldenratio.CameraDialog
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
@@ -29,8 +31,12 @@ import com.example.goldenratio.img.ImgInterface
 import com.example.goldenratio.img.ImgResponse
 import com.example.goldenratio.img.ImgService
 import com.example.goldenratio.hangover.models.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 
 
@@ -72,6 +78,49 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface, ImgInterface {
             Log.d("tag", "url_hangover:"+"{$url_hangover}")
         }
 
+        //보드 아이디 받아오기
+        val boardId = intent.getIntExtra("boardId", -1)
+
+        //만약 수정 중이라면
+        if(boardId != -1) {
+            val editCocktail =
+                RegisterClient.hangoverService.getHangoverItem(boardId.toString())
+            editCocktail.enqueue(object : Callback<HangoverData> {
+                override fun onResponse(
+                    call: Call<HangoverData>,
+                    response: Response<HangoverData>
+                ) {
+                    val hangoverData = response.body()!!
+
+                    //화면 초기화
+                    //제목 작성란에 데이터 넣기
+                    addHangoverBinding.etContent.setText(hangoverData.title)
+
+                    //재료
+                    if (hangoverData.gradientList.size != 0) {
+                        for (i in 0 until hangoverData.gradientList.size) {
+                            ingredientList.add(
+                                Ingredient(
+                                    URL(hangoverData.gradientList[i].gradientImageUrl),
+                                    hangoverData.gradientList[i].gradientName,
+                                    R.drawable.ic_delete
+                                )
+                            )
+                            ingredientNameList.add(hangoverData.gradientList[i].gradientName)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<HangoverData>, t: Throwable) {
+                    Toast.makeText(
+                        this@AddHangoverActivity,
+                        "데이터를 불러올 수 없습니다.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+        }
+
         // 뒤로가기
         addHangoverBinding.btBack.setOnClickListener {
             finish()
@@ -100,7 +149,13 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface, ImgInterface {
             }
 
             val PostRegisterRequest = PostHangRequest(title = title, hangoverMainImageUrl = hangoverMainImageUrl, content = content, category = category, gradientList = gradientList)
-            HangService(this).tryPostRegister(PostRegisterRequest)
+
+
+            if(boardId != -1) {
+                HangService(this).tryEditRegister(boardId.toString(), PostRegisterRequest)
+            }
+            else
+                HangService(this).tryPostRegister(PostRegisterRequest)
         }
 
         // ViewPager 여백, 너비 정의
@@ -121,6 +176,7 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface, ImgInterface {
         addHangoverBinding.btCamera.setOnClickListener{
             addDialog(it.context) // 다이얼로그 띄우기
         }
+
     }
     // 다이얼로그 띄우기
     fun addDialog(context: Context) {
