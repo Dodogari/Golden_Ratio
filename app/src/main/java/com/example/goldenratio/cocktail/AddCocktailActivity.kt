@@ -21,6 +21,8 @@ import com.example.goldenratio.CocktailData
 import com.example.goldenratio.R
 import com.example.goldenratio.RegisterClient
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
+import com.example.goldenratio.hangover.Ingredient
+import com.example.goldenratio.login.id
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,8 +60,10 @@ class AddCocktailActivity : AppCompatActivity() {
         ingredient_name = null
         ratioItemList.clear()
 
+        //보드 아이디 받아오기
         val boardId = intent.getIntExtra("boardId", -1)
 
+        //만약 수정 중이라면
         if(boardId != -1) {
             val editCocktail = RegisterClient.cocktailService.getCocktailItem(boardId.toString())
             editCocktail.enqueue(object : Callback<CocktailData> {
@@ -78,6 +82,21 @@ class AddCocktailActivity : AppCompatActivity() {
                         0 -> addCocktailBinding.rbt1.isChecked = true
                         1 -> addCocktailBinding.rbt2.isChecked = true
                         2 -> addCocktailBinding.rbt3.isChecked = true
+                    }
+
+                    //단맛 라디오 버튼
+                    when (cocktailData.sweet) {
+                        0 -> addCocktailBinding.rbtTop.isChecked = true
+                        1 -> addCocktailBinding.rbtMid.isChecked = true
+                        2 -> addCocktailBinding.rbtBottom.isChecked = true
+                    }
+
+                    //재료
+                    if(cocktailData.gradientList.size != 0) {
+                        for (i in 0 until cocktailData.gradientList.size){
+                            ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
+                            ingredientNameList.add(cocktailData.gradientList[i].gradientName)
+                        }
                     }
                 }
 
@@ -98,8 +117,8 @@ class AddCocktailActivity : AppCompatActivity() {
             val intent = Intent(this@AddCocktailActivity, IngredientActivity2::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
-            intent.putExtra("board_id", boardId)
-
+            if(boardId != -1)
+                intent.putExtra("boardId", boardId)
             startActivity(intent)
         }
 
