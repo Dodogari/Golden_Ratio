@@ -141,7 +141,7 @@ class CocktailItemActivity : AppCompatActivity() {
 
                     //2-10. 레시피 설명
                     cocktailItemBinding.recipeContent.text = cocktailItemData.content
-
+*/
                     //2-11. 리뷰 - 리사이클러뷰 레이아웃 설정 + 어댑터 연결
                     recyclerViewReviewAdapter = ReviewAdapter(cocktailItemData.reviews)
 
@@ -150,7 +150,7 @@ class CocktailItemActivity : AppCompatActivity() {
                     cocktailItemBinding.listReview.adapter = recyclerViewReviewAdapter
 
                     recyclerViewReviewAdapter.notifyItemRangeChanged(cocktailItemData.reviews.size, cocktailItemData.reviews.size)
-*/
+
                     //2-12. 날짜
                     cocktailItemBinding.timeUploadCocktail.text = "${cocktailItemData.createdDate[0]}년 ${cocktailItemData.createdDate[1]}월 ${cocktailItemData.createdDate[2]}일 작성"
 

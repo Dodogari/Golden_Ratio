@@ -33,6 +33,7 @@ class RatioActivity : AppCompatActivity() {
         ratioBinding.btNext.setOnClickListener {
             val intent = Intent(this, NewCocktailActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            val boardId = intent.putExtra("boardId", boardId)
             startActivity(intent)
         }
 
