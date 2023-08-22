@@ -6,6 +6,7 @@ import retrofit2.create
 
 object RegisterClient {
     //사용하고 있는 서버 BASE 주소 => 변경 필요
+    //https://golden-ratio.store
     private var baseUrl = "https://golden-ratio.store"
 
     //retrofit 설정

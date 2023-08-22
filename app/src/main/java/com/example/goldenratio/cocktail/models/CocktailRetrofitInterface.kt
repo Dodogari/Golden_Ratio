@@ -9,4 +9,11 @@ interface CocktailRetrofitInterface {
         @Header("Authorization") accessToken: String,
         @Body params: PostCocktailRequest
     ): Call<CocktailResponse>
+
+    @POST("/golden-ratio/cocktail/{board-id}")
+    fun editCocktail(
+        @Path("board-id") boardId: String,
+        @Header("Authorization") accessToken: String,
+        @Body params: PostCocktailRequest
+    ): Call<CocktailResponse>
 }
