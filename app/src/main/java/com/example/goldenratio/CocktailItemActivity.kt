@@ -189,7 +189,7 @@ class CocktailItemActivity : AppCompatActivity() {
         //#4. 리뷰 전체 보기 화면 불러오기
         cocktailItemBinding.reviewAll.setOnClickListener {
             val reviewIntent = Intent(this@CocktailItemActivity, ReviewActivity::class.java)
-            reviewIntent.putExtra("boardId", boardId)
+            reviewIntent.putExtra("board", boardId)
             reviewIntent.putExtra("category", 0)
             startActivity(reviewIntent)
         }

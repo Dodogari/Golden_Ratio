@@ -9,4 +9,11 @@ interface HangRetrofitInterface {
         @Header("Authorization") accessToken: String,
         @Body params: PostHangRequest
     ): Call<HangResponse>
+
+    @POST("/golden-ratio/hangover/{board-id}")
+    fun editHang(
+        @Path("board-id") boardId: String,
+        @Header("Authorization") accessToken: String,
+        @Body params: PostHangRequest
+    ): Call<HangResponse>
 }

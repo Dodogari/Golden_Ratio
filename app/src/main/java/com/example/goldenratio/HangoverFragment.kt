@@ -98,7 +98,7 @@ class HangoverFragment : Fragment() {
         hangoverBinding.listHangover.adapter = recyclerViewBoardAdapter
 
         //좋아요에 대한 sharedPreferences 객체 선언
-        val likeSharedHangover = activity!!.getSharedPreferences("pref_hangover", AppCompatActivity.MODE_PRIVATE)
+        val likeSharedHangover = activity!!.getSharedPreferences("hangover", AppCompatActivity.MODE_PRIVATE)
         val editor = likeSharedHangover.edit()
         val stringPref = likeSharedHangover.getString("key", "")
 
@@ -196,7 +196,6 @@ class HangoverFragment : Fragment() {
                     override fun onClick(position: Int) {
                         val itemIntent = Intent(activity, HangoverItemActivity::class.java)
                         itemIntent.putExtra("boardId", hangoverList[position].boardId)
-                        Log.d("dd", hangoverList[position].boardId.toString())
                         startActivity(itemIntent)
                     }
 

@@ -48,11 +48,11 @@ class HangoverItemActivity : AppCompatActivity() {
 
         //#1. 서버 통신: 세부 숙취해소 보드 내용 받아오기
         //1-1. 데이터 포지션
-        val boardId = intent.getIntExtra("boardId", 1).toString()
-        Log.d("dd", boardId)
+        val boardId = intent.getIntExtra("boardId", 1)
+        Log.d("dd", boardId.toString())
 
         //1-2. 통신
-        val hangoverItemContent = RegisterClient.hangoverService.getHangoverItem(boardId)
+        val hangoverItemContent = RegisterClient.hangoverService.getHangoverItem(boardId.toString())
         hangoverItemContent.enqueue(object : Callback<HangoverData> {
             //서버 응답 시
             @SuppressLint("SetTextI18n")
@@ -116,9 +116,8 @@ class HangoverItemActivity : AppCompatActivity() {
                         hangoverItemBinding.gradientImageListHangover.setPageTransformer(transform)
                     }
                     catch (e: NullPointerException) {
-                        Toast.makeText(this@HangoverItemActivity, "재료 이미지 및 이름을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this@HangoverItemActivity, "재료 이미지 및 이름을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                     }
-
 
                     //2-10. 레시피 설명
                     hangoverItemBinding.recipeContentHangover.text = hangoverItemData.content
@@ -158,7 +157,7 @@ class HangoverItemActivity : AppCompatActivity() {
         //#4. 리뷰 전체 보기 화면 불러오기
         hangoverItemBinding.reviewAll.setOnClickListener {
             val reviewIntent = Intent(this@HangoverItemActivity, ReviewActivity::class.java)
-            reviewIntent.putExtra("boardId", boardId)
+            reviewIntent.putExtra("board", boardId)
             reviewIntent.putExtra("category", 1)
             startActivity(reviewIntent)
         }

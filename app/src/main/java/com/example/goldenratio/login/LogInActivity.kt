@@ -12,6 +12,7 @@ import com.example.goldenratio.databinding.ActivityLoginBinding
 import com.example.goldenratio.login.models.*
 
 var accessToken : String? = null
+var userId: String = ""
 
 class LoginActivity : AppCompatActivity(), LoginInterface {
     private lateinit var loginBinding: ActivityLoginBinding
@@ -45,6 +46,8 @@ class LoginActivity : AppCompatActivity(), LoginInterface {
                 tv_pw = loginBinding.etPw.text.toString()
 
                 loginBinding.btLogin.isEnabled = tv_id.isNotEmpty() && tv_pw.isNotEmpty()
+
+                userId = tv_id
             }
         })
 

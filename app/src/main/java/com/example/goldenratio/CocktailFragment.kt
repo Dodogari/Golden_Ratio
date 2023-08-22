@@ -89,7 +89,7 @@ class CocktailFragment : Fragment() {
         })
 
         //좋아요에 대한 sharedPreferences 객체 선언
-        val likeShared = activity!!.getSharedPreferences("pref", AppCompatActivity.MODE_PRIVATE)
+        val likeShared = activity!!.getSharedPreferences("cocktail", AppCompatActivity.MODE_PRIVATE)
         val editor = likeShared.edit()
         val stringPref = likeShared.getString("key", "")
 
@@ -101,6 +101,10 @@ class CocktailFragment : Fragment() {
             for(i in 0 until arrJson.length())
                 markList.add(arrJson.optBoolean(i))
         }
+
+        Log.d("dd", markList.size.toString())
+
+
 
         //#3. 리사이클러뷰 설정
         //3-1. 리사이클러뷰 레이아웃 설정

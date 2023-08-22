@@ -96,12 +96,16 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
                         2 -> addCocktailBinding.rbtBottom.isChecked = true
                     }
 
-                    //재료
-                    if(cocktailData.gradientList.size != 0) {
-                        for (i in 0 until cocktailData.gradientList.size){
-                            ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
-                            ingredientNameList.add(cocktailData.gradientList[i].gradientName)
+                    try {
+                        //재료
+                        if(cocktailData.gradientList.size != 0) {
+                            for (i in 0 until cocktailData.gradientList.size){
+                                ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
+                                ingredientNameList.add(cocktailData.gradientList[i].gradientName)
+                            }
                         }
+                    } catch (e: Exception) {
+
                     }
                 }
 

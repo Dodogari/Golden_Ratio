@@ -3,15 +3,14 @@ package com.example.goldenratio
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.config.ApplicationClass.Companion.X_ACCESS_TOKEN
 import com.example.goldenratio.databinding.ActivityReviewBinding
-import com.example.goldenratio.login.accessToken
-import com.example.goldenratio.login.nick
-import com.example.goldenratio.login.url_profile
+import com.example.goldenratio.login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,14 +35,14 @@ class ReviewActivity : AppCompatActivity() {
 
         //#1. 서버 통신: 세부 칵테일 보드 내용 받아오기
         //1-1. 데이터 포지션 / 카테고리
-        val boardId = intent.getIntExtra("boardId", 0)
+        val board = intent.getIntExtra("board", 0)
         val category = intent.getIntExtra("category", -1)
 
-        Toast.makeText(this@ReviewActivity, boardId.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@ReviewActivity, board.toString(), Toast.LENGTH_SHORT).show()
 
         try {
             //1-2. 통신
-            val reviewContent = RegisterClient.reviewService.getReviewAll(boardId.toString())
+            val reviewContent = RegisterClient.reviewService.getReviewAll(board.toString())
             reviewContent.enqueue(object : Callback<ArrayList<ReviewItemData>> {
                 override fun onResponse(
                     call: Call<ArrayList<ReviewItemData>>,
@@ -65,24 +64,28 @@ class ReviewActivity : AppCompatActivity() {
                             total += reviewItemList[i].rating
                         }
 
-                        //1) 레이팅 바 표시
+
                         if(reviewItemList.size == 0) {
                             reviewBinding.avgRatingBar3.rating = 0f
-                        }
-                        else {
-                            reviewBinding.avgRatingBar3.rating = total / reviewItemList.size
+                            reviewBinding.avgRatingNum3.text = "0.0"
                         }
 
-                        //2) 텍스트 표시(소숫점 한 자리 수까지)
-                        val ratingValue = DecimalFormat("#.#")
-                        ratingValue.roundingMode = RoundingMode.HALF_UP
-                        reviewBinding.avgRatingNum3.text = ratingValue.format(total / reviewItemList.size)
+                        else {
+                            //1) 레이팅 바 표시
+                            reviewBinding.avgRatingBar3.rating = total / reviewItemList.size
+
+                            //2) 텍스트 표시(소숫점 한 자리 수까지)
+                            val ratingValue = DecimalFormat("#.#")
+                            ratingValue.roundingMode = RoundingMode.HALF_UP
+                            reviewBinding.avgRatingNum3.text = ratingValue.format(total / reviewItemList.size)
+                        }
 
                         //2-4. 리뷰 갯수
                         reviewBinding.ratingCount3.text = "(${reviewItemList.size})"
 
                         //사용자 프로필 표시
-                        reviewBinding.userName.text = nick
+                        reviewBinding.userName.text = userId
+
                         Glide.with(reviewBinding.userProfile)
                             .load(url_profile)
                             .into(reviewBinding.userProfile)
@@ -107,7 +110,7 @@ class ReviewActivity : AppCompatActivity() {
                 itemIntent = Intent(this@ReviewActivity, HangoverItemActivity::class.java)
             }
 
-            itemIntent.putExtra("boardId", boardId)
+            itemIntent.putExtra("boardId", board)
             startActivity(itemIntent)
 
             //끝나지 않았다면
@@ -116,33 +119,37 @@ class ReviewActivity : AppCompatActivity() {
 
         //#4. 등록 버튼
         reviewBinding.reviewEnroll.setOnClickListener {
-            val registerData = ReviewRegisterData(reviewBinding.writingContent.text.toString(), reviewBinding.ratingBar.rating)
+            
+            if(reviewBinding.ratingBar.rating == 0f) {
+                Toast.makeText(this@ReviewActivity, "별점을 매겨주세요", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val registerData = ReviewRegisterData(reviewBinding.writingContent.text.toString(), reviewBinding.ratingBar.rating)
 
-            //4-1. 통신
-            val registerReviewContent = RegisterClient.reviewService.registerReview(boardId.toString(),
-                "Bearer $accessToken", registerData)
-            registerReviewContent.enqueue(object : Callback<PostResponse> {
-                override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
+                //4-1. 통신
+                val registerReviewContent = RegisterClient.reviewService.registerReview(board.toString(),
+                    "Bearer $accessToken", registerData)
+                registerReviewContent.enqueue(object : Callback<PostResponse> {
+                    override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
+                        if (response.isSuccessful) {
+                            val result = response.body()!!.result
+                            Toast.makeText(this@ReviewActivity, result, Toast.LENGTH_SHORT).show()
 
-                    Toast.makeText(this@ReviewActivity, response.code().toString(), Toast.LENGTH_SHORT).show()
-                    if (response.isSuccessful) {
-                        val result = response.body()!!.result
-                        Toast.makeText(this@ReviewActivity, result, Toast.LENGTH_SHORT).show()
+                            //화면 갱신 : 종료 후 다시 시작
+                            finish()
+                            overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
 
-                        //화면 갱신 : 종료 후 다시 시작
-                        finish()
-                        overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-
-                        startActivity(intent) //현재 액티비티 재실행 실시
-                        overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                            startActivity(intent) //현재 액티비티 재실행 실시
+                            overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                    Toast.makeText(this@ReviewActivity, "리뷰 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
-                }
+                    override fun onFailure(call: Call<PostResponse>, t: Throwable) {
+                        Toast.makeText(this@ReviewActivity, "리뷰 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
 
-            })
+                })
+            }
         }
     }
 }
