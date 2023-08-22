@@ -6,7 +6,7 @@ import retrofit2.http.*
 interface CocktailInterface {
     //칵테일 조회 - 전체
     @GET("/golden-ratio/cocktail/all")
-    fun getCocktailAll():Call<ArrayList<BoardData>>
+    fun getCocktailAll():Call<ArrayList<BoardAllData>>
 
     //칵테일 조회 - 별점순
     @GET("/golden-ratio/cocktail/star")
