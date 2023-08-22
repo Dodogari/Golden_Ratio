@@ -22,13 +22,16 @@ import com.bumptech.glide.Glide
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityAddHangoverBinding
+import com.example.goldenratio.img.ImgInterface
+import com.example.goldenratio.img.ImgResponse
+import com.example.goldenratio.img.ImgService
 import com.example.goldenratio.hangover.models.*
+import java.io.File
 import java.io.FileOutputStream
-import java.net.URL
 import java.text.SimpleDateFormat
 
 
-class AddHangoverActivity : AppCompatActivity(), HangInterface {
+class AddHangoverActivity : AppCompatActivity(), HangInterface, ImgInterface {
     private lateinit var addHangoverBinding: ActivityAddHangoverBinding
 
     // storage 권한 처리에 필요한 변수
@@ -93,7 +96,6 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
 
             val PostRegisterRequest = PostHangRequest(title = title, hangoverMainImageUrl = hangoverMainImageUrl, content = content, category = category, gradientList = gradientList)
             HangService(this).tryPostRegister(PostRegisterRequest)
-            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
         // ViewPager 여백, 너비 정의
@@ -209,18 +211,18 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
 
-                        // uri -> url로 변경
-                        url_hangover = URL("file://"+ absolutelyPath(uri!!))
-                        Log.d("tag", "title url:"+ "{$url_hangover}")
+                        // 아미지 url로 변경
+                        val file = File(absolutelyPath(uri!!))
+                        ImgService(this).tryPostImg(file)
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
 
-                    // uri -> url로 변경
-                    url_hangover = URL("file://"+ absolutelyPath(uri!!))
-                    Log.d("tag", "title url:"+ "{$url_hangover}")
+                    // 아미지 url로 변경
+                    val file = File(absolutelyPath(uri!!))
+                    ImgService(this).tryPostImg(file)
                 }
             }
         }
@@ -238,10 +240,18 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
         var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
         var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c.moveToFirst()
-
         var result = c.getString(index)
-
         return result
+    }
+
+    // 서버 연결 성공
+    override fun onPostImgSuccess(response: ImgResponse) {
+        url_hangover = response.result
+    }
+
+    // 서버 연결 실패
+    override fun onPostImgFailure(message: String) {
+        Log.d("error", "오류 : $message")
     }
 
     // 서버 연결 성공
@@ -251,7 +261,7 @@ class AddHangoverActivity : AppCompatActivity(), HangInterface {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(intent)
 
-        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, response.result, Toast.LENGTH_SHORT).show()
     }
 
     // 서버 연결 실패

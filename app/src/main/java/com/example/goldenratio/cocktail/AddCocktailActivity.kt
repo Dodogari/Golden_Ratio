@@ -21,9 +21,13 @@ import com.example.goldenratio.CocktailData
 import com.example.goldenratio.R
 import com.example.goldenratio.RegisterClient
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
+import com.example.goldenratio.img.ImgInterface
+import com.example.goldenratio.img.ImgResponse
+import com.example.goldenratio.img.ImgService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -35,7 +39,7 @@ var alcohol : Int?= null
 
 val ingredientNameList: ArrayList<String> = arrayListOf()   // 재료 이름
 
-class AddCocktailActivity : AppCompatActivity() {
+class AddCocktailActivity : AppCompatActivity(), ImgInterface {
     private lateinit var addCocktailBinding: ActivityAddCocktailBinding
 
     // storage 권한 처리에 필요한 변수
@@ -53,7 +57,7 @@ class AddCocktailActivity : AppCompatActivity() {
         img_camera = findViewById(R.id.img_camera)
 
         // 초기화
-        ingredientList.clear()
+        ingredientList2.clear()
         ingredientNameList.clear()
         ingredient_name = null
         ratioItemList.clear()
@@ -214,9 +218,9 @@ class AddCocktailActivity : AppCompatActivity() {
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
 
-                        // uri -> url로 변경
-                        url_cocktail = URL("file://"+ absolutelyPath(uri!!))
-                        Log.d("tag", "title url:"+ "{$url_cocktail}")
+                        // 아미지 url로 변경
+                        val file = File(absolutelyPath(uri!!))
+                        ImgService(this).tryPostImg(file)
                     }
 
 
@@ -225,9 +229,9 @@ class AddCocktailActivity : AppCompatActivity() {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
 
-                    // uri -> url로 변경
-                    url_cocktail = URL("file://"+ absolutelyPath(uri!!))
-                    Log.d("tag", "title url:"+ "{$url_cocktail}")
+                    // 아미지 url로 변경
+                    val file = File(absolutelyPath(uri!!))
+                    ImgService(this).tryPostImg(file)
                 }
             }
         }
@@ -239,9 +243,7 @@ class AddCocktailActivity : AppCompatActivity() {
         var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
         var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c.moveToFirst()
-
         var result = c.getString(index)
-
         return result
     }
 
@@ -249,5 +251,15 @@ class AddCocktailActivity : AppCompatActivity() {
     fun RandomFileName() : String{
         val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
         return fileName
+    }
+
+    // 서버 연결 성공
+    override fun onPostImgSuccess(response: ImgResponse) {
+        url_cocktail = response.result
+    }
+
+    // 서버 연결 실패
+    override fun onPostImgFailure(message: String) {
+        Log.d("error", "오류 : $message")
     }
 }
