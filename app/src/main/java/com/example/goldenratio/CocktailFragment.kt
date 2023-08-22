@@ -2,6 +2,7 @@ package com.example.goldenratio
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -102,78 +103,19 @@ class CocktailFragment : Fragment() {
                 markList.add(arrJson.optBoolean(i))
         }
 
+        //#3. 리사이클러뷰 설정
+        //3-1. 리사이클러뷰 레이아웃 설정
         cocktailBinding.listCocktail.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
 
         //#2. 서버 통신: 칵테일 보드 내용 받아오기
         //2-1. 응답
         var cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
-        cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
-            //서버 응답 시
-            override fun onResponse(
-                call: Call<ArrayList<BoardData>>,
-                response: Response<ArrayList<BoardData>>) {
-                cocktailList = response.body()!!
-                if(cocktailList.size == 0) {
-
-                }
-
-                //#3. 리사이클러뷰 설정
-                //3-1. 리사이클러뷰 레이아웃 설정
-
-                //3-2. 어댑터 - 리스트 연결
-                recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
-                cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
-
-                recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                    //5-1. 상세 메뉴 액티비티로 전환`
-                    override fun onClick(position: Int) {
-                        val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                        itemIntent.putExtra("boardId", cocktailList[position].boardId)
-                        startActivity(itemIntent)
-                    }
-
-                    //5-2. 좋아요 클릭
-                    override fun likeOnClick(position: Int) {
-                        val likeContent = RegisterClient.cocktailService.registerLikes(cocktailList[position].boardId.toString(),
-                            "Bearer $accessToken"
-                        )
-                        likeContent.enqueue(object : Callback<PostResponse> {
-                            override fun onResponse(
-                                call: Call<PostResponse>,
-                                response: Response<PostResponse>
-                            ) {
-                                val resultPost = response.body()!!.result
-                                Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
-                                markList[position] = !markList[position]
-
-                                //markList를 JSONArray 형식으로 변환
-                                val jsonArr = JSONArray()
-                                for (pos in markList)
-                                    jsonArr.put(pos)
-
-                                //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
-                                val result = jsonArr.toString()
-
-                                with(editor) {
-                                    putString("key", result)
-                                    apply()
-                                }
-                            }
-
-                            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                                Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
-                            }
-
-                        })
-                    }
-                })
-                response.errorBody().toString()
-            }
-
-            override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
-                Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
+        try {
+            //리스트 불러오기
+            listUpdate(editor, cocktailListContent)
+        } catch (e: Exception) {
+            Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
 
         //#4. 라디오 버튼 클릭
         cocktailBinding.radioCocktailAll.isChecked = true
@@ -181,294 +123,60 @@ class CocktailFragment : Fragment() {
         //4-1. 전체
         cocktailBinding.radioCocktailAll.setOnClickListener {
             cocktailListContent = RegisterClient.cocktailService.getCocktailAll()
-            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
-                //서버 응답 시
-                override fun onResponse(
-                    call: Call<ArrayList<BoardData>>,
-                    response: Response<ArrayList<BoardData>>) {
-                    cocktailList.clear()
-
-                    cocktailList = response.body()!!
-                    recyclerViewBoardAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
-                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            try {
+                //리스트 불러오기
+                listUpdate(editor, cocktailListContent)
+            } catch (e: Exception) {
+                Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //4-2. 별점순
         cocktailBinding.radioCocktailRating.setOnClickListener {
-
             cocktailListContent = RegisterClient.cocktailService.getCocktailStar()
-            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
-                //서버 응답 시
-                override fun onResponse(
-                    call: Call<ArrayList<BoardData>>,
-                    response: Response<ArrayList<BoardData>>) {
-                    cocktailList.clear()
-                    cocktailList = response.body()!!
-                    Toast.makeText(activity, cocktailList[0].title, Toast.LENGTH_SHORT).show()
 
-                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
-                    cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
-
-                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                        //5-1. 상세 메뉴 액티비티로 전환`
-                        override fun onClick(position: Int) {
-                            val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                            itemIntent.putExtra("boardId", cocktailList[position].boardId)
-                            startActivity(itemIntent)
-                        }
-
-                        //5-2. 좋아요 클릭
-                        override fun likeOnClick(position: Int) {
-                            val likeContent = RegisterClient.cocktailService.registerLikes(
-                                cocktailList[position].boardId.toString(),
-                                "Bearer $accessToken"
-                            )
-                            likeContent.enqueue(object : Callback<PostResponse> {
-                                override fun onResponse(
-                                    call: Call<PostResponse>,
-                                    response: Response<PostResponse>
-                                ) {
-                                    val resultPost = response.body()!!.result
-                                    Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
-                                    markList[position] = !markList[position]
-
-                                    //markList를 JSONArray 형식으로 변환
-                                    val jsonArr = JSONArray()
-                                    for (pos in markList)
-                                        jsonArr.put(pos)
-
-                                    //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
-                                    val result = jsonArr.toString()
-
-                                    with(editor) {
-                                        putString("key", result)
-                                        apply()
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                                    Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-
-                            })
-                        }
-                    })
-                }
-
-                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
-                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            try {
+                //리스트 불러오기
+                listUpdate(editor, cocktailListContent)
+            } catch (e: Exception) {
+                Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //4-3. 좋아요순
         cocktailBinding.radioCocktailLike.setOnClickListener {
-
             cocktailListContent = RegisterClient.cocktailService.getCocktailLike()
-            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
-                //서버 응답 시
-                override fun onResponse(
-                    call: Call<ArrayList<BoardData>>,
-                    response: Response<ArrayList<BoardData>>) {
-                    cocktailList.clear()
-                    cocktailList = response.body()!!
 
-                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
-                    cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
-
-                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                        //5-1. 상세 메뉴 액티비티로 전환`
-                        override fun onClick(position: Int) {
-                            val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                            itemIntent.putExtra("boardId", cocktailList[position].boardId)
-                            startActivity(itemIntent)
-                        }
-
-                        //5-2. 좋아요 클릭
-                        override fun likeOnClick(position: Int) {
-                            val likeContent = RegisterClient.cocktailService.registerLikes(
-                                cocktailList[position].boardId.toString(),
-                                "Bearer $accessToken"
-                            )
-                            likeContent.enqueue(object : Callback<PostResponse> {
-                                override fun onResponse(
-                                    call: Call<PostResponse>,
-                                    response: Response<PostResponse>
-                                ) {
-                                    val resultPost = response.body()!!.result
-                                    Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
-                                    markList[position] = !markList[position]
-
-                                    //markList를 JSONArray 형식으로 변환
-                                    val jsonArr = JSONArray()
-                                    for (pos in markList)
-                                        jsonArr.put(pos)
-
-                                    //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
-                                    val result = jsonArr.toString()
-
-                                    with(editor) {
-                                        putString("key", result)
-                                        apply()
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                                    Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-
-                            })
-                        }
-                    })
-                }
-
-                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
-                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            try {
+                //리스트 불러오기
+                listUpdate(editor, cocktailListContent)
+            } catch (e: Exception) {
+                Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //4-4. 도수 높은 순
         cocktailBinding.radioCocktailAlcohol.setOnClickListener {
-
             cocktailListContent = RegisterClient.cocktailService.getCocktailAlcohol()
-            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
-                //서버 응답 시
-                override fun onResponse(
-                    call: Call<ArrayList<BoardData>>,
-                    response: Response<ArrayList<BoardData>>) {
-                    cocktailList.clear()
-                    cocktailList = response.body()!!
 
-                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
-                    cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
-
-                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                        //5-1. 상세 메뉴 액티비티로 전환`
-                        override fun onClick(position: Int) {
-                            val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                            itemIntent.putExtra("boardId", cocktailList[position].boardId)
-                            startActivity(itemIntent)
-                        }
-
-                        //5-2. 좋아요 클릭
-                        override fun likeOnClick(position: Int) {
-                            val likeContent = RegisterClient.cocktailService.registerLikes(
-                                cocktailList[position].boardId.toString(),
-                                "Bearer $accessToken"
-                            )
-                            likeContent.enqueue(object : Callback<PostResponse> {
-                                override fun onResponse(
-                                    call: Call<PostResponse>,
-                                    response: Response<PostResponse>
-                                ) {
-                                    val resultPost = response.body()!!.result
-                                    Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
-                                    markList[position] = !markList[position]
-
-                                    //markList를 JSONArray 형식으로 변환
-                                    val jsonArr = JSONArray()
-                                    for (pos in markList)
-                                        jsonArr.put(pos)
-
-                                    //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
-                                    val result = jsonArr.toString()
-
-                                    with(editor) {
-                                        putString("key", result)
-                                        apply()
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                                    Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-
-                            })
-                        }
-                    })
-                }
-
-                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
-                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            try {
+                //리스트 불러오기
+                listUpdate(editor, cocktailListContent)
+            } catch (e: Exception) {
+                Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //4-5. 단맛높은순
         cocktailBinding.radioCocktailSweet.setOnClickListener {
-
             cocktailListContent = RegisterClient.cocktailService.getCocktailSweet()
-            cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
-                //서버 응답 시
-                override fun onResponse(
-                    call: Call<ArrayList<BoardData>>,
-                    response: Response<ArrayList<BoardData>>) {
-                    cocktailList.clear()
-                    cocktailList = response.body()!!
 
-                    recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
-                    cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
-
-                    recyclerViewBoardAdapter!!.setOnClickListener(object : RecyclerViewBoardAdapter.OnClickListener {
-                        //5-1. 상세 메뉴 액티비티로 전환`
-                        override fun onClick(position: Int) {
-                            val itemIntent = Intent(activity, CocktailItemActivity::class.java)
-                            itemIntent.putExtra("boardId", cocktailList[position].boardId)
-                            startActivity(itemIntent)
-                        }
-
-                        //5-2. 좋아요 클릭
-                        override fun likeOnClick(position: Int) {
-                            val likeContent = RegisterClient.cocktailService.registerLikes(
-                                cocktailList[position].boardId.toString(),
-                                "Bearer $accessToken"
-                            )
-                            likeContent.enqueue(object : Callback<PostResponse> {
-                                override fun onResponse(
-                                    call: Call<PostResponse>,
-                                    response: Response<PostResponse>
-                                ) {
-                                    val resultPost = response.body()!!.result
-                                    Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
-                                    markList[position] = !markList[position]
-
-                                    //markList를 JSONArray 형식으로 변환
-                                    val jsonArr = JSONArray()
-                                    for (pos in markList)
-                                        jsonArr.put(pos)
-
-                                    //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
-                                    val result = jsonArr.toString()
-
-                                    with(editor) {
-                                        putString("key", result)
-                                        apply()
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                                    Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-
-                            })
-                        }
-                    })
-                }
-
-                override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
-                    Toast.makeText(activity, "데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            try {
+                //리스트 불러오기
+                listUpdate(editor, cocktailListContent)
+            } catch (e: Exception) {
+                Toast.makeText(activity, "칵테일 데이터 불러오기를 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -487,6 +195,72 @@ class CocktailFragment : Fragment() {
         //그 외엔 마지막으로 향해 이미지 슬라이드
         else
             topSlideBannerViewPager2.currentItem = topSlideBannerViewPager2.currentItem + 1
+    }
+
+    //리사이클러뷰 갱신
+    private fun listUpdate(editor: SharedPreferences.Editor, cocktailListContent: Call<ArrayList<BoardData>>) {
+        cocktailListContent.enqueue(object : Callback<ArrayList<BoardData>> {
+            //서버 응답 시
+            override fun onResponse(
+                call: Call<ArrayList<BoardData>>,
+                response: Response<ArrayList<BoardData>>
+            ) {
+                cocktailList.clear()
+                cocktailList = response.body()!!
+                //#3. 리사이클러뷰 설정
+                //3-1. 리사이클러뷰 레이아웃 설정
+                recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
+                cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
+
+                recyclerViewBoardAdapter!!.setOnClickListener(object :
+                    RecyclerViewBoardAdapter.OnClickListener {
+
+                    //5-1. 상세 메뉴 액티비티로 전환`
+                    override fun onClick(position: Int) {
+                        val itemIntent = Intent(activity, CocktailItemActivity::class.java)
+                        itemIntent.putExtra("boardId", cocktailList[position].boardId)
+                        startActivity(itemIntent)
+                    }
+
+                    //5-2. 좋아요 클릭
+                    override fun likeOnClick(position: Int) {
+                        val likeContent = RegisterClient.cocktailService.registerLikes(
+                            cocktailList[position].boardId.toString(),
+                            "Bearer $accessToken"
+                        )
+                        likeContent.enqueue(object : Callback<PostResponse> {
+                            override fun onResponse(
+                                call: Call<PostResponse>,
+                                response: Response<PostResponse>
+                            ) {
+                                val resultPost = response.body()!!.result
+                                Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
+                                markList[position] = !markList[position]
+
+                                //markList를 JSONArray 형식으로 변환
+                                val jsonArr = JSONArray()
+                                for (pos in markList)
+                                    jsonArr.put(pos)
+
+                                //JSONArray를 문자열 형식으로 변환하여 sharedPreferences 객체에 저장한다.
+                                val result = jsonArr.toString()
+                                with(editor) {
+                                    putString("key", result)
+                                    apply()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
+                                Toast.makeText(context, "좋아요 등록을 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    }
+                })
+            }
+            override fun onFailure(call: Call<ArrayList<BoardData>>, t: Throwable) {
+                Toast.makeText(context, "데이터를 불러오는데 실패하였습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     //Resume 상태라면 현재 페이지에서 3초 대기

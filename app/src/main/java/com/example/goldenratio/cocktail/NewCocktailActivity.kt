@@ -53,6 +53,8 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface, ImgInterface
 
         img_cocktail = findViewById(R.id.img_cocktail)
 
+        val boardId = intent.getIntExtra("boardId", -1)
+
         // 이미지
         val imgList: ArrayList<Img> = arrayListOf()
         val size = ingredientList2.size
@@ -149,7 +151,13 @@ class NewCocktailActivity : AppCompatActivity(), CocktailInterface, ImgInterface
             val PostCocktailRequest = PostCocktailRequest(
                 title = title, cocktailMainImageUrl = cocktailMainImageUrl,
                 content = content, category = category, sweet = sweet, alcohol = alcohol, gradientList = gradientList, balanceList = balanceList)
-            CocktailService(this).tryPostCocktail(PostCocktailRequest)
+
+            if(boardId != -1)
+                CocktailService(this).tryEditCocktail(boardId.toString(), PostCocktailRequest)
+            else
+                CocktailService(this).tryPostCocktail(PostCocktailRequest)
+
+            Toast.makeText(this, "서버 요청", Toast.LENGTH_SHORT).show()
         }
 
         // ViewPager 여백, 너비 정의
