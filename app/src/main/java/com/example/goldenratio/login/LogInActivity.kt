@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.goldenratio.MainActivity
 import com.example.goldenratio.databinding.ActivityLoginBinding
 import com.example.goldenratio.login.models.*
@@ -21,6 +22,10 @@ class LoginActivity : AppCompatActivity(), LoginInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Show Splash Screen
+        installSplashScreen()
+
         loginBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(loginBinding.root)
 
