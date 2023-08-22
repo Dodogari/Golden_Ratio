@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityProfileBinding
-import com.example.goldenratio.hangover.url_hangover
 import com.example.goldenratio.login.models.register.PostRegisterRequest
 import com.example.goldenratio.login.models.register.RegisterInterface
 import com.example.goldenratio.login.models.register.RegisterResponse
@@ -68,7 +67,6 @@ class ProfileActivity : AppCompatActivity(), RegisterInterface {
             GetAlbum()
         }
     }
-
     // 카메라 권한, 저장소 권한
     // 요청 권한
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -185,9 +183,7 @@ class ProfileActivity : AppCompatActivity(), RegisterInterface {
         var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
         var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c.moveToFirst()
-
         var result = c.getString(index)
-
         return result
     }
 

@@ -217,9 +217,11 @@ class CocktailFragment : Fragment() {
 
                     //5-1. 상세 메뉴 액티비티로 전환`
                     override fun onClick(position: Int) {
+                        val id = cocktailList[position].boardId
                         val itemIntent = Intent(activity, CocktailItemActivity::class.java)
                         itemIntent.putExtra("boardId", cocktailList[position].boardId)
                         startActivity(itemIntent)
+                        Log.d("tag", "cocktailList : {$cocktailList}")
                     }
 
                     //5-2. 좋아요 클릭
@@ -235,7 +237,7 @@ class CocktailFragment : Fragment() {
                             ) {
                                 val resultPost = response.body()!!.result
                                 Toast.makeText(context, resultPost, Toast.LENGTH_SHORT).show()
-                                markList[position] = !markList[position]
+                                //markList[position] = !markList[position]
 
                                 //markList를 JSONArray 형식으로 변환
                                 val jsonArr = JSONArray()

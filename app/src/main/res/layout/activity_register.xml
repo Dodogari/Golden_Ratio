@@ -128,7 +128,7 @@
             android:layout_marginTop="14dp">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_pw"
+                android:id="@+id/tv_agree"
                 style="@style/basic_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

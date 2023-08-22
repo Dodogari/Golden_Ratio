@@ -3,6 +3,7 @@ package com.example.goldenratio.cocktail
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -13,16 +14,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.goldenratio.CameraDialog
 import com.example.goldenratio.CocktailData
 import com.example.goldenratio.R
 import com.example.goldenratio.RegisterClient
 import com.example.goldenratio.databinding.ActivityAddCocktailBinding
 import com.example.goldenratio.hangover.Ingredient
-import com.example.goldenratio.login.id
 import com.example.goldenratio.img.ImgInterface
 import com.example.goldenratio.img.ImgResponse
 import com.example.goldenratio.img.ImgService
@@ -46,6 +48,8 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
 
     // storage 권한 처리에 필요한 변수
     val CAMERA = arrayOf(Manifest.permission.CAMERA)
+    val STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
     val CAMERA_CODE = 98
     val STORAGE_CODE = 99
 
@@ -98,7 +102,7 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
                     //재료
                     if(cocktailData.gradientList.size != 0) {
                         for (i in 0 until cocktailData.gradientList.size){
-                            ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
+                            ingredientList2.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
                             ingredientNameList.add(cocktailData.gradientList[i].gradientName)
                         }
                     }
@@ -112,7 +116,7 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
 
         // 카메라
         addCocktailBinding.btCamera.setOnClickListener{
-            CallCamera()
+            addDialog(it.context) // 다이얼로그 띄우기
         }
 
         addCocktailBinding.btNext.setOnClickListener {
@@ -143,6 +147,24 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
                 R.id.rbt_bottom -> sweet = 2 // 하
             }
         }
+    }
+    // 다이얼로그 띄우기
+    fun addDialog(context: Context) {
+        val dialog = CameraDialog(
+            context = context,
+            clickCamera = clickCamera,
+            clickGallery = clickGallery
+        )
+        dialog.showDialog()
+    }
+    // 카메라
+    private val clickCamera = View.OnClickListener {
+        CallCamera()
+    }
+
+    // 갤러리
+    private val clickGallery = View.OnClickListener {
+        GetAlbum()
     }
 
     // 카메라 권한, 저장소 권한
@@ -190,6 +212,15 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
         if(checkPermission(CAMERA, CAMERA_CODE)){
             val itt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(itt, CAMERA_CODE)
+        }
+    }
+
+    // 갤러리 취득
+    fun GetAlbum(){
+        if(checkPermission(STORAGE, STORAGE_CODE)){
+            val itt = Intent(Intent.ACTION_PICK)
+            itt.type = MediaStore.Images.Media.CONTENT_TYPE
+            startActivityForResult(itt, STORAGE_CODE)
         }
     }
 
