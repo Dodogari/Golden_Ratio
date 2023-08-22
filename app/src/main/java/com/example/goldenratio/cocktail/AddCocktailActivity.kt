@@ -98,7 +98,7 @@ class AddCocktailActivity : AppCompatActivity(), ImgInterface {
                     //재료
                     if(cocktailData.gradientList.size != 0) {
                         for (i in 0 until cocktailData.gradientList.size){
-                            ingredientList.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
+                            ingredientList2.add(Ingredient(URL(cocktailData.gradientList[i].gradientImageUrl), cocktailData.gradientList[i].gradientName, R.drawable.ic_delete))
                             ingredientNameList.add(cocktailData.gradientList[i].gradientName)
                         }
                     }

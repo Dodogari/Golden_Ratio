@@ -46,7 +46,7 @@
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/view_search"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="22dp"
                     android:background="@drawable/bg_input"
@@ -67,8 +67,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_search">
 
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingClass">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_name_search" />
+        </androidx.core.widget.NestedScrollView>
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_recently"
             style="@style/search_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,16 +106,18 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_rank"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/tv_recently"
             tools:ignore="MissingClass">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_search"
+                android:id="@+id/rv_recently"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingBottom="42dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -101,13 +125,14 @@
         </androidx.core.widget.NestedScrollView>
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_rank"
             style="@style/search_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="42dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/suite_bold"
             android:text="인기 검색어"
+            app:layout_constraintBottom_toTopOf="@+id/nestedScrollView2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
 
@@ -120,7 +145,7 @@
             android:layout_alignParentBottom="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rank"
             tools:ignore="MissingClass">
 
             <androidx.recyclerview.widget.RecyclerView

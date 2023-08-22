@@ -48,7 +48,7 @@ class  NewHangoverActivity : AppCompatActivity(), ImgInterface {
 
         img_camera = findViewById(R.id.img_camera)
         NewHangoverBinding.btNext.isEnabled = true
-
+        ingredientList.clear()
 
         // 이전 화면으로 이동
         NewHangoverBinding.btBack.setOnClickListener{
