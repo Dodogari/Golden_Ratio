@@ -19,6 +19,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityNewIngredientBinding
+import com.example.goldenratio.img.ImgInterface
+import com.example.goldenratio.img.ImgResponse
+import com.example.goldenratio.img.ImgService
+import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -26,7 +30,7 @@ import java.text.SimpleDateFormat
 var url_ingredient: URL? = null
 var ingredient_name: String? = null
 
-class NewIngredientActivity2 : AppCompatActivity() {
+class NewIngredientActivity2 : AppCompatActivity(), ImgInterface {
 
     private lateinit var newIngredientBinding: ActivityNewIngredientBinding
 
@@ -163,18 +167,18 @@ class NewIngredientActivity2 : AppCompatActivity() {
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
 
-                        // uri -> url로 변경
-                        url_ingredient = URL("file://"+ absolutelyPath(uri!!))
-                        Log.d("tag", "img_ingredient:"+ "{$url_ingredient}")
+                        // 아미지 url로 변경
+                        val file = File(absolutelyPath(uri!!))
+                        ImgService(this).tryPostImg(file)
                     }
                 }
                 STORAGE_CODE -> {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
 
-                    // uri -> url로 변경
-                    url_ingredient = URL("file://"+ absolutelyPath(uri!!))
-                    Log.d("tag", "img_ingredient:"+ "{$url_ingredient}")
+                    // 아미지 url로 변경
+                    val file = File(absolutelyPath(uri!!))
+                    ImgService(this).tryPostImg(file)
                 }
             }
         }
@@ -192,9 +196,17 @@ class NewIngredientActivity2 : AppCompatActivity() {
         var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
         var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c.moveToFirst()
-
         var result = c.getString(index)
-
         return result
+    }
+
+    // 서버 연결 성공
+    override fun onPostImgSuccess(response: ImgResponse) {
+        url_ingredient = response.result
+    }
+
+    // 서버 연결 실패
+    override fun onPostImgFailure(message: String) {
+        Log.d("error", "오류 : $message")
     }
 }

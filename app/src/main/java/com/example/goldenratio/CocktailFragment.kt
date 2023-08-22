@@ -196,7 +196,8 @@ class CocktailFragment : Fragment() {
             ) {
                 cocktailList.clear()
                 cocktailList = response.body()!!
-
+                //#3. 리사이클러뷰 설정
+                //3-1. 리사이클러뷰 레이아웃 설정
                 recyclerViewBoardAdapter = RecyclerViewBoardAdapter(cocktailList, markList)
                 cocktailBinding.listCocktail.adapter = recyclerViewBoardAdapter
 

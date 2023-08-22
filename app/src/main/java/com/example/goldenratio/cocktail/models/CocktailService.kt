@@ -10,7 +10,25 @@ import retrofit2.Response
 class CocktailService(val CocktailInterface: CocktailInterface) {
     fun tryPostCocktail(PostCocktailRequest: PostCocktailRequest){
         val CocktailRetrofitInterface = ApplicationClass.sRetrofit?.create(CocktailRetrofitInterface::class.java)
-        CocktailRetrofitInterface?.postCocktail("Bearer " + accessToken, PostCocktailRequest)?.enqueue(object : Callback<CocktailResponse>{
+        CocktailRetrofitInterface?.postCocktail("Bearer $accessToken", PostCocktailRequest)?.enqueue(object : Callback<CocktailResponse>{
+            override fun onResponse(call: Call<CocktailResponse>, response: Response<CocktailResponse>) {
+                (response.body() as CocktailResponse?)?.let {
+                    CocktailInterface.onPostCocktailSuccess(
+                        it
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<CocktailResponse>, t: Throwable) {
+                CocktailInterface.onPostCocktailFailure(t.message ?: "통신 오류")
+                Log.d("error","연결 실패")
+            }
+        })
+    }
+
+    fun tryEditCocktail(boardId: String, postCocktailRequest: PostCocktailRequest){
+        val cocktailRetrofitInterface = ApplicationClass.sRetrofit?.create(CocktailRetrofitInterface::class.java)
+        cocktailRetrofitInterface?.editCocktail(boardId, "Bearer " + accessToken, postCocktailRequest)?.enqueue(object : Callback<CocktailResponse>{
             override fun onResponse(call: Call<CocktailResponse>, response: Response<CocktailResponse>) {
                 (response.body() as CocktailResponse?)?.let {
                     CocktailInterface.onPostCocktailSuccess(

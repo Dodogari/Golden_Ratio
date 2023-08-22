@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goldenratio.R
 import com.example.goldenratio.databinding.ActivityIngredientBinding
+import com.example.goldenratio.search.SearchActivity
 
 
 val ingredientList: ArrayList<Ingredient> = arrayListOf()

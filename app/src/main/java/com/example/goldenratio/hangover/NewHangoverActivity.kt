@@ -18,9 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.goldenratio.R
-import com.example.goldenratio.cocktail.IngredientFragment
 import com.example.goldenratio.databinding.ActivityNewHangoverBinding
-import com.example.goldenratio.search.SearchFragment
+import com.example.goldenratio.img.ImgInterface
+import com.example.goldenratio.img.ImgResponse
+import com.example.goldenratio.img.ImgService
+import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -28,7 +30,7 @@ import java.text.SimpleDateFormat
 var title_hangover = ""
 var url_hangover: URL?= null
 
-class  NewHangoverActivity : AppCompatActivity() {
+class  NewHangoverActivity : AppCompatActivity(), ImgInterface {
 
     private lateinit var NewHangoverBinding : ActivityNewHangoverBinding
 
@@ -46,9 +48,7 @@ class  NewHangoverActivity : AppCompatActivity() {
 
         img_camera = findViewById(R.id.img_camera)
         NewHangoverBinding.btNext.isEnabled = true
-        val title_hangover = NewHangoverBinding.etTitle.text.toString() + "이게 안된다고?"
 
-        Log.d("tag", "title :{$title_hangover}")
 
         // 이전 화면으로 이동
         NewHangoverBinding.btBack.setOnClickListener{
@@ -57,6 +57,8 @@ class  NewHangoverActivity : AppCompatActivity() {
 
         // 다음 화면으로 이동
         NewHangoverBinding.btNext.setOnClickListener{
+            title_hangover = NewHangoverBinding.etTitle.text.toString()
+
             val intent = Intent(this, IngredientActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
@@ -148,8 +150,6 @@ class  NewHangoverActivity : AppCompatActivity() {
         return uri
     }
 
-
-
     // 결과
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -162,9 +162,9 @@ class  NewHangoverActivity : AppCompatActivity() {
                         val uri = saveFile(RandomFileName(), "image/jpeg", img)
                         img_camera.setImageURI(uri)
 
-                        // uri -> url로 변경
-                        url_hangover = URL("file://"+ absolutelyPath(uri!!))
-                        Log.d("tag", "title url:"+ "{$url_hangover}")
+                        // 아미지 url로 변경
+                        val file = File(absolutelyPath(uri!!))
+                        ImgService(this).tryPostImg(file)
                     }
 
 
@@ -173,9 +173,9 @@ class  NewHangoverActivity : AppCompatActivity() {
                     val uri = data?.data
                     img_camera.setImageURI(uri)
 
-                    // uri -> url로 변경
-                    url_hangover = URL("file://"+ absolutelyPath(uri!!))
-                    Log.d("tag", "title url:"+ "{$url_hangover}")
+                    // 아미지 url로 변경
+                    val file = File(absolutelyPath(uri!!))
+                    ImgService(this).tryPostImg(file)
                 }
             }
         }
@@ -187,9 +187,7 @@ class  NewHangoverActivity : AppCompatActivity() {
         var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
         var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c.moveToFirst()
-
         var result = c.getString(index)
-
         return result
     }
 
@@ -199,24 +197,13 @@ class  NewHangoverActivity : AppCompatActivity() {
         return fileName
     }
 
-    // 화면 이동
-    fun changeFragment(index: Int){
-        when(index) {
-            // 재료 추가 페이지
-            1 -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(NewHangoverBinding.hangoverFrame.id, IngredientFragment())
-                    .commitAllowingStateLoss()
-            }
+    // 서버 연결 성공
+    override fun onPostImgSuccess(response: ImgResponse) {
+        url_hangover = response.result
+    }
 
-            // 재료 검색 페이지
-            2 -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(NewHangoverBinding.hangoverFrame.id, SearchFragment())
-                    .commitAllowingStateLoss()
-            }
-        }
+    // 서버 연결 실패
+    override fun onPostImgFailure(message: String) {
+        Log.d("error", "오류 : $message")
     }
 }
